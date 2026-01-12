@@ -1,0 +1,197 @@
+﻿name: Release on Tag
+
+# 触发条件：当有标签被推送到仓库时触发该工作流。
+# 支持任意格式的标签名，例如 `1.0.0` 或 `v1.0.0`。
+on:
+#  手动触发
+  workflow_dispatch:
+# 如果触发条件满足，则执行以下步骤
+#  push:
+#    tags:
+#      - '*'   # 匹配所有标签推送事件
+
+# 权限设置：授予写入 contents 的权限，
+# 这样 GITHUB_TOKEN 才能调用 GitHub Releases API 创建发布。
+permissions:
+  contents: write
+
+# 定义环境变量供后续步骤使用
+env:
+  GODOT_VERSION: 4.5.1               # 指定使用的 Godot 版本
+  EXPORT_NAME: CosmicMiningCompany   # 导出项目名称前缀
+
+# 工作流中的任务定义部分
+jobs:
+
+  # 构建 Windows 和 Linux 可执行文件的任务，在 Ubuntu 环境中运行
+  export-windows-linux:
+    name: Build Windows & Linux (for Release)  # 显示名称
+    runs-on: ubuntu-latest                     # 使用最新的 Ubuntu 运行器
+
+    steps:
+      # 步骤一：检出源码并启用 Git LFS 支持
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # 步骤二：安装指定版本的 .NET SDK（用于编译 C# 项目）
+      - name: Setup .NET (for restore/build)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      # 步骤三：还原 NuGet 包（如果存在解决方案文件）
+      - name: Restore NuGet packages
+        run: |
+          if [ -f "${{ env.EXPORT_NAME }}.sln" ]; then
+            dotnet restore "${{ env.EXPORT_NAME }}.sln"
+          else
+            echo "Solution file not found, skipping dotnet restore"
+          fi
+
+      # 步骤四：安装 Godot 引擎及其导出模板
+      - name: Setup Godot (includes export templates)
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          include-importer: true
+          include-templates: true
+
+      # 步骤五：尝试构建 C# 解决方案（忽略错误）
+      - name: Build C# project (if applicable)
+        run: |
+          godot --headless --build-solutions --quit || echo "Godot build-solutions returned non-zero (ignored)"
+
+      # 步骤六：创建输出目录结构
+      - name: Create export dirs
+        run: |
+          rm -rf build || true
+          mkdir -p build/windows
+          mkdir -p build/linux
+
+      # 步骤七：导出 Windows 平台可执行程序
+      - name: Export Windows Desktop (x86_64)
+        run: |
+          set -e
+          godot --headless --export-release "Windows Desktop" build/windows/${{ env.EXPORT_NAME }}.exe --quit
+
+      # 步骤八：导出 Linux 平台可执行程序
+      - name: Export Linux (x86_64)
+        run: |
+          set -e
+          godot --headless --export-release "Linux" build/linux/${{ env.EXPORT_NAME }}.x86_64 --quit
+      - name: Package Windows
+        run: |
+          cd build/windows
+          zip -r ../${{ env.EXPORT_NAME }}-windows.zip .
+
+      - name: Package Linux
+        run: |
+          cd build/linux
+          zip -r ../${{ env.EXPORT_NAME }}-linux.zip .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-windows-linux
+          path: build/*.zip
+
+
+  # 构建 macOS 应用程序的任务，在 macOS 环境中运行
+  export-macos:
+    name: Build macOS (for Release)
+    runs-on: macos-latest
+
+    steps:
+      # 同上，检出代码并启用 Git LFS
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # 安装 .NET SDK
+      - name: Setup .NET (for restore/build)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      # 还原 NuGet 包（如适用）
+      - name: Restore NuGet packages
+        run: |
+          if [ -f "${{ env.EXPORT_NAME }}.sln" ]; then
+            dotnet restore "${{ env.EXPORT_NAME }}.sln"
+          else
+            echo "Solution file not found, skipping dotnet restore"
+          fi
+
+      # 在 macOS 上安装 Godot 及其导出模板
+      - name: Setup Godot on macOS (includes export templates)
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          include-importer: true
+          include-templates: true
+
+      # 编译 C# 项目（如有需要）
+      - name: Build C# project (if applicable)
+        run: |
+          godot --headless --build-solutions --quit || echo "Godot build-solutions returned non-zero (ignored)"
+
+      # 创建 macOS 输出目录
+      - name: Create macOS export dir
+        run: mkdir -p build/macos
+
+      # 导出 macOS 应用包
+      - name: Export macOS (.app)
+        run: |
+          set -e
+          godot --headless --export-release "macOS" build/macos/${{ env.EXPORT_NAME }}.app --quit
+
+      # 压缩 .app 文件为 zip 格式以便上传
+      - name: Zip macOS app
+        run: |
+          cd build/macos || exit 0
+          if [ -d "${{ env.EXPORT_NAME }}.app" ]; then
+            zip -r ../${{ env.EXPORT_NAME }}-macOS.zip "${{ env.EXPORT_NAME }}.app"
+          else
+            echo ".app not found, skipping zip"
+          fi
+
+      # 上传压缩后的 macOS 构建产物
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-macos
+          path: build/${{ env.EXPORT_NAME }}-macOS.zip
+
+
+
+  # 创建 GitHub Release，并将之前构建的所有平台产物附加到此次发布中
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [ export-windows-linux, export-macos ]
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Release ${{ github.ref_name }}"
+          body: "Automated release for tag ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          files: dist/**/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+      # 调试用途：列出已成功上传到 Release 的附件信息
+      - name: List uploaded release assets (debug)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          RELEASE_INFO=$(curl -sSL -H "Authorization: token ${GITHUB_TOKEN}" \
+            "https://api.github.com/repos/${REPO}/releases/tags/${TAG}")
+          echo "$RELEASE_INFO" | jq '.assets | map({name: .name, size: .size, url: .browser_download_url})'

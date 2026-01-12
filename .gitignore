@@ -14,3 +14,9 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# Rider
+.idea/
+
+# Visual Studio Code
+.vscode/
