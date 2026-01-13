@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using GFramework.Core.extensions;
+using GFramework.Core.system;
 
 namespace GFrameworkGodotTemplate.scripts.core.ui;
 
@@ -7,13 +9,26 @@ namespace GFrameworkGodotTemplate.scripts.core.ui;
 /// </summary>
 /// <typeparam name="T">UI根节点类型，必须实现IUiRoot接口</typeparam>
 /// <param name="uiRoot">UI根节点实例</param>
-/// <param name="factory">UI工厂实例</param>
-public abstract class AbstractUiRouter<T>(T uiRoot, IUiFactory factory) : IUiRouter where T : IUiRoot
+public abstract class AbstractUiRouter<T>(T uiRoot) :AbstractSystem, IUiRouter where T : IUiRoot
 {
+    /// <summary>
+    /// UI工厂实例，用于创建UI相关的对象
+    /// </summary>
+    protected IUiFactory Factory { get; private set; } = null!;
+    
+    /// <summary>
+    /// 初始化方法，在页面初始化时获取UI工厂实例
+    /// </summary>
+    protected override void OnInit()
+    {
+        Factory = this.GetUtility<IUiFactory>()!;
+    }
+
     /// <summary>
     /// 页面栈，用于管理UI页面的显示顺序
     /// </summary>
     private readonly Stack<IUiPage> _stack = new();
+
 
     /// <summary>
     /// 将指定UI页面压入栈顶并显示
@@ -26,7 +41,7 @@ public abstract class AbstractUiRouter<T>(T uiRoot, IUiFactory factory) : IUiRou
         if (_stack.Count > 0)
             _stack.Peek().OnPause();
 
-        var page = factory.Create(uiKey);
+        var page = Factory.Create(uiKey);
         uiRoot.AddUiPage(page);
         _stack.Push(page);
 

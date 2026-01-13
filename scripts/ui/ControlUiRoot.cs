@@ -14,6 +14,12 @@ namespace GFrameworkGodotTemplate.scripts.ui;
 [ContextAware]
 public partial class ControlUiRoot : Control, IUiRoot
 {
+	public static ControlUiRoot Instance { get; private set; } = null!;
+	public override void _Ready()
+	{
+		Instance = this;
+	}
+
 	/// <summary>
 	/// 向UI根节点添加UI页面
 	/// </summary>

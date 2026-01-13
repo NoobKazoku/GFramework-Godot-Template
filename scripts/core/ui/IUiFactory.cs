@@ -1,9 +1,11 @@
-﻿namespace GFrameworkGodotTemplate.scripts.core.ui;
+﻿using GFramework.Core.Abstractions.utility;
+
+namespace GFrameworkGodotTemplate.scripts.core.ui;
 
 /// <summary>
 /// UI工厂接口，用于创建UI页面实例
 /// </summary>
-public interface IUiFactory
+public interface IUiFactory: IContextUtility
 {
     /// <summary>
     /// 根据UI键值创建对应的UI页面实例

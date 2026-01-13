@@ -1,10 +1,12 @@
-﻿namespace GFrameworkGodotTemplate.scripts.core.ui;
+﻿using GFramework.Core.Abstractions.utility;
+
+namespace GFrameworkGodotTemplate.scripts.core.ui;
 
 /// <summary>
 /// UI注册表接口，用于根据UI键获取对应的UI实例
 /// </summary>
 /// <typeparam name="T">UI实例的类型参数，使用协变修饰符out</typeparam>
-public interface IUiRegistry<out T>
+public interface IUiRegistry<out T>: IUtility
 {
     /// <summary>
     /// 根据指定的UI键获取对应的UI实例

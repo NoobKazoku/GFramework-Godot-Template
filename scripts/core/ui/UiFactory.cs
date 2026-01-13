@@ -1,4 +1,6 @@
 ﻿using System;
+using GFramework.Core.extensions;
+using GFramework.Core.utility;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.core.ui;
@@ -7,8 +9,10 @@ namespace GFrameworkGodotTemplate.scripts.core.ui;
 /// UI工厂类，用于创建和实例化UI页面
 /// </summary>
 /// <param name="registry">UI注册表，用于获取PackedScene类型的UI资源</param>
-public class UiFactory(IUiRegistry<PackedScene> registry)
+public class UiFactory:AbstractContextUtility, IUiFactory
 {
+    protected IWritableUiRegistry<PackedScene> Registry = null!;
+    
     /// <summary>
     /// 根据指定的UI键创建UI页面实例
     /// </summary>
@@ -18,10 +22,18 @@ public class UiFactory(IUiRegistry<PackedScene> registry)
     public IUiPage Create(string uiKey)
     {
         // 从注册表中获取对应的场景资源
-        var scene = registry.Get(uiKey);
+        var scene = Registry.Get(uiKey);
         // 实例化场景节点
         var node  = scene.Instantiate();
 
         return node as IUiPage ?? throw new InvalidCastException($"UI scene {uiKey} must inherit IUiPage");
+    }
+
+    /// <summary>
+    /// 初始化方法，获取UI注册表实例
+    /// </summary>
+    protected override void OnInit()
+    {
+       Registry = this.GetUtility<IWritableUiRegistry<PackedScene>>()!;
     }
 }

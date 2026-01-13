@@ -1,5 +1,7 @@
 ﻿using GFramework.Core.Abstractions.architecture;
 using GFramework.Game.architecture;
+using GFrameworkGodotTemplate.scripts.core.ui;
+using GFrameworkGodotTemplate.scripts.ui;
 
 namespace GFrameworkGodotTemplate.scripts.module;
 
@@ -15,6 +17,6 @@ public class SystemModule: AbstractModule
     /// <param name="architecture">游戏架构接口实例，用于注册系统</param>
     public override void Install(IArchitecture architecture)
     {
-
+        architecture.RegisterSystem(new ControlUiRouter(ControlUiRoot.Instance));
     }
 }

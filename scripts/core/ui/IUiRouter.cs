@@ -1,9 +1,11 @@
-﻿namespace GFrameworkGodotTemplate.scripts.core.ui;
+﻿using GFramework.Core.Abstractions.system;
+
+namespace GFrameworkGodotTemplate.scripts.core.ui;
 
 /// <summary>
 /// UI路由管理器接口，用于管理UI界面的导航和切换操作
 /// </summary>
-public interface IUiRouter
+public interface IUiRouter: ISystem
 {
     /// <summary>
     /// 将指定的UI界面压入路由栈，显示新的UI界面

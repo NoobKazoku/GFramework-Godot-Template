@@ -7,7 +7,7 @@ namespace GFrameworkGodotTemplate.scripts.core.ui;
 /// <summary>
 /// UI注册表类，用于管理和注册UI场景
 /// </summary>
-public class UiRegistry : IUiRegistry<PackedScene>
+public class UiRegistry : IWritableUiRegistry<PackedScene>
 {
     /// <summary>
     /// 存储UI键值对的字典，键为UI标识符，值为对应的PackedScene对象
@@ -19,9 +19,11 @@ public class UiRegistry : IUiRegistry<PackedScene>
     /// </summary>
     /// <param name="key">UI的唯一标识符</param>
     /// <param name="scene">要注册的PackedScene对象</param>
-    public void Register(string key, PackedScene scene)
+    /// <returns>返回当前UI注册表实例，支持链式调用</returns>
+    public IWritableUiRegistry<PackedScene> Register(string key, PackedScene scene)
     {
         _map[key] = scene;
+        return this;
     }
 
     /// <summary>
