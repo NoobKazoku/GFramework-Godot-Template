@@ -8,9 +8,9 @@ namespace GFrameworkGodotTemplate.scripts.core.ui;
 /// 抽象UI路由基类，提供页面栈管理功能
 /// </summary>
 /// <typeparam name="T">UI根节点类型，必须实现IUiRoot接口</typeparam>
-/// <param name="uiRoot">UI根节点实例</param>
-public abstract class AbstractUiRouter<T>(T uiRoot) :AbstractSystem, IUiRouter where T : IUiRoot
+public class BaseUiRouter<T> :AbstractSystem, IUiRouter where T : IUiRoot
 {
+    protected T UiRoot = default!;
     /// <summary>
     /// UI工厂实例，用于创建UI相关的对象
     /// </summary>
@@ -29,6 +29,14 @@ public abstract class AbstractUiRouter<T>(T uiRoot) :AbstractSystem, IUiRouter w
     /// </summary>
     private readonly Stack<IUiPage> _stack = new();
 
+    /// <summary>
+    /// 绑定根UI组件
+    /// </summary>
+    /// <param name="root">要绑定的根UI组件</param>
+    public void BindRoot(T root)
+    {
+        UiRoot = root;
+    }
 
     /// <summary>
     /// 将指定UI页面压入栈顶并显示
@@ -42,7 +50,7 @@ public abstract class AbstractUiRouter<T>(T uiRoot) :AbstractSystem, IUiRouter w
             _stack.Peek().OnPause();
 
         var page = Factory.Create(uiKey);
-        uiRoot.AddUiPage(page);
+        UiRoot.AddUiPage(page);
         _stack.Push(page);
 
         page.OnEnter(param);
@@ -57,7 +65,7 @@ public abstract class AbstractUiRouter<T>(T uiRoot) :AbstractSystem, IUiRouter w
 
         var top = _stack.Pop();
         top.OnExit();
-        uiRoot.RemoveUiPage(top);
+        UiRoot.RemoveUiPage(top);
 
         // 恢复新的栈顶页面
         if (_stack.Count > 0)

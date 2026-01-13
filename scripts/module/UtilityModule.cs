@@ -1,6 +1,8 @@
 ﻿using GFramework.Core.Abstractions.architecture;
 using GFramework.Game.architecture;
+using GFrameworkGodotTemplate.scripts.core.constants;
 using GFrameworkGodotTemplate.scripts.core.ui;
+using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.module;
 
@@ -15,7 +17,13 @@ public class UtilityModule : AbstractModule
     /// <param name="architecture">要安装模块的目标游戏架构实例</param>
     public override void Install(IArchitecture architecture)
     {
-        architecture.RegisterUtility(new UiRegistry());
+        architecture.RegisterUtility(
+            new UiRegistry()
+                .Register(UiKeys.MainMenu, GD.Load<PackedScene>("res://scenes/tests/ui/main_menu/test_main_menu.tscn"))
+                .Register(UiKeys.Page1, GD.Load<PackedScene>("res://scenes/tests/ui/page_1.tscn"))
+                .Register(UiKeys.Page2, GD.Load<PackedScene>("res://scenes/tests/ui/page_2.tscn"))
+                .Register(UiKeys.Page3, GD.Load<PackedScene>("res://scenes/tests/ui/page_3.tscn"))
+        );
         architecture.RegisterUtility(new UiFactory());
     }
 }

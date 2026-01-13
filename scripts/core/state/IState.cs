@@ -1,3 +1,4 @@
+using System;
 using GFramework.Core.Abstractions.rule;
 
 namespace GFrameworkGodotTemplate.scripts.core.state;
@@ -7,6 +8,11 @@ namespace GFrameworkGodotTemplate.scripts.core.state;
 /// </summary>
 public interface IState : IContextAware
 {
+    /// <summary>
+    /// 状态的标识符
+    /// </summary>
+    public Type Key() => GetType();
+
     /// <summary>
     /// 进入状态时调用
     /// </summary>

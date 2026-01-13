@@ -1,6 +1,9 @@
 using System;
+using GFramework.Core.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
+using GFrameworkGodotTemplate.scripts.core.state;
+using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using Godot;
 
@@ -14,10 +17,14 @@ namespace GFrameworkGodotTemplate.scripts.ui;
 [ContextAware]
 public partial class ControlUiRoot : Control, IUiRoot
 {
-	public static ControlUiRoot Instance { get; private set; } = null!;
 	public override void _Ready()
 	{
-		Instance = this;
+		var router = this.GetSystem<ControlUiRouter>();
+		router!.BindRoot(this);
+		// 创建并切换到游戏主菜单状态
+		this
+			.GetSystem<GameStateMachine>()!
+			.ChangeState<MainMenuState>();
 	}
 
 	/// <summary>

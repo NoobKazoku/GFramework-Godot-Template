@@ -23,6 +23,11 @@ buses/default_bus_layout="res://resource/project_bus_layout.tres"
 
 GameEntryPoint="*res://global/game_entry_point.tscn"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
 [dotnet]
 
 project/assembly_name="GFramework-Godot-Template"

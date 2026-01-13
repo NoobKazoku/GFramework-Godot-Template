@@ -31,4 +31,8 @@
         <Content Include=".github\workflows\auto-tag.yml"/>
         <Content Include=".github\workflows\release.yml"/>
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="scripts\model\" />
+      <Folder Include="scripts\tests\" />
+    </ItemGroup>
 </Project>

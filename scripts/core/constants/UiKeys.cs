@@ -19,5 +19,9 @@ public static class UiKeys
     /// 设置界面的标识键
     /// </summary>
     public const string Settings = "settings";
+    
+    public const string Page1 = "page1";
+    public const string Page2 = "page2";
+    public const string Page3 = "page3";
 }
 

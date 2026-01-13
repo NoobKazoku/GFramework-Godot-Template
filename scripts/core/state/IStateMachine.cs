@@ -11,12 +11,12 @@ public interface IStateMachine
     /// 当前状态
     /// </summary>
     IState? CurrentState { get; }
-    
+
     /// <summary>
-    /// 切换到新状态
+    /// 切换到指定类型的状态
     /// </summary>
-    /// <param name="newState">要切换到的新状态</param>
-    void ChangeState(IState newState);
+    /// <param name="stateType">目标状态的类型</param>
+    public void ChangeState(Type stateType);
     
     /// <summary>
     /// 注册状态到状态机
@@ -25,8 +25,9 @@ public interface IStateMachine
     void RegisterState(IState state);
     
     /// <summary>
-    /// 从状态机注销状态
+    /// 从状态机中注销指定类型的状态
     /// </summary>
-    /// <param name="state">要注销的状态</param>
-    void UnregisterState(IState state);
+    /// <typeparam name="T">要注销的状态类型</typeparam>
+    void UnregisterState<T>() where T : IState;
 }
+

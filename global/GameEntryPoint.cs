@@ -1,11 +1,15 @@
+using GFramework.Core.Abstractions.architecture;
 using GFramework.Core.Abstractions.logging;
 using GFramework.Core.Abstractions.properties;
 using GFramework.Core.architecture;
+using GFramework.Core.extensions;
 using GFramework.Godot.logging;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.core;
 using GFrameworkGodotTemplate.scripts.core.environment;
+using GFrameworkGodotTemplate.scripts.core.state;
+using GFrameworkGodotTemplate.scripts.core.state.impls;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -17,12 +21,9 @@ namespace GFrameworkGodotTemplate.global;
 [ContextAware]
 public partial class GameEntryPoint : Node
 {
-	private GameArchitecture _architecture = null!;
 	
-	/// <summary>
-	/// 获取游戏入口点的单例实例
-	/// </summary>
-	public static GameEntryPoint Instance { get; private set; } = null!;
+	public static IArchitecture Architecture { get; private set; } = null!;
+
 
 	/// <summary>
 	/// Godot引擎调用的节点就绪方法，在此方法中初始化游戏架构和相关组件
@@ -32,7 +33,7 @@ public partial class GameEntryPoint : Node
 		// 创建并初始化游戏架构实例
 		// 配置架构的日志记录属性，设置Godot日志工厂提供程序并指定最低日志级别为调试级别
 		// 然后初始化架构实例以准备游戏运行环境
-		_architecture = new GameArchitecture(new ArchitectureConfiguration
+		Architecture = new GameArchitecture(new ArchitectureConfiguration
 		{
 			LoggerProperties = new LoggerProperties
 			{
@@ -42,8 +43,7 @@ public partial class GameEntryPoint : Node
 				},
 			},
 		}, new GameDevEnvironment());
-		_architecture.Initialize();
-		Instance = this;
+		Architecture.Initialize();
 		_log.Debug("GameEntryPoint ready.");
 	}
 }

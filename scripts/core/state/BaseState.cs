@@ -6,7 +6,7 @@ namespace GFrameworkGodotTemplate.scripts.core.state;
 /// 状态抽象基类，实现了IState接口的默认行为
 /// 提供了状态机中状态的基本功能框架，包括进入、退出和状态转换等操作的默认实现
 /// </summary>
-public abstract class AbstractState : IState
+public class BaseState : IState
 {
     /// <summary>
     /// 架构上下文引用，用于访问架构相关的服务和数据
