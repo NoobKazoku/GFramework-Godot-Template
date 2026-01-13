@@ -31,11 +31,11 @@ project/assembly_name="GFramework-Godot-Template"
 
 folder_colors={
 "res://assets/": "red",
-"res://global/": "green",
+"res://global/": "orange",
 "res://resource/": "yellow",
-"res://scenes/": "purple",
-"res://script_templates/": "gray",
-"res://scripts/": "blue"
+"res://scenes/": "green",
+"res://script_templates/": "blue",
+"res://scripts/": "teal"
 }
 
 [gui]
