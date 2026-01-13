@@ -4,7 +4,7 @@ namespace GFrameworkGodotTemplate.scripts.core.state;
 
 /// <summary>
 /// 状态抽象基类，实现了IState接口的默认行为
-/// 提供了状态机中状态的基本功能框架，包括进入、退出、更新和状态转换等操作的默认实现
+/// 提供了状态机中状态的基本功能框架，包括进入、退出和状态转换等操作的默认实现
 /// </summary>
 public abstract class AbstractState : IState
 {
@@ -31,16 +31,7 @@ public abstract class AbstractState : IState
     public virtual void OnExit(IState? toState)
     {
     }
-    
-    /// <summary>
-    /// 每帧更新状态逻辑的方法
-    /// 子类可重写此方法以实现状态的持续性逻辑处理
-    /// </summary>
-    /// <param name="deltaTime">当前帧与上一帧的时间间隔，单位为秒</param>
-    public virtual void OnUpdate(double deltaTime)
-    {
-    }
-    
+
     /// <summary>
     /// 判断当前状态是否可以转换到目标状态
     /// 子类可重写此方法以实现自定义的状态转换规则

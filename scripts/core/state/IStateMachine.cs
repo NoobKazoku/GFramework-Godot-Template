@@ -29,10 +29,4 @@ public interface IStateMachine
     /// </summary>
     /// <param name="state">要注销的状态</param>
     void UnregisterState(IState state);
-    
-    /// <summary>
-    /// 更新状态机，处理当前状态的更新逻辑
-    /// </summary>
-    /// <param name="deltaTime">帧间隔时间（秒）</param>
-    void Update(double deltaTime);
 }

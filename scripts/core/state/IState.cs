@@ -20,12 +20,6 @@ public interface IState : IContextAware
     void OnExit(IState? toState);
 
     /// <summary>
-    /// 每帧更新状态逻辑
-    /// </summary>
-    /// <param name="deltaTime">帧间隔时间（秒）</param>
-    void OnUpdate(double deltaTime);
-
-    /// <summary>
     /// 判断是否可以转换到目标状态
     /// </summary>
     /// <param name="targetState">目标状态</param>

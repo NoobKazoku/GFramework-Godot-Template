@@ -65,17 +65,8 @@ public abstract class AbstractStateMachine : AbstractSystem, IStateMachine
         var stateKey = GetStateKey(state);
         States.Remove(stateKey);
     }
-    
+
     /// <summary>
-    /// 更新状态机，处理当前状态的更新逻辑
-    /// </summary>
-    /// <param name="deltaTime">帧间隔时间（秒）</param>
-    public void Update(double deltaTime)
-    {
-        CurrentState?.OnUpdate(deltaTime);
-    }
-    
-     /// <summary>
     /// 获取状态的唯一标识键，子类可重写以自定义键生成逻辑
     /// </summary>
     /// <param name="state">要获取键的状态</param>
