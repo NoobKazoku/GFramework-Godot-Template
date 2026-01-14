@@ -23,10 +23,10 @@ public partial class TestMainMenu : Control, IController,IUiPageProvider
     /// </summary>
     public override void _Ready()
     {
-        var _uiRouter = ContextAwareExtensions.GetSystem<IUiRouter>(this)!;
-        Page1Button.Pressed += () => { _uiRouter.Push(UiKeys.Page1); };
-        Page2Button.Pressed += () => { _uiRouter.Push(UiKeys.Page2); };
-        Page3Button.Pressed += () => { _uiRouter.Push(UiKeys.Page3); };
+        var uiRouter = this.GetSystem<IUiRouter>()!;
+        Page1Button.Pressed += () => { uiRouter.Push(UiKeys.Page1); };
+        Page2Button.Pressed += () => { uiRouter.Push(UiKeys.Page2); };
+        Page3Button.Pressed += () => { uiRouter.Push(UiKeys.Page3); };
     }
 
     public void OnEnter(IUiPageEnterParam? param)
