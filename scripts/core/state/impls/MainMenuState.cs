@@ -8,7 +8,7 @@ namespace GFrameworkGodotTemplate.scripts.core.state.impls;
 /// 主菜单状态
 /// 负责管理主菜单界面的显示和隐藏逻辑
 /// </summary>
-public class MainMenuState : BaseState
+public class MainMenuState : StateBase
 {
     /// <summary>
     /// 状态进入时的处理方法

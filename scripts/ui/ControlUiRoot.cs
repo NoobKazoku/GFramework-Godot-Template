@@ -15,7 +15,7 @@ namespace GFrameworkGodotTemplate.scripts.ui;
 /// </summary>
 [Log]
 [ContextAware]
-public partial class ControlUiRoot : Control, IUiRoot
+public partial class ControlUiRoot : Godot.Control, IUiRoot
 {
 	public override void _Ready()
 	{

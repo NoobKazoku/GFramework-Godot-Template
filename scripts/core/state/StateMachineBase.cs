@@ -9,7 +9,7 @@ namespace GFrameworkGodotTemplate.scripts.core.state;
 /// 状态机基类，实现了IStateMachine接口的核心逻辑
 /// 提供状态管理、状态切换、状态注册等功能
 /// </summary>
-public class BaseStateMachine : AbstractSystem, IStateMachine
+public class StateMachineBase : AbstractSystem, IStateMachine
 {
     /// <summary>
     /// 已注册的状态字典，用于存储类型到状态实例的映射关系

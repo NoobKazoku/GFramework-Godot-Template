@@ -2,7 +2,7 @@
 
 namespace GFrameworkGodotTemplate.scripts.core.ui;
 
-public partial class ControlUiPage : Control
+public partial class ControlUiPage : Godot.Control,IUiPage
 {
     public override void _Ready()
     {
@@ -13,7 +13,7 @@ public partial class ControlUiPage : Control
     }
 
     /// <summary>
-    /// 页面进入（必须实现）
+    /// 页面进入
     /// </summary>
     public virtual void OnEnter(IUiPageEnterParam? param)
     {

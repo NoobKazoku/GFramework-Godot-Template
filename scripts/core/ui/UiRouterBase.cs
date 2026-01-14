@@ -8,7 +8,7 @@ namespace GFrameworkGodotTemplate.scripts.core.ui;
 /// 抽象UI路由基类，提供页面栈管理功能
 /// </summary>
 /// <typeparam name="T">UI根节点类型，必须实现IUiRoot接口</typeparam>
-public class BaseUiRouter<T> :AbstractSystem, IUiRouter where T : IUiRoot
+public class UiRouterBase<T> :AbstractSystem, IUiRouter where T : IUiRoot
 {
     protected T UiRoot = default!;
     /// <summary>
