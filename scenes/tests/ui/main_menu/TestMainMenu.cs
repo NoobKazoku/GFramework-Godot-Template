@@ -24,9 +24,9 @@ public partial class TestMainMenu : Control, IController,IUiPageProvider
     public override void _Ready()
     {
         var uiRouter = this.GetSystem<IUiRouter>()!;
-        Page1Button.Pressed += () => { uiRouter.Push(UiKeys.Page1); };
-        Page2Button.Pressed += () => { uiRouter.Push(UiKeys.Page2); };
-        Page3Button.Pressed += () => { uiRouter.Push(UiKeys.Page3); };
+        Page1Button.Pressed += () => { uiRouter.Replace(UiKeys.Page1); };
+        Page2Button.Pressed += () => { uiRouter.Replace(UiKeys.Page2); };
+        Page3Button.Pressed += () => { uiRouter.Replace(UiKeys.Page3); };
     }
 
     public void OnEnter(IUiPageEnterParam? param)

@@ -1,11 +1,5 @@
-[gd_scene load_steps=2 format=3 uid="uid://6s2urcdmkpbt"]
-
-[ext_resource type="PackedScene" uid="uid://dpfium4mv0yvg" path="res://scenes/ui/control_ui_root.tscn" id="1_o5qli"]
+[gd_scene format=3 uid="uid://6s2urcdmkpbt"]
 
 [node name="Main" type="Node2D"]
 
 [node name="GameRoot" type="Node2D" parent="."]
-
-[node name="UiRoot" type="CanvasLayer" parent="."]
-
-[node name="ControlUiRoot" parent="UiRoot" instance=ExtResource("1_o5qli")]

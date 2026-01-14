@@ -30,9 +30,9 @@ public partial class Page3 : Control,IController,IUiPageProvider
 	public override void _Ready()
 	{
 		var uiRouter = this.GetSystem<IUiRouter>()!;
-		MainMenuButton.Pressed += () => { uiRouter.Push(UiKeys.MainMenu); };
-		Page1Button.Pressed += () => { uiRouter.Push(UiKeys.Page1); };
-		Page2Button.Pressed += () => { uiRouter.Push(UiKeys.Page2); };
+		MainMenuButton.Pressed += () => { uiRouter.Replace(UiKeys.MainMenu); };
+		Page1Button.Pressed += () => { uiRouter.Replace(UiKeys.Page1); };
+		Page2Button.Pressed += () => { uiRouter.Replace(UiKeys.Page2); };
 	}
 	public void OnEnter(IUiPageEnterParam? param)
 	{
