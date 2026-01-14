@@ -24,6 +24,7 @@ public partial class GameEntryPoint : Node
 	
 	public static IArchitecture Architecture { get; private set; } = null!;
 
+	[Export] public bool IsDev { get; set; } = true;
 
 	/// <summary>
 	/// Godot引擎调用的节点就绪方法，在此方法中初始化游戏架构和相关组件
@@ -42,8 +43,17 @@ public partial class GameEntryPoint : Node
 					MinLevel = LogLevel.Debug,
 				},
 			},
-		}, new GameDevEnvironment());
+		}, IsDev?new GameDevEnvironment():new GameMainEnvironment());
 		Architecture.Initialize();
 		_log.Debug("GameEntryPoint ready.");
+		if (!IsDev)
+		{
+			this.RegisterEvent<UiRoot.UiRootReadyEvent>(_ =>
+			{
+				// 创建并切换到游戏主菜单状态
+				this.GetSystem<GameStateMachine>()!
+					.ChangeState<MainMenuState>();
+			});
+		}
 	}
 }

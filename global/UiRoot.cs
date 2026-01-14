@@ -18,6 +18,7 @@ namespace GFrameworkGodotTemplate.global;
 [ContextAware]
 public partial class UiRoot : CanvasLayer, IUiRoot
 {
+	public struct UiRootReadyEvent;
 	/// <summary>
 	/// Godot节点就绪时的回调方法
 	/// 初始化UI层设置、绑定路由根节点，并切换到游戏主菜单状态
@@ -28,9 +29,7 @@ public partial class UiRoot : CanvasLayer, IUiRoot
 		Layer = UiLayers.UiRoot;
 		var router = this.GetSystem<IUiRouter>()!;
 		router.BindRoot(this);
-		// 创建并切换到游戏主菜单状态
-		this.GetSystem<GameStateMachine>()!
-			.ChangeState<MainMenuState>();
+		this.SendEvent<UiRootReadyEvent>();
 	}
 
 	/// <summary>
