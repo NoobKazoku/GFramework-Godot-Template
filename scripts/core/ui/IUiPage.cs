@@ -31,7 +31,12 @@ public interface IUiPage
     void OnHide();
 
     /// <summary>
-    /// 页面重新显示
+    /// 页面重新显示时调用的方法
     /// </summary>
     void OnShow();
+    
+    /// <summary>
+    /// 获取页面是否处于活动状态
+    /// </summary>
+    bool IsAlive { get; }
 }

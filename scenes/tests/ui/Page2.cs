@@ -2,22 +2,25 @@ using GFramework.Core.Abstractions.controller;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.core.ui;
+using Godot;
 
 [ContextAware]
 [Log]
-public partial class Page2 : ControlUiPage,IController,IUiPage
+public partial class Page2 : Control,IController
 {
+	private ControlUiPageBehavior _page = null!;
 	/// <summary>
 	/// 节点准备就绪时的回调方法
 	/// 在节点添加到场景树后调用
 	/// </summary>
 	public override void _Ready()
 	{
-		
+		_page = new ControlUiPageBehavior(this);
 	}
 
 	public void OnEnter(IUiPageEnterParam? param)
 	{
 		_log.Info("Page2 OnEnter");
 	}
+	public IUiPage AsPage() => _page;
 }
