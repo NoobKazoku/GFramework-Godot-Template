@@ -1,5 +1,6 @@
 using System;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.core.constants;
@@ -18,40 +19,41 @@ namespace GFrameworkGodotTemplate.global;
 [ContextAware]
 public partial class UiRoot : CanvasLayer, IUiRoot
 {
-	public struct UiRootReadyEvent;
-	/// <summary>
-	/// Godot节点就绪时的回调方法
-	/// 初始化UI层设置、绑定路由根节点，并切换到游戏主菜单状态
-	/// </summary>
-	public override void _Ready()
-	{
-		// 设置UI层级为UI根层
-		Layer = UiLayers.UiRoot;
-		var router = this.GetSystem<IUiRouter>()!;
-		router.BindRoot(this);
-		this.SendEvent<UiRootReadyEvent>();
-	}
+    public struct UiRootReadyEvent;
 
-	/// <summary>
-	/// 向UI根节点添加UI页面
-	/// </summary>
-	/// <param name="child">要添加的UI页面，必须实现IUiPage接口</param>
-	/// <exception cref="InvalidOperationException">当传入的child不是Godot Node类型时抛出</exception>
-	public void AddUiPage(IPageBehavior child)
-	{
-		if (child.View is Node node)
-			AddChild(node);
-		else
-			throw new InvalidOperationException("UIPage View must be a Godot Node");
-	}
+    /// <summary>
+    /// Godot节点就绪时的回调方法
+    /// 初始化UI层设置、绑定路由根节点，并切换到游戏主菜单状态
+    /// </summary>
+    public override void _Ready()
+    {
+        // 设置UI层级为UI根层
+        Layer = UiLayers.UiRoot;
 
-	/// <summary>
-	/// 从UI根节点移除UI页面
-	/// </summary>
-	/// <param name="child">要移除的UI页面，必须实现IUiPage接口</param>
-	public void RemoveUiPage(IPageBehavior child)
-	{
-		if (child.View is Node node)
-			RemoveChild(node);
-	}
+        var router = this.GetSystem<IUiRouter>()!;
+        router.BindRoot(this);
+        this.SendEvent<UiRootReadyEvent>();
+    }
+
+    /// <summary>
+    /// 向UI根节点添加UI页面
+    /// </summary>
+    /// <param name="child">要添加的UI页面行为对象</param>
+    public void AddUiPage(IUiPageBehavior child)
+    {
+        if (child.View is Node node)
+            AddChild(node);
+        else
+            throw new InvalidOperationException("UIPage View must be a Godot Node");
+    }
+
+    /// <summary>
+    /// 从UI根节点移除UI页面
+    /// </summary>
+    /// <param name="child">要移除的UI页面行为对象</param>
+    public void RemoveUiPage(IUiPageBehavior child)
+    {
+        if (child.View is Node node)
+            RemoveChild(node);
+    }
 }

@@ -1,5 +1,7 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.ui;
+using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.core.constants;
@@ -10,13 +12,17 @@ namespace GFrameworkGodotTemplate.scenes.tests.ui;
 
 [ContextAware]
 [Log]
-public partial class Page1 : Control,IController,IUiPageProvider,IUiPage
+public partial class Page1 : Control,IController,IUiPageBehaviorProvider,ISimpleUiPage
 {
-	private ControlPageBehaviorBehavior? _page;
 	private Button MainMenuButton=> GetNode<Button>("%MainMenuButton");
 	private Button Page2Button => GetNode<Button>("%Page2Button");
 	private Button Page3Button => GetNode<Button>("%Page3Button");
-
+	private IUiPageBehavior? _page;
+	public IUiPageBehavior GetPage()
+	{
+		_page ??= new CanvasItemUiPageBehavior<Control>(this);
+		return _page;
+	}
 	/// <summary>
 	/// 节点准备就绪时的回调方法
 	/// 在节点添加到场景树后调用
@@ -32,10 +38,5 @@ public partial class Page1 : Control,IController,IUiPageProvider,IUiPage
 	public void OnEnter(IUiPageEnterParam? param)
 	{
 		_log.Info("Page1 OnEnter");
-	}
-	public IPageBehavior GetPage()
-	{
-		_page ??= new ControlPageBehaviorBehavior(this);
-		return _page;
 	}
 }

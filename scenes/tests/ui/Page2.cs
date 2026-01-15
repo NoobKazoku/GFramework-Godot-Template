@@ -1,5 +1,7 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.ui;
+using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.core.constants;
@@ -10,12 +12,12 @@ namespace GFrameworkGodotTemplate.scenes.tests.ui;
 
 [ContextAware]
 [Log]
-public partial class Page2 : Control,IController,IUiPageProvider,IUiPage
+public partial class Page2 : Control,IController,IUiPageBehaviorProvider,ISimpleUiPage
 {
-	private ControlPageBehaviorBehavior? _page;
-	public IPageBehavior GetPage()
+	private IUiPageBehavior? _page;
+	public IUiPageBehavior GetPage()
 	{
-		_page ??= new ControlPageBehaviorBehavior(this);
+		_page ??= new CanvasItemUiPageBehavior<Control>(this);
 		return _page;
 	}
 	private Button MainMenuButton=> GetNode<Button>("%MainMenuButton");

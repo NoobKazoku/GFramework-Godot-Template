@@ -9,12 +9,13 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="script_templates\**"/>
+        <Compile Remove="scripts\core\ui\UiFactory.cs" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Update="Meziantou.Analyzer" Version="2.0.276">
+        <PackageReference Update="Meziantou.Analyzer" Version="2.0.278">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
@@ -22,10 +23,10 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.107" />
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.107" />
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.107" />
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.107" />
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.109" />
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.109" />
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.109" />
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.109" />
     </ItemGroup>
     <ItemGroup>
         <Content Include=".github\workflows\auto-tag.yml"/>
