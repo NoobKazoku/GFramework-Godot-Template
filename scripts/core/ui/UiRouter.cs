@@ -10,8 +10,15 @@ namespace GFrameworkGodotTemplate.scripts.core.ui;
 [Log]
 public partial class UiRouter : UiRouterBase
 {
+    /// <summary>
+    /// 注册默认的过渡处理器
+    /// </summary>
+    /// <remarks>
+    /// 该方法用于注册日志记录过渡处理器到UI路由系统中
+    /// </remarks>
     protected override void RegisterHandlers()
     {
+        // 注册默认过渡处理器时输出调试日志
         _log.Debug("Registering default transition handlers");
         RegisterHandler(new LoggingTransitionHandler());
     }

@@ -1,4 +1,4 @@
-﻿// meta-name: UI页面控制器类模板
+﻿// meta-name: 简单UI页面控制器类模板
 // meta-description: 负责管理UI页面场景的生命周期和架构关联
 using Godot;
 using GFramework.Core.Abstractions.controller;
@@ -11,7 +11,7 @@ using GFramework.SourceGenerators.Abstractions.rule;
 
 [ContextAware]
 [Log]
-public partial class _CLASS_ :_BASE_,IController,IUiPageBehaviorProvider,IUiPage
+public partial class _CLASS_ :_BASE_,IController,IUiPageBehaviorProvider,ISimpleUiPage
 {
     /// <summary>
     /// 节点准备就绪时的回调方法
@@ -42,46 +42,6 @@ public partial class _CLASS_ :_BASE_,IController,IUiPageBehaviorProvider,IUiPage
     /// <param name="param">页面进入参数，可能为空</param>
     public void OnEnter(IUiPageEnterParam? param)
     {
-        
-    }
-	/// <summary>
-    /// 页面退出时调用的方法
-    /// </summary>
-    public void IUiPage.OnExit()
-    {
-        
-    }
-
-
-    /// <summary>
-    /// 页面暂停时调用的方法
-    /// </summary>
-    public void IUiPage.OnPause()
-    {
-        
-    }
-
-    /// <summary>
-    /// 页面恢复时调用的方法
-    /// </summary>
-    public void IUiPage.OnResume()
-    {
-        
-    }
-
-    /// <summary>
-    /// 页面显示时调用的方法
-    /// </summary>
-    public void IUiPage.OnShow()
-    {
        
-    }
-
-    /// <summary>
-    /// 页面隐藏时调用的方法
-    /// </summary>
-    public void IUiPage.OnHide()
-    {
-        
     }
 }
