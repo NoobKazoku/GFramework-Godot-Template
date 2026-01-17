@@ -23,21 +23,19 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.117" />
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.117" />
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.117" />
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.117" />
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.118" />
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.118" />
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.118" />
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.118" />
     </ItemGroup>
     <ItemGroup>
         <Content Include=".github\workflows\auto-tag.yml"/>
         <Content Include=".github\workflows\release.yml"/>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="scripts\command\" />
       <Folder Include="scripts\command\audio\input\" />
       <Folder Include="scripts\command\graphics\input\" />
       <Folder Include="scripts\command\setting\input\" />
-      <Folder Include="scripts\events\" />
       <Folder Include="scripts\tests\" />
     </ItemGroup>
 </Project>

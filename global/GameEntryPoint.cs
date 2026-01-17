@@ -1,6 +1,7 @@
 using GFramework.Core.Abstractions.architecture;
 using GFramework.Core.Abstractions.logging;
 using GFramework.Core.Abstractions.properties;
+using GFramework.Core.Abstractions.state;
 using GFramework.Core.architecture;
 using GFramework.Core.extensions;
 using GFramework.Game.state;
@@ -52,7 +53,7 @@ public partial class GameEntryPoint : Node
 			this.RegisterEvent<UiRoot.UiRootReadyEvent>(_ =>
 			{
 				// 创建并切换到游戏主菜单状态
-				this.GetSystem<GameStateMachine>()!
+				this.GetSystem<IStateMachineSystem>()!
 					.ChangeTo<MainMenuState>();
 			});
 		}

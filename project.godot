@@ -23,6 +23,7 @@ buses/default_bus_layout="res://resource/project_bus_layout.tres"
 
 GameEntryPoint="*res://global/game_entry_point.tscn"
 UiRoot="*res://global/ui_root.tscn"
+GlobalInputController="*res://global/GlobalInputController.cs"
 
 [display]
 
