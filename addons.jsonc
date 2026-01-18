@@ -1,0 +1,23 @@
+// Godot addons configuration file for use with the GodotEnv tool.
+// See https://github.com/chickensoft-games/GodotEnv for more info.
+// -------------------------------------------------------------------- //
+// Note: this is a JSONC file, so you can use comments!
+// If using Rider, see https://youtrack.jetbrains.com/issue/RIDER-41716
+// for any issues with JSONC.
+// -------------------------------------------------------------------- //
+// godotenv addons init
+// godotenv addons install
+// -------------------------------------------------------------------- //
+{
+  "$schema": "https://chickensoft.games/schemas/addons.schema.json",
+  // "path": "addons", // default
+  // "cache": ".addons", // default
+  "addons": {
+//    "rename_tool": { // name must match the folder name in the repository
+//      "url": "https://github.com/GeWuYou/rename_tool_plugin.git",
+//      // "source": "remote", // default
+//       "checkout": "master", // default
+//      "subfolder": "addons/rename_tool"
+//    }
+  }
+}
