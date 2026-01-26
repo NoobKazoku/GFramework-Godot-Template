@@ -1,5 +1,5 @@
 ﻿using GFramework.Core.model;
-using GFrameworkGodotTemplate.scripts.data.entities;
+using GFrameworkGodotTemplate.scripts.data.model;
 using GFrameworkGodotTemplate.scripts.setting.interfaces;
 
 namespace GFrameworkGodotTemplate.scripts.setting;

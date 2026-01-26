@@ -1,8 +1,8 @@
 ﻿using GFramework.Core.Abstractions.storage;
 using GFramework.Core.extensions;
 using GFramework.Core.utility;
-using GFrameworkGodotTemplate.scripts.data.entities;
 using GFrameworkGodotTemplate.scripts.data.interfaces;
+using GFrameworkGodotTemplate.scripts.data.model;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.data;

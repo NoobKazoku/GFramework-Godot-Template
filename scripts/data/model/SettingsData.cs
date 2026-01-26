@@ -1,4 +1,4 @@
-﻿namespace GFrameworkGodotTemplate.scripts.data.entities;
+﻿namespace GFrameworkGodotTemplate.scripts.data.model;
 
 /// <summary>
 /// 游戏设置数据类，包含音频和图形设置的配置信息

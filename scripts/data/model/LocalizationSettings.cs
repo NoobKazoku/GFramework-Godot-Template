@@ -1,4 +1,4 @@
-﻿namespace GFrameworkGodotTemplate.scripts.data.entities;
+﻿namespace GFrameworkGodotTemplate.scripts.data.model;
 
 /// <summary>
 /// 本地化设置类，用于管理游戏的语言本地化配置

@@ -1,4 +1,4 @@
-namespace GFrameworkGodotTemplate.scripts.data.entities;
+namespace GFrameworkGodotTemplate.scripts.data.model;
 
 /// <summary>
 /// 图形设置类，用于管理游戏的图形相关配置
