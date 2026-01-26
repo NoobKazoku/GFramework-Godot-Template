@@ -3,9 +3,7 @@ using GFramework.Game.architecture;
 using GFramework.Game.serializer;
 using GFramework.Godot.storage;
 using GFramework.Godot.ui;
-using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.setting;
-using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.module;
 
@@ -20,13 +18,6 @@ public class UtilityModule : AbstractModule
     /// <param name="architecture">要安装模块的目标游戏架构实例</param>
     public override void Install(IArchitecture architecture)
     {
-        architecture.RegisterUtility(
-            new GodotUiRegistry()
-                .Register(UiKeys.MainMenu, GD.Load<PackedScene>("res://scenes/tests/ui/main_menu/test_main_menu.tscn"))
-                .Register(UiKeys.Page1, GD.Load<PackedScene>("res://scenes/tests/ui/page_1.tscn"))
-                .Register(UiKeys.Page2, GD.Load<PackedScene>("res://scenes/tests/ui/page_2.tscn"))
-                .Register(UiKeys.Page3, GD.Load<PackedScene>("res://scenes/tests/ui/page_3.tscn"))
-        );
         architecture.RegisterUtility(new GodotUiFactory());
         var jsonSerializer = new JsonSerializer();
         architecture.RegisterUtility(jsonSerializer);

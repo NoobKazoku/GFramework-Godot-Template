@@ -15,18 +15,18 @@
         <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Update="Meziantou.Analyzer" Version="2.0.279">
+        <PackageReference Update="Meziantou.Analyzer" Version="2.0.286">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Update="Meziantou.Polyfill" Version="1.0.84">
+        <PackageReference Update="Meziantou.Polyfill" Version="1.0.100">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.118" />
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.118" />
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.118" />
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.118" />
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.133" />
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.133" />
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.133" />
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.133" />
     </ItemGroup>
     <ItemGroup>
         <Content Include=".github\workflows\auto-tag.yml"/>
@@ -34,6 +34,7 @@
         <Content Include="addons.jsonc" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="scenes\" />
       <Folder Include="scripts\command\audio\input\" />
       <Folder Include="scripts\command\graphics\input\" />
       <Folder Include="scripts\command\setting\input\" />
