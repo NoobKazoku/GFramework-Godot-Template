@@ -1,4 +1,4 @@
-﻿namespace GFrameworkGodotTemplate.scripts.setting;
+﻿namespace GFrameworkGodotTemplate.scripts.data.entities;
 
 /// <summary>
 /// 音频设置类，用于管理游戏中的音频配置

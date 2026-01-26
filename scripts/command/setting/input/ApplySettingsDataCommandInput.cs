@@ -1,5 +1,5 @@
 using GFramework.Core.Abstractions.command;
-using GFrameworkGodotTemplate.scripts.setting;
+using GFrameworkGodotTemplate.scripts.data.entities;
 
 namespace GFrameworkGodotTemplate.scripts.command.setting.input;
 

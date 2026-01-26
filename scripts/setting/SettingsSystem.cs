@@ -17,14 +17,6 @@ public partial class SettingsSystem : AbstractSystem, ISettingsSystem
     private ISettingsModel _settingsModel = null!;
 
     /// <summary>
-    /// 初始化设置系统，获取设置模型并应用所有设置
-    /// </summary>
-    protected override void OnInit()
-    {
-        _settingsModel = this.GetModel<ISettingsModel>()!;
-    }
-
-    /// <summary>
     /// 应用所有设置（图形设置和音频设置）
     /// </summary>
     public async Task ApplyAll()
@@ -44,12 +36,12 @@ public partial class SettingsSystem : AbstractSystem, ISettingsSystem
         // 直接调用DisplayServer API，不使用异步或延迟
         // 1. 设置边框标志
         DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, g.Fullscreen);
-        
+
         // 2. 设置窗口模式
         DisplayServer.WindowSetMode(
             g.Fullscreen ? DisplayServer.WindowMode.ExclusiveFullscreen : DisplayServer.WindowMode.Windowed
         );
-        
+
         // 3. 窗口化下设置尺寸和位置
         if (!g.Fullscreen)
         {
@@ -60,7 +52,7 @@ public partial class SettingsSystem : AbstractSystem, ISettingsSystem
             var pos = (screenSize - size) / 2;
             DisplayServer.WindowSetPosition(pos);
         }
-        
+
         await Task.CompletedTask.ConfigureAwait(false);
     }
 
@@ -73,6 +65,14 @@ public partial class SettingsSystem : AbstractSystem, ISettingsSystem
         SetBus(GameConstants.Master, a.MasterVolume);
         SetBus(GameConstants.Bgm, a.BgmVolume);
         SetBus(GameConstants.Sfx, a.SfxVolume);
+    }
+
+    /// <summary>
+    /// 初始化设置系统，获取设置模型并应用所有设置
+    /// </summary>
+    protected override void OnInit()
+    {
+        _settingsModel = this.GetModel<ISettingsModel>()!;
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using GFramework.Core.Abstractions.model;
+using GFrameworkGodotTemplate.scripts.data.entities;
 
 namespace GFrameworkGodotTemplate.scripts.setting.interfaces;
 

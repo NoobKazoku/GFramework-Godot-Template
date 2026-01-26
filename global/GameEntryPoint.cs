@@ -16,6 +16,7 @@ using GFrameworkGodotTemplate.scripts.core;
 using GFrameworkGodotTemplate.scripts.core.environment;
 using GFrameworkGodotTemplate.scripts.core.resource;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
+using GFrameworkGodotTemplate.scripts.data.interfaces;
 using GFrameworkGodotTemplate.scripts.enums.game;
 using GFrameworkGodotTemplate.scripts.setting.interfaces;
 using Godot;

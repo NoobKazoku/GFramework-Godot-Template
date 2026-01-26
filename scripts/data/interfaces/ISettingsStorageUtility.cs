@@ -1,6 +1,7 @@
 ﻿using GFramework.Core.Abstractions.utility;
+using GFrameworkGodotTemplate.scripts.data.entities;
 
-namespace GFrameworkGodotTemplate.scripts.setting.interfaces;
+namespace GFrameworkGodotTemplate.scripts.data.interfaces;
 
 /// <summary>
 /// 定义设置数据存储工具的接口，提供加载和保存设置数据的功能

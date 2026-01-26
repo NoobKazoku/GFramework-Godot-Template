@@ -1,6 +1,7 @@
 ﻿using GFramework.Core.command;
 using GFramework.Core.extensions;
-using GFrameworkGodotTemplate.scripts.setting;
+using GFrameworkGodotTemplate.scripts.data.entities;
+using GFrameworkGodotTemplate.scripts.data.interfaces;
 using GFrameworkGodotTemplate.scripts.setting.interfaces;
 
 namespace GFrameworkGodotTemplate.scripts.command.setting;
