@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://h32sfgimf5hg"]
+[gd_scene format=3 uid="uid://h32sfgimf5hg"]
 
 [ext_resource type="Script" uid="uid://qnv78cfw4fob" path="res://global/AudioManager.cs" id="1_siwhy"]
 
-[node name="AudioManager" type="Node"]
+[node name="AudioManager" type="Node" unique_id=297356846]
 script = ExtResource("1_siwhy")
 
-[node name="BgmAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="BgmAudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=684404688]
+unique_name_in_owner = true

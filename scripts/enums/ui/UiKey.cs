@@ -19,4 +19,5 @@ public enum UiKey
     /// 加载菜单界面键值
     /// </summary>
     LoadMenu,
+    
 }
