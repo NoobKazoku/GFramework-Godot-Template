@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.6.0">
+<Project Sdk="Godot.NET.Sdk/4.5.1">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
@@ -8,11 +8,11 @@
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Remove="script_templates\**" />
+        <Compile Remove="script_templates\**"/>
         <Compile Remove="scripts\core\ui\UiFactory.cs" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Remove="script_templates\**" />
+        <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Update="Meziantou.Analyzer" Version="2.0.286">
@@ -23,14 +23,14 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.135" />
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.135" />
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.135" />
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.135" />
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.133" />
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.133" />
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.133" />
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.133" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include=".github\workflows\auto-tag.yml" />
-        <Content Include=".github\workflows\release.yml" />
+        <Content Include=".github\workflows\auto-tag.yml"/>
+        <Content Include=".github\workflows\release.yml"/>
         <Content Include="addons.jsonc" />
         <Content Include="global\README.md" />
         <Content Include="scripts\command\README.md" />
