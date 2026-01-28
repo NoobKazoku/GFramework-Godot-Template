@@ -1,0 +1,228 @@
+[gd_scene format=3 uid="uid://dngneq20rrrn4"]
+
+[ext_resource type="PackedScene" uid="uid://yd2jo4bddl1v" path="res://scenes/component/volume_container.tscn" id="1_08d7r"]
+[ext_resource type="Script" uid="uid://k63bfqjv8kq3" path="res://scripts/options_menu/OptionsMenu.cs" id="1_44mp6"]
+[ext_resource type="Theme" uid="uid://drg0lvsgoqfsc" path="res://resource/theme/project_theme.tres" id="3_025dt"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_025dt"]
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="OptionsMenu" type="Control" unique_id=1298882326]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_44mp6")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2113445608]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.5254902)
+
+[node name="Panel" type="Panel" parent="." unique_id=306044598]
+custom_minimum_size = Vector2(800, 720)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -180.0
+offset_right = 240.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_025dt")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=630694786]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=46678036]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer" unique_id=555170095]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer" unique_id=949606053]
+layout_mode = 2
+theme_override_constants/separation = 19
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1672487260]
+custom_minimum_size = Vector2(180, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_025dt")
+text = "设置"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1999120484]
+layout_mode = 2
+theme_override_constants/separation = 290
+alignment = 2
+
+[node name="Audio" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=243091089]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Audio" unique_id=1927387105]
+custom_minimum_size = Vector2(20, 32)
+layout_mode = 2
+theme = ExtResource("3_025dt")
+theme_override_font_sizes/font_size = 32
+text = "声音"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Audio" unique_id=532051186]
+layout_mode = 2
+theme = ExtResource("3_025dt")
+theme_override_constants/margin_left = 105
+theme_override_constants/margin_right = 105
+
+[node name="MasterVolumeContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Audio/MarginContainer" unique_id=1312736515 instance=ExtResource("1_08d7r")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Audio" unique_id=308681330]
+layout_mode = 2
+theme = ExtResource("3_025dt")
+theme_override_constants/margin_left = 105
+theme_override_constants/margin_right = 105
+
+[node name="BgmVolumeContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Audio/MarginContainer2" unique_id=721119240 instance=ExtResource("1_08d7r")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Audio" unique_id=1465843541]
+layout_mode = 2
+theme = ExtResource("3_025dt")
+theme_override_constants/margin_left = 105
+theme_override_constants/margin_right = 105
+
+[node name="SfxVolumeContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Audio/MarginContainer3" unique_id=1482041959 instance=ExtResource("1_08d7r")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Graphics" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=502068045]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics" unique_id=1208102]
+custom_minimum_size = Vector2(20, 32)
+layout_mode = 2
+theme = ExtResource("3_025dt")
+theme_override_font_sizes/font_size = 32
+text = "图形"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics" unique_id=1274659775]
+layout_mode = 2
+theme_override_constants/margin_left = 105
+theme_override_constants/margin_right = 105
+
+[node name="FullscreenContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics/MarginContainer" unique_id=1642105692]
+layout_mode = 2
+
+[node name="FullscreenLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics/MarginContainer/FullscreenContainer" unique_id=2050738049]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_025dt")
+text = "全屏模式"
+
+[node name="FullscreenOptionButton" type="OptionButton" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics/MarginContainer/FullscreenContainer" unique_id=391805353]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(321, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics" unique_id=1739433983]
+layout_mode = 2
+theme_override_constants/margin_left = 105
+theme_override_constants/margin_right = 105
+
+[node name="ResolutionContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics/MarginContainer2" unique_id=491278929]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="ResolutionLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics/MarginContainer2/ResolutionContainer" unique_id=352991094]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_025dt")
+text = "分辨率"
+
+[node name="ResolutionOptionButton" type="OptionButton" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Graphics/MarginContainer2/ResolutionContainer" unique_id=463452780]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(321, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+
+[node name="Localization" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=1038311763]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Localization" unique_id=2130508667]
+custom_minimum_size = Vector2(20, 32)
+layout_mode = 2
+theme = ExtResource("3_025dt")
+theme_override_font_sizes/font_size = 32
+text = "本地化"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Localization" unique_id=115384821]
+layout_mode = 2
+theme_override_constants/margin_left = 105
+theme_override_constants/margin_right = 105
+
+[node name="LanguageContainer" type="HBoxContainer" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Localization/MarginContainer" unique_id=1379842278]
+layout_mode = 2
+
+[node name="LanguageLabel" type="Label" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Localization/MarginContainer/LanguageContainer" unique_id=1532029301]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_025dt")
+text = "语言"
+
+[node name="LanguageOptionButton" type="OptionButton" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer/Localization/MarginContainer/LanguageContainer" unique_id=229524629]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(321, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+
+[node name="Back" type="Button" parent="Panel/MarginContainer/HBoxContainer/MarginContainer/HBoxContainer" unique_id=182978590]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_025dt")
+theme_override_font_sizes/font_size = 32
+text = "退出"

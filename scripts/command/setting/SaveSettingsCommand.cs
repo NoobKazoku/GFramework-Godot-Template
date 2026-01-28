@@ -10,14 +10,12 @@ namespace GFrameworkGodotTemplate.scripts.command.setting;
 /// 保存游戏设置命令类
 /// 负责将当前游戏设置数据保存到存储中
 /// </summary>
-/// <param name="input">命令输入参数，类型为EmptyCommentInput</param>
-public sealed class SaveSettingsCommand(EmptyCommandInput input) : AbstractCommand<EmptyCommandInput>(input)
+public sealed class SaveSettingsCommand : AbstractCommand
 {
     /// <summary>
     /// 执行保存设置命令的主逻辑
     /// </summary>
-    /// <param name="input">命令输入参数</param>
-    protected override void OnExecute(EmptyCommandInput input)
+    protected override void OnExecute()
     {
         // 获取设置模型和存储工具实例
         var model = this.GetModel<ISettingsModel>()!;
