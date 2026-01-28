@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="GFramework-Godot-Template"
-run/main_scene="uid://6s2urcdmkpbt"
+run/main_scene="uid://dngneq20rrrn4"
 config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="uid://p5dak2wsc1nk"
 config/save/setting_path="user://setting.json"

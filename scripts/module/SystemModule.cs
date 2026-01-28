@@ -1,7 +1,7 @@
 ﻿using GFramework.Core.Abstractions.architecture;
 using GFramework.Game.architecture;
-using GFramework.Game.setting;
 using GFrameworkGodotTemplate.scripts.core.ui;
+using GFrameworkGodotTemplate.scripts.setting;
 
 namespace GFrameworkGodotTemplate.scripts.module;
 
