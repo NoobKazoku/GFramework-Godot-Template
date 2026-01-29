@@ -13,7 +13,8 @@
 
 using GFramework.Core.extensions;
 using GFramework.Core.query;
-using GFrameworkGodotTemplate.scripts.setting.interfaces;
+using GFramework.Game.Abstractions.setting;
+using GFramework.Game.Abstractions.setting.data;
 using GFrameworkGodotTemplate.scripts.setting.query.view;
 
 namespace GFrameworkGodotTemplate.scripts.setting.query;
@@ -35,7 +36,9 @@ public sealed class GetCurrentSettingsQuery : AbstractQuery<SettingsView>
         // 构建并返回设置视图对象
         return new SettingsView
         {
-            SettingsData = model.GetSettingsData(),
+            Audio = model.GetData<AudioSettings>(),
+            Graphics = model.GetData<GraphicsSettings>(),
+            Localization = model.GetData<LocalizationSettings>(),
         };
     }
 }

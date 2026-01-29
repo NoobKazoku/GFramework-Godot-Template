@@ -1,8 +1,9 @@
-using System.Threading.Tasks;
 using GFramework.Core.command;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.setting;
+using GFramework.Game.Abstractions.setting.data;
+using GFramework.Godot.setting;
 using GFrameworkGodotTemplate.scripts.command.graphics.input;
-using GFrameworkGodotTemplate.scripts.setting.interfaces;
 
 namespace GFrameworkGodotTemplate.scripts.command.graphics;
 
@@ -20,9 +21,9 @@ public sealed class ChangeResolutionCommand(ChangeResolutionCommandInput input)
     protected override async Task OnExecuteAsync(ChangeResolutionCommandInput input)
     {
         var model = this.GetModel<ISettingsModel>()!;
-        model.Graphics.ResolutionWidth = input.Width;
-        model.Graphics.ResolutionHeight = input.Height;
-
-        await this.GetSystem<ISettingsSystem>()!.ApplyGraphics().ConfigureAwait(false);
+        var settings = model.GetData<GraphicsSettings>();
+        settings.ResolutionWidth = input.Width;
+        settings.ResolutionHeight = input.Height;
+        await this.GetSystem<ISettingsSystem>()!.Apply<GodotGraphicsSettings>().ConfigureAwait(false);
     }
 }

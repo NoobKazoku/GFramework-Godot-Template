@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFrameworkGodotTemplate.scripts.data.model;
+
+using GFramework.Game.Abstractions.setting.data;
 
 namespace GFrameworkGodotTemplate.scripts.setting.query.view;
 
@@ -21,5 +22,18 @@ namespace GFrameworkGodotTemplate.scripts.setting.query.view;
 /// </summary>
 public sealed class SettingsView
 {
-    public SettingsData SettingsData { get; init; } = new();
+    /// <summary>
+    /// 音频设置配置对象，包含所有音频相关的设置选项
+    /// </summary>
+    public AudioSettings Audio { get; set; } = new();
+
+    /// <summary>
+    /// 图形设置配置对象，包含所有图形渲染相关的设置选项
+    /// </summary>
+    public GraphicsSettings Graphics { get; set; } = new();
+    
+    /// <summary>
+    /// 本地化设置配置对象，包含所有语言和区域相关的设置选项
+    /// </summary>
+    public LocalizationSettings Localization { get; set; } = new();
 }

@@ -1,7 +1,8 @@
 ﻿using GFramework.Core.Abstractions.architecture;
 using GFramework.Game.architecture;
+using GFramework.Game.setting;
 using GFrameworkGodotTemplate.scripts.core.ui;
-using GFrameworkGodotTemplate.scripts.setting;
+using GFrameworkGodotTemplate.scripts.setting.interfaces;
 
 namespace GFrameworkGodotTemplate.scripts.module;
 
@@ -18,6 +19,7 @@ public class SystemModule: AbstractModule
     public override void Install(IArchitecture architecture)
     {
         architecture.RegisterSystem(new UiRouter());
-        architecture.RegisterSystem(new SettingsSystem());
+        var settingsDataRepository = architecture.Context.GetUtility<ISettingsDataRepository>()!;
+        architecture.RegisterSystem(new SettingsSystem<ISettingsDataRepository>(settingsDataRepository));
     }
 }

@@ -1,24 +1,21 @@
-using System;
 using GFramework.Core.Abstractions.architecture;
 using GFramework.Core.Abstractions.logging;
 using GFramework.Core.Abstractions.properties;
 using GFramework.Core.Abstractions.state;
 using GFramework.Core.architecture;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.setting;
 using GFramework.Godot.logging;
 using GFramework.Godot.scene;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.setting;
-using GFrameworkGodotTemplate.scripts.command.setting.input;
 using GFrameworkGodotTemplate.scripts.core;
 using GFrameworkGodotTemplate.scripts.core.environment;
 using GFrameworkGodotTemplate.scripts.core.resource;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
-using GFrameworkGodotTemplate.scripts.data.interfaces;
 using GFrameworkGodotTemplate.scripts.enums.game;
-using GFrameworkGodotTemplate.scripts.setting.interfaces;
 using Godot;
 using Godot.Collections;
 
@@ -33,8 +30,8 @@ public partial class GameEntryPoint : Node
 {
     private IGodotSceneRegistry _sceneRegistry = null!;
     private ISettingsModel _settingsModel = null!;
-    private ISettingsStorageUtility _settingsStorageUtility = null!;
     private IGodotUiRegistry _uiRegistry = null!;
+    private ISettingsSystem _settingsSystem = null!;
     public static IArchitecture Architecture { get; private set; } = null!;
     [Export] public bool IsDev { get; set; } = true;
 
@@ -68,13 +65,10 @@ public partial class GameEntryPoint : Node
             },
         }, IsDev ? new GameDevEnvironment() : new GameMainEnvironment());
         Architecture.Initialize();
-        _settingsStorageUtility = this.GetUtility<ISettingsStorageUtility>()!;
         _settingsModel = this.GetModel<ISettingsModel>()!;
-        var data = _settingsStorageUtility.Load();
-        _ = this.SendCommandAsync(new ApplySettingsDataCommand(new ApplySettingsDataCommandInput
-        {
-            Settings = data,
-        })).ConfigureAwait(false);
+        _ =_settingsModel.InitializeAsync();
+        _settingsSystem = this.GetSystem<ISettingsSystem>()!;
+        _= _settingsSystem.ApplyAll();
         _log.Info("设置已加载");
         _sceneRegistry = this.GetUtility<IGodotSceneRegistry>()!;
         _uiRegistry = this.GetUtility<IGodotUiRegistry>()!;
@@ -125,6 +119,6 @@ public partial class GameEntryPoint : Node
     /// </summary>
     public override void _ExitTree()
     {
-        _settingsStorageUtility.Save(_settingsModel.GetSettingsData());
+        this.SendCommand(new SaveSettingsCommand());
     }
 }

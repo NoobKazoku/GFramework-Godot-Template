@@ -108,8 +108,7 @@ public partial class OptionsMenu : Control, IController
 	{
 		_initializing = true;
 		var view = this.SendQuery(new GetCurrentSettingsQuery());
-		var settingsData = view.SettingsData;
-		var audioSettings = settingsData.Audio;
+		var audioSettings = view.Audio;
 		MasterVolume.Initialize("主音量", audioSettings.MasterVolume);
 		BgmVolume.Initialize("音乐音量", audioSettings.BgmVolume);
 		SfxVolume.Initialize("音效音量", audioSettings.SfxVolume);
@@ -120,7 +119,7 @@ public partial class OptionsMenu : Control, IController
 			ResolutionOptionButton.AddItem($"{resolution.X}x{resolution.Y}");
 		}
 
-		var graphicsSettings = settingsData.Graphics;
+		var graphicsSettings = view.Graphics;
 		ResolutionOptionButton.Disabled = graphicsSettings.Fullscreen;
 		
 		// 初始化全屏选项
@@ -139,7 +138,7 @@ public partial class OptionsMenu : Control, IController
 			}
 		}
 
-		var localizationSettings = settingsData.Localization;
+		var localizationSettings = view.Localization;
 		LanguageOptionButton.Clear();
 		LanguageOptionButton.AddItem("简体中文");
 		LanguageOptionButton.AddItem("English");
@@ -157,19 +156,19 @@ public partial class OptionsMenu : Control, IController
 		MasterVolume
 			.Signal(signalName)
 			.To(Callable.From<float>(v =>
-				ContextAwareExtensions.SendCommand(this, new ChangeMasterVolumeCommand(
+				_ = this.SendCommandAsync(new ChangeMasterVolumeCommand(
 					new ChangeMasterVolumeCommandInput { Volume = v }))))
 			.End();
 		BgmVolume
 			.Signal(signalName)
 			.To(Callable.From<float>(v =>
-				ContextAwareExtensions.SendCommand(this, new ChangeBgmVolumeCommand(
+				_ = this.SendCommandAsync(new ChangeBgmVolumeCommand(
 					new ChangeBgmVolumeCommandInput { Volume = v }))))
 			.End();
 		SfxVolume
 			.Signal(signalName)
 			.To(Callable.From<float>(v =>
-				ContextAwareExtensions.SendCommand(this, new ChangeSfxVolumeCommand(
+				_ = this.SendCommandAsync(new ChangeSfxVolumeCommand(
 					new ChangeSfxVolumeCommandInput { Volume = v }))))
 			.End();
 		ResolutionOptionButton.ItemSelected += async index=> await OnResolutionChanged(index).ConfigureAwait(false);

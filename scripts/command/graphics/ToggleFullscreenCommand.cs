@@ -1,9 +1,9 @@
-using System.Threading.Tasks;
-using GFramework.Core.Abstractions.command;
 using GFramework.Core.command;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.setting;
+using GFramework.Game.Abstractions.setting.data;
+using GFramework.Godot.setting;
 using GFrameworkGodotTemplate.scripts.command.graphics.input;
-using GFrameworkGodotTemplate.scripts.setting.interfaces;
 
 namespace GFrameworkGodotTemplate.scripts.command.graphics;
 
@@ -21,7 +21,7 @@ public sealed class ToggleFullscreenCommand(ToggleFullscreenCommandInput input)
     protected override async Task OnExecuteAsync(ToggleFullscreenCommandInput input)
     {
         var model = this.GetModel<ISettingsModel>()!;
-        model.Graphics.Fullscreen = input.Fullscreen;
-        await this.GetSystem<ISettingsSystem>()!.ApplyGraphics().ConfigureAwait(false);
+        model.GetData<GraphicsSettings>().Fullscreen = input.Fullscreen;
+        await this.GetSystem<ISettingsSystem>()!.Apply<GodotGraphicsSettings>().ConfigureAwait(false);
     }
 }
