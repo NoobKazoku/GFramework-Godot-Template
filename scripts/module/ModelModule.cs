@@ -1,9 +1,10 @@
 ﻿using GFramework.Core.Abstractions.architecture;
+using GFramework.Game.Abstractions.data;
 using GFramework.Game.architecture;
 using GFramework.Game.setting;
 using GFramework.Godot.setting;
 using GFramework.Godot.setting.data;
-using GFrameworkGodotTemplate.scripts.setting.interfaces;
+using GFrameworkGodotTemplate.scripts.setting;
 
 namespace GFrameworkGodotTemplate.scripts.module;
 
@@ -20,7 +21,7 @@ public class ModelModule : AbstractModule
     {
         var settingsDataRepository = architecture.Context.GetUtility<ISettingsDataRepository>()!;
         var settingsModel =
-            architecture.RegisterModel(new SettingsModel<ISettingsDataRepository>(settingsDataRepository));
+            architecture.RegisterModel(new SettingsModel<ISettingsDataRepository>(new SettingDataLocationProvider(),settingsDataRepository));
         settingsModel
             .RegisterApplicator(new GodotAudioSettings(settingsModel, new AudioBusMap()))
             .RegisterApplicator(new GodotGraphicsSettings(settingsModel))

@@ -1,12 +1,12 @@
 ﻿using GFramework.Core.Abstractions.architecture;
 using GFramework.Game.Abstractions.data;
 using GFramework.Game.architecture;
+using GFramework.Game.data;
 using GFramework.Game.serializer;
 using GFramework.Godot.scene;
 using GFramework.Godot.storage;
 using GFramework.Godot.ui;
 using GFrameworkGodotTemplate.scripts.data;
-using GFrameworkGodotTemplate.scripts.setting;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.module;
@@ -29,7 +29,7 @@ public class UtilityModule : AbstractModule
         architecture.RegisterUtility(jsonSerializer);
         var storage = new GodotFileStorage(jsonSerializer);
         architecture.RegisterUtility(storage);
-        architecture.RegisterUtility(new SettingsDataRepository(storage: storage, serializer: jsonSerializer,
+        architecture.RegisterUtility(new UnifiedSettingsDataRepository(storage: storage, serializer: jsonSerializer,
             options: new DataRepositoryOptions
             {
                 BasePath = ProjectSettings.GetSetting("application/config/save/setting_path").AsString(),

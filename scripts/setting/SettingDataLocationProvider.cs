@@ -1,4 +1,5 @@
-﻿// Copyright (c) 2026 GeWuYou
+﻿
+// Copyright (c) 2026 GeWuYou
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -12,13 +13,18 @@
 // limitations under the License.
 
 using GFramework.Game.Abstractions.data;
+using GFrameworkGodotTemplate.scripts.data.model;
 
-namespace GFrameworkGodotTemplate.scripts.setting.interfaces;
+namespace GFrameworkGodotTemplate.scripts.setting;
 
-/// <summary>
-/// 设置数据仓库接口，用于管理应用程序设置数据的存储和访问
-/// </summary>
-/// <remarks>
-/// 该接口继承自IDataRepository，提供了专门针对设置数据的操作能力
-/// </remarks>
-public interface ISettingsDataRepository : IDataRepository;
+public class SettingDataLocationProvider: IDataLocationProvider
+{
+    public IDataLocation GetLocation(Type type)
+    {
+        return new LocalDataLocation()
+        {
+            Key = type.Name,
+            Namespace = "settings",
+        };
+    }
+}
