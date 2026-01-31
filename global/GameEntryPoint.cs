@@ -5,6 +5,7 @@ using GFramework.Core.Abstractions.state;
 using GFramework.Core.architecture;
 using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.setting;
+using GFramework.Game.setting.events;
 using GFramework.Godot.logging;
 using GFramework.Godot.scene;
 using GFramework.Godot.ui;
@@ -67,9 +68,13 @@ public partial class GameEntryPoint : Node
         Architecture.Initialize();
         _settingsModel = this.GetModel<ISettingsModel>()!;
         _ =_settingsModel.InitializeAsync();
-        _settingsSystem = this.GetSystem<ISettingsSystem>()!;
-        _= _settingsSystem.ApplyAll();
-        _log.Info("设置已加载");
+        // 监听设置初始化完成事件
+        this.RegisterEvent<SettingsInitializedEvent>(e =>
+        {
+            _settingsSystem = this.GetSystem<ISettingsSystem>()!;
+            _= _settingsSystem.ApplyAll();
+            _log.Info("设置已加载");
+        });
         _sceneRegistry = this.GetUtility<IGodotSceneRegistry>()!;
         _uiRegistry = this.GetUtility<IGodotUiRegistry>()!;
         // 注册所有游戏场景配置到场景注册表中
