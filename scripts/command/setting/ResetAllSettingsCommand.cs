@@ -1,8 +1,6 @@
 ﻿using GFramework.Core.command;
 using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.setting;
-using GFrameworkGodotTemplate.scripts.enums.settings;
-using GFrameworkGodotTemplate.scripts.events.settings;
 
 namespace GFrameworkGodotTemplate.scripts.command.setting;
 
@@ -21,9 +19,5 @@ public sealed class ResetAllSettingsCommand(EmptyCommandInput input)
     protected override async Task OnExecuteAsync(EmptyCommandInput input)
     {
         await this.GetSystem<ISettingsSystem>()!.ResetAll().ConfigureAwait(false);
-        this.SendEvent(new SettingsChangedEvent
-        {
-            Reason = SettingsChangedReason.All,
-        });
     }
 }

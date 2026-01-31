@@ -1,5 +1,6 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.extensions;
+using GFramework.Game.setting.events;
 using GFramework.Godot.extensions.signal;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
@@ -74,8 +75,13 @@ public partial class OptionsMenu : Control, IController
 	/// </summary>
 	public override void _Ready()
 	{
+		Hide();
+		this.RegisterEvent<SettingsInitializedEvent>(_ =>
+		{
+			InitializeUi();
+			Show();
+		});
 		GetNode<Button>("%Back").Pressed += OnBackPressed;
-		InitializeUi();
 		SetupEventHandlers();
 	}
 
