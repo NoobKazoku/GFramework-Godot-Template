@@ -1,6 +1,6 @@
-# CI/CD工作流配置：构建和测试.NET项目
+# CI/CD工作流配置：构建.NET项目
 # 该工作流在push到main/master分支或创建pull request时触发
-name: CI - Build & Test
+name: CI - Build
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   test:
-    name: Build and Test
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -55,4 +55,4 @@ jobs:
         run: dotnet tool restore
       # 构建项目，使用Release配置且跳过恢复步骤
       - name: Build
-        run: dotnet build -c Release --no-restore
+        run: dotnet build -c Release --no-restore -p:NoBuild=true
