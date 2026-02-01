@@ -21,7 +21,7 @@ public sealed class ChangeBgmVolumeCommand(ChangeBgmVolumeCommandInput input)
     protected override async Task OnExecuteAsync(ChangeBgmVolumeCommandInput input)
     {
         var model = this.GetModel<ISettingsModel>()!;
-        model.GetData<AudioSettings>().SfxVolume = input.Volume;
+        model.GetData<AudioSettings>().BgmVolume = input.Volume;
         await this.GetSystem<ISettingsSystem>()!.Apply<GodotAudioSettings>().ConfigureAwait(false);
     }
 }

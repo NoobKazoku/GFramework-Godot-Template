@@ -197,6 +197,11 @@ public partial class OptionsMenu : Control, IController
             .End();
         ResolutionOptionButton.ItemSelected += async index => await OnResolutionChanged(index).ConfigureAwait(false);
         FullscreenOptionButton.ItemSelected += async index => await OnFullscreenChanged(index).ConfigureAwait(false);
+        LanguageOptionButton.ItemSelected += async index => await OnLanguageChanged(index).ConfigureAwait(false);
+    }
+
+    private async Task OnLanguageChanged(long index)
+    {
     }
 
     /// <summary>
