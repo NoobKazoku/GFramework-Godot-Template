@@ -14,6 +14,7 @@ using GFrameworkGodotTemplate.scripts.command.audio.input;
 using GFrameworkGodotTemplate.scripts.command.graphics;
 using GFrameworkGodotTemplate.scripts.command.graphics.input;
 using GFrameworkGodotTemplate.scripts.command.setting;
+using GFrameworkGodotTemplate.scripts.command.setting.input;
 using GFrameworkGodotTemplate.scripts.component;
 using GFrameworkGodotTemplate.scripts.options_menu.events;
 using GFrameworkGodotTemplate.scripts.setting.query;
@@ -200,8 +201,22 @@ public partial class OptionsMenu : Control, IController
         LanguageOptionButton.ItemSelected += async index => await OnLanguageChanged(index).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// 语言改变事件
+    /// </summary>
+    /// <param name="index">选择的语言索引</param>
     private async Task OnLanguageChanged(long index)
     {
+        if (_initializing) return;
+
+        // 根据索引获取对应的语言
+        var language = index == 0 ? "简体中文" : "English";
+
+        // 发送更改语言命令
+        await this.SendCommandAsync(new ChangeLanguageCommand(new ChangeLanguageCommandInput
+            { Language = language })).ConfigureAwait(false);
+
+        _log.Debug($"语言更改为: {language}");
     }
 
     /// <summary>
