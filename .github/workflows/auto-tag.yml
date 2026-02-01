@@ -23,7 +23,7 @@ jobs:
       # 步骤一：检出仓库代码
       # 使用 actions/checkout 动作获取完整的 Git 历史用于查找已有标签
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           lfs: true
           fetch-depth: 0 # 获取全部历史记录以查找现有标签
