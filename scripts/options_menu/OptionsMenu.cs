@@ -86,7 +86,6 @@ public partial class OptionsMenu : Control, IController
     {
         // 使用 CallDeferred 确保在下一帧执行协程，避免节点初始化冲突
         CallDeferred(MethodName.StartInitialization);
-
         GetNode<Button>("%Back").Pressed += OnBackPressed;
         SetupEventHandlers();
     }
@@ -115,8 +114,7 @@ public partial class OptionsMenu : Control, IController
 
     private void OnBackPressed()
     {
-        // 使用 CallDeferred 确保在下一帧执行协程，避免节点初始化冲突
-        CallDeferred(MethodName.StartSaving);
+        Timing.RunCoroutine(BackCoroutine());
     }
 
     /// <summary>
@@ -180,20 +178,22 @@ public partial class OptionsMenu : Control, IController
         MasterVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                _ = this.SendCommandAsync(new ChangeMasterVolumeCommand(
-                    new ChangeMasterVolumeCommandInput { Volume = v }))))
+                Timing.RunCoroutine(this.SendCommandCoroutineWithErrorHandler(
+                    new ChangeMasterVolumeCommand(new ChangeMasterVolumeCommandInput { Volume = v })))))
             .End();
         BgmVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                _ = this.SendCommandAsync(new ChangeBgmVolumeCommand(
-                    new ChangeBgmVolumeCommandInput { Volume = v }))))
+                Timing.RunCoroutine(this.SendCommandCoroutineWithErrorHandler(
+                    new ChangeBgmVolumeCommand(
+                        new ChangeBgmVolumeCommandInput { Volume = v })))))
             .End();
         SfxVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                _ = this.SendCommandAsync(new ChangeSfxVolumeCommand(
-                    new ChangeSfxVolumeCommandInput { Volume = v }))))
+                Timing.RunCoroutine(this.SendCommandCoroutineWithErrorHandler(
+                    new ChangeSfxVolumeCommand(
+                        new ChangeSfxVolumeCommandInput { Volume = v })))))
             .End();
         ResolutionOptionButton.ItemSelected += async index => await OnResolutionChanged(index).ConfigureAwait(false);
         FullscreenOptionButton.ItemSelected += async index => await OnFullscreenChanged(index).ConfigureAwait(false);
@@ -245,29 +245,35 @@ public partial class OptionsMenu : Control, IController
         _log.Debug($"全屏模式切换为: {fullscreen}");
     }
 
+    /// <summary>
+    /// 初始化协程，用于设置界面的初始化流程
+    /// </summary>
+    /// <returns>返回一个IYieldInstruction类型的IEnumerator，用于协程执行</returns>
     private IEnumerator<IYieldInstruction> InitCoroutine()
     {
         Hide();
         var eventBus = this.GetService<IEventBus>()!;
+        // 等待设置初始化事件完成
         yield return new WaitForEvent<SettingsInitializedEvent>(eventBus);
 
         InitializeUi();
         Show();
     }
 
+    /// <summary>
+    /// 返回协程，用于处理设置保存和界面关闭逻辑
+    /// </summary>
+    /// <returns>返回一个IYieldInstruction类型的IEnumerator，用于协程执行</returns>
     private IEnumerator<IYieldInstruction> BackCoroutine()
     {
-        var enumerator = this.SendCommandCoroutineWithErrorHandler(
-            new SaveSettingsCommand(),
-            e => _log.Error("保存失败！", e)
-        );
-
-        while (enumerator.MoveNext())
-        {
-            yield return enumerator.Current;
-        }
-
-        _log.Info("设置已保存");
-        this.SendEvent<CloseOptionsMenuEvent>();
+        return this.SendCommandCoroutineWithErrorHandler(
+                new SaveSettingsCommand(),
+                e => _log.Error("保存失败！", e)
+            )
+            .Then(() =>
+            {
+                _log.Info("设置已保存");
+                this.SendEvent<CloseOptionsMenuEvent>();
+            });
     }
 }
