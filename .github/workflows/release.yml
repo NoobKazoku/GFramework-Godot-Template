@@ -1,4 +1,4 @@
-﻿name: Release on Tag
+name: Release on Tag
 
 # 触发条件：当有标签被推送到仓库时触发该工作流。
 # 支持任意格式的标签名，例如 `1.0.0` 或 `v1.0.0`。
@@ -37,7 +37,7 @@ jobs:
 
       # 步骤二：安装指定版本的 .NET SDK（用于编译 C# 项目）
       - name: Setup .NET (for restore/build)
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
 
@@ -110,7 +110,7 @@ jobs:
 
       # 安装 .NET SDK
       - name: Setup .NET (for restore/build)
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.0.x'
 
