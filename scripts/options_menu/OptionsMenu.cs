@@ -95,7 +95,7 @@ public partial class OptionsMenu : Control, IController
     /// </summary>
     private void StartInitialization()
     {
-        Timing.RunCoroutine(InitCoroutine());
+        InitCoroutine().RunCoroutine();
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ public partial class OptionsMenu : Control, IController
 
     private void OnBackPressed()
     {
-        Timing.RunCoroutine(BackCoroutine());
+        SaveCommandCoroutine().RunCoroutine();
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public partial class OptionsMenu : Control, IController
     /// </summary>
     private void StartSaving()
     {
-        Timing.RunCoroutine(BackCoroutine());
+        SaveCommandCoroutine().RunCoroutine();
     }
 
     /// <summary>
@@ -178,15 +178,17 @@ public partial class OptionsMenu : Control, IController
         MasterVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                Timing.RunCoroutine(this.SendCommandCoroutineWithErrorHandler(
-                    new ChangeMasterVolumeCommand(new ChangeMasterVolumeCommandInput { Volume = v })))))
+                this.SendCommandCoroutineWithErrorHandler(
+                        new ChangeMasterVolumeCommand(new ChangeMasterVolumeCommandInput { Volume = v }))
+                    .RunCoroutine()))
             .End();
         BgmVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                Timing.RunCoroutine(this.SendCommandCoroutineWithErrorHandler(
-                    new ChangeBgmVolumeCommand(
-                        new ChangeBgmVolumeCommandInput { Volume = v })))))
+                this.SendCommandCoroutineWithErrorHandler(
+                        new ChangeBgmVolumeCommand(
+                            new ChangeBgmVolumeCommandInput { Volume = v }))
+                    .RunCoroutine()))
             .End();
         SfxVolume
             .Signal(signalName)
@@ -261,10 +263,10 @@ public partial class OptionsMenu : Control, IController
     }
 
     /// <summary>
-    /// 返回协程，用于处理设置保存和界面关闭逻辑
+    /// 保存命令协程，用于处理设置保存操作
     /// </summary>
     /// <returns>返回一个IYieldInstruction类型的IEnumerator，用于协程执行</returns>
-    private IEnumerator<IYieldInstruction> BackCoroutine()
+    private IEnumerator<IYieldInstruction> SaveCommandCoroutine()
     {
         return this.SendCommandCoroutineWithErrorHandler(
                 new SaveSettingsCommand(),
