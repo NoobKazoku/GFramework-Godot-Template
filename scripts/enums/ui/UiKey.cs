@@ -9,15 +9,25 @@ public enum UiKey
     /// 主菜单界面键值
     /// </summary>
     MainMenu,
-    
+
     /// <summary>
     /// 保存菜单界面键值
     /// </summary>
     SaveMenu,
-    
+
     /// <summary>
     /// 加载菜单界面键值
     /// </summary>
+    /// <remarks>
+    /// 表示加载菜单相关的界面状态或操作类型
+    /// </remarks>
     LoadMenu,
-    
+
+    /// <summary>
+    /// 选项菜单界面键值
+    /// </summary>
+    /// <remarks>
+    /// 表示选项菜单相关的界面状态或操作类型
+    /// </remarks>
+    OptionsMenu,
 }

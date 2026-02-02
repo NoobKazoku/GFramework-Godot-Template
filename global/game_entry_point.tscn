@@ -3,12 +3,19 @@
 [ext_resource type="Script" uid="uid://7tmuhvthtrnh" path="res://global/GameEntryPoint.cs" id="1_a14y6"]
 [ext_resource type="PackedScene" uid="uid://4xqosh5cpa8o" path="res://scenes/main_menu/main_menu.tscn" id="2_l8ju5"]
 [ext_resource type="Script" uid="uid://cowpnmhamgtd3" path="res://scripts/core/resource/UiPageConfig.cs" id="3_x37g7"]
+[ext_resource type="PackedScene" uid="uid://dngneq20rrrn4" path="res://scenes/options_menu/options_menu.tscn" id="4_3xsct"]
 [ext_resource type="PackedScene" uid="uid://6s2urcdmkpbt" path="res://scenes/main.tscn" id="4_pn3ws"]
 [ext_resource type="Script" uid="uid://5mfgbvaive07" path="res://scripts/core/resource/GameSceneConfig.cs" id="5_3xsct"]
 
 [sub_resource type="Resource" id="Resource_pn3ws"]
 script = ExtResource("3_x37g7")
 Scene = ExtResource("2_l8ju5")
+metadata/_custom_type_script = "uid://cowpnmhamgtd3"
+
+[sub_resource type="Resource" id="Resource_f22d5"]
+script = ExtResource("3_x37g7")
+UiKey = 3
+Scene = ExtResource("4_3xsct")
 metadata/_custom_type_script = "uid://cowpnmhamgtd3"
 
 [sub_resource type="Resource" id="Resource_7mti7"]
@@ -19,5 +26,5 @@ metadata/_custom_type_script = "uid://5mfgbvaive07"
 
 [node name="GameEntryPoint" type="Node" unique_id=729277825]
 script = ExtResource("1_a14y6")
-UiPageConfigs = Array[Object]([SubResource("Resource_pn3ws")])
+UiPageConfigs = Array[Object]([SubResource("Resource_pn3ws"), SubResource("Resource_f22d5")])
 GameSceneConfigs = Array[Object]([SubResource("Resource_7mti7")])

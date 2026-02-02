@@ -50,6 +50,7 @@ public partial class _CLASS_ :_BASE_,IController,IUiPageBehaviorProvider,ISimple
         {
             _uiRouter.Push(GetPage());
         }
+        // 在此添加延迟初始化逻辑
     }
     /// <summary>
     /// 节点准备就绪时的回调方法
@@ -66,6 +67,10 @@ public partial class _CLASS_ :_BASE_,IController,IUiPageBehaviorProvider,ISimple
     {
         await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
         _uiRouter = this.GetSystem<IUiRouter>()!;
+        
+        // 在此添加就绪逻辑
+        
+        // 这个需要延迟调用，因为UiRoot还没有添加到场景树中
         CallDeferred(nameof(CallDeferredInit));
     }
     /// <summary>

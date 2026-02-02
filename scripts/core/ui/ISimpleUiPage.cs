@@ -6,14 +6,13 @@ namespace GFrameworkGodotTemplate.scripts.core.ui;
 /// 简单UI页面接口，继承自IUiPage接口
 /// 提供了页面生命周期管理的基础方法实现
 /// </summary>
-public interface ISimpleUiPage: IUiPage
+public interface ISimpleUiPage : IUiPage
 {
     /// <summary>
     /// 页面退出时调用的方法
     /// </summary>
     void IUiPage.OnExit()
     {
-        
     }
 
     /// <summary>
@@ -21,7 +20,6 @@ public interface ISimpleUiPage: IUiPage
     /// </summary>
     void IUiPage.OnPause()
     {
-        
     }
 
     /// <summary>
@@ -29,7 +27,6 @@ public interface ISimpleUiPage: IUiPage
     /// </summary>
     void IUiPage.OnResume()
     {
-        
     }
 
     /// <summary>
@@ -37,7 +34,6 @@ public interface ISimpleUiPage: IUiPage
     /// </summary>
     void IUiPage.OnShow()
     {
-       
     }
 
     /// <summary>
@@ -45,6 +41,13 @@ public interface ISimpleUiPage: IUiPage
     /// </summary>
     void IUiPage.OnHide()
     {
-        
+    }
+
+    /// <summary>
+    /// 页面进入时调用的方法
+    /// </summary>
+    /// <param name="param">页面进入参数，可为空</param>
+    void IUiPage.OnEnter(IUiPageEnterParam? param)
+    {
     }
 }
