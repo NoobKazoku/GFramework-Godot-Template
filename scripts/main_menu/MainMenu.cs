@@ -4,6 +4,8 @@ using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
+using GFrameworkGodotTemplate.scripts.command.game;
+using GFrameworkGodotTemplate.scripts.command.game.input;
 using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.enums.ui;
@@ -26,6 +28,12 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
     private IUiPageBehavior? _page;
 
     private IUiRouter _uiRouter = null!;
+
+    private Button NewGameButton => GetNode<Button>("%NewGameButton");
+    private Button ContinueGameButton => GetNode<Button>("%ContinueGameButton");
+    private Button OptionsMenuButton => GetNode<Button>("%OptionsMenuButton");
+    private Button CreditsButton => GetNode<Button>("%CreditsButton");
+    private Button ExitButton => GetNode<Button>("%ExitButton");
 
     /// <summary>
     ///  Ui Key的字符串形式
@@ -70,6 +78,11 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
         // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
+        // 绑定退出游戏按钮点击事件
+        ExitButton.Pressed += () =>
+        {
+            this.SendCommand(new ExitGameCommand(new ExitGameCommandInput { Node = this }));
+        };
         // 延迟调用初始化方法
         CallDeferred(nameof(CallDeferredInit));
     }

@@ -1,3 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://drg0lvsgoqfsc"]
 
+[ext_resource type="FontFile" uid="uid://dapxowp0mirbf" path="res://assets/fonts/VonwaonBitmap-16px.ttf" id="1_qv2l7"]
+
 [resource]
+Button/font_sizes/font_size = 48
+Button/fonts/font = ExtResource("1_qv2l7")

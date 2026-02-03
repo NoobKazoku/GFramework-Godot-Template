@@ -115,12 +115,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
         // 在开发环境中且当前页面不在路由栈顶时，将页面推入路由栈
         if (GameConstants.Development.Equals(env.Name, StringComparison.Ordinal) && !_uiRouter.IsTop(UiKeyStr))
         {
-            _uiRouter.Show(
-                UiKeyStr,
-                UiLayer.Modal,
-                param: null,
-                instancePolicy: UiInstancePolicy.Reuse
-            );
+            _uiRouter.Show(GetPage(), UiLayer.Modal);
         }
 
         InitCoroutine().RunCoroutine();
