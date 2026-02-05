@@ -1,7 +1,6 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.enums;
-using GFramework.Game.Abstractions.scene;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
@@ -83,7 +82,6 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
         // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
-        _sceneRouter = this.GetSystem<ISceneRouter>()!;
         SetupEventHandlers();
         // 延迟调用初始化方法
         CallDeferred(nameof(CallDeferredInit));
