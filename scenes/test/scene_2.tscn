@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b1vjila6v2iyw"]
+
+[ext_resource type="Texture2D" uid="uid://p5dak2wsc1nk" path="res://nooblogo.png" id="1_x7k20"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8jw84"]
+
+[node name="Scene1" type="Node2D" unique_id=331001394]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1110659108]
+material = SubResource("CanvasItemMaterial_8jw84")
+position = Vector2(1539, 249)
+texture = ExtResource("1_x7k20")

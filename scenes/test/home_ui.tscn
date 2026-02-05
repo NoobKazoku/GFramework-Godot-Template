@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://ctw1uutwq5msk"]
+
+[ext_resource type="Script" uid="uid://bvv2aal8vo6uw" path="res://scripts/tests/HomeUi.cs" id="1_nbfor"]
+
+[node name="HomeUi" type="Control" unique_id=773135946]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nbfor")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1750478616]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=1052159578]
+layout_mode = 2
+theme_override_constants/separation = 83
+
+[node name="Scene1Button" type="Button" parent="CenterContainer/HBoxContainer" unique_id=1242585154]
+unique_name_in_owner = true
+layout_mode = 2
+text = "场景1"
+
+[node name="Scene2Button" type="Button" parent="CenterContainer/HBoxContainer" unique_id=2024384054]
+unique_name_in_owner = true
+layout_mode = 2
+text = "场景2"
+
+[node name="HomeButton" type="Button" parent="CenterContainer/HBoxContainer" unique_id=653578696]
+unique_name_in_owner = true
+layout_mode = 2
+text = "主场景"

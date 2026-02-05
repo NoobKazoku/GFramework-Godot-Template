@@ -38,4 +38,5 @@ public enum UiKey
     /// 表示显示版权信息的界面状态或操作类型
     /// </remarks>
     Credits,
+    HomeUi
 }

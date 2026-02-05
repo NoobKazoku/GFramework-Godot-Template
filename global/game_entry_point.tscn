@@ -5,8 +5,12 @@
 [ext_resource type="Script" uid="uid://cowpnmhamgtd3" path="res://scripts/core/resource/UiPageConfig.cs" id="3_x37g7"]
 [ext_resource type="PackedScene" uid="uid://dngneq20rrrn4" path="res://scenes/options_menu/options_menu.tscn" id="4_3xsct"]
 [ext_resource type="PackedScene" uid="uid://6s2urcdmkpbt" path="res://scenes/main.tscn" id="4_pn3ws"]
-[ext_resource type="Script" uid="uid://5mfgbvaive07" path="res://scripts/core/resource/GameSceneConfig.cs" id="5_3xsct"]
 [ext_resource type="PackedScene" uid="uid://b3oc5caltregr" path="res://scenes/credits/credits.tscn" id="5_7mti7"]
+[ext_resource type="PackedScene" uid="uid://ctw1uutwq5msk" path="res://scenes/test/home_ui.tscn" id="6_iiepj"]
+[ext_resource type="PackedScene" uid="uid://dyrf2o3rqfqic" path="res://scenes/test/scene_1.tscn" id="6_inr81"]
+[ext_resource type="Script" uid="uid://5mfgbvaive07" path="res://scripts/core/resource/SceneConfig.cs" id="7_iiepj"]
+[ext_resource type="PackedScene" uid="uid://b1vjila6v2iyw" path="res://scenes/test/scene_2.tscn" id="8_rtbxk"]
+[ext_resource type="PackedScene" uid="uid://fb017woaakjg" path="res://scenes/test/home.tscn" id="9_iumd8"]
 
 [sub_resource type="Resource" id="Resource_pn3ws"]
 script = ExtResource("3_x37g7")
@@ -25,13 +29,37 @@ UiKey = 4
 Scene = ExtResource("5_7mti7")
 metadata/_custom_type_script = "uid://cowpnmhamgtd3"
 
-[sub_resource type="Resource" id="Resource_7mti7"]
-script = ExtResource("5_3xsct")
+[sub_resource type="Resource" id="Resource_rtbxk"]
+script = ExtResource("3_x37g7")
+UiKey = 5
+Scene = ExtResource("6_iiepj")
+metadata/_custom_type_script = "uid://cowpnmhamgtd3"
+
+[sub_resource type="Resource" id="Resource_1yddw"]
+script = ExtResource("7_iiepj")
+SceneKey = 2
+Scene = ExtResource("6_inr81")
+metadata/_custom_type_script = "uid://5mfgbvaive07"
+
+[sub_resource type="Resource" id="Resource_fgqit"]
+script = ExtResource("7_iiepj")
+SceneKey = 3
+Scene = ExtResource("8_rtbxk")
+metadata/_custom_type_script = "uid://5mfgbvaive07"
+
+[sub_resource type="Resource" id="Resource_hjx06"]
+script = ExtResource("7_iiepj")
+SceneKey = 4
+Scene = ExtResource("9_iumd8")
+metadata/_custom_type_script = "uid://5mfgbvaive07"
+
+[sub_resource type="Resource" id="Resource_iumd8"]
+script = ExtResource("7_iiepj")
 SceneKey = 1
 Scene = ExtResource("4_pn3ws")
 metadata/_custom_type_script = "uid://5mfgbvaive07"
 
 [node name="GameEntryPoint" type="Node" unique_id=729277825]
 script = ExtResource("1_a14y6")
-UiPageConfigs = Array[Object]([SubResource("Resource_pn3ws"), SubResource("Resource_f22d5"), SubResource("Resource_inr81")])
-GameSceneConfigs = Array[Object]([SubResource("Resource_7mti7")])
+UiPageConfigs = Array[Object]([SubResource("Resource_pn3ws"), SubResource("Resource_f22d5"), SubResource("Resource_inr81"), SubResource("Resource_rtbxk")])
+GameSceneConfigs = Array[Object]([SubResource("Resource_1yddw"), SubResource("Resource_fgqit"), SubResource("Resource_hjx06"), SubResource("Resource_iumd8")])

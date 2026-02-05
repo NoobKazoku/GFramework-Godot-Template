@@ -17,7 +17,7 @@ using GFrameworkGodotTemplate.scripts.core;
 using GFrameworkGodotTemplate.scripts.core.environment;
 using GFrameworkGodotTemplate.scripts.core.resource;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
-using GFrameworkGodotTemplate.scripts.enums.game;
+using GFrameworkGodotTemplate.scripts.enums.scene;
 using Godot;
 using Godot.Collections;
 
@@ -46,7 +46,7 @@ public partial class GameEntryPoint : Node
     [Export]
     public Array<UiPageConfig> UiPageConfigs { get; set; } = null!;
 
-    [Export] public Array<GameSceneConfig> GameSceneConfigs { get; set; } = null!;
+    [Export] public Array<SceneConfig> GameSceneConfigs { get; set; } = null!;
 
     /// <summary>
     /// Godot引擎调用的节点就绪方法，在此方法中初始化游戏架构和相关组件
@@ -123,7 +123,7 @@ public partial class GameEntryPoint : Node
             return false;
 
         var scenePath = currentScene.SceneFilePath;
-        return string.Equals(scenePath, _sceneRegistry.Get(nameof(GameSceneKey.Main)).GetPath(),
+        return string.Equals(scenePath, _sceneRegistry.Get(nameof(SceneKey.Main)).GetPath(),
             StringComparison.Ordinal);
     }
 

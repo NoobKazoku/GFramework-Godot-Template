@@ -1,6 +1,7 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.enums;
+using GFramework.Game.Abstractions.scene;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
@@ -12,6 +13,7 @@ using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.credits;
 using GFrameworkGodotTemplate.scripts.enums.ui;
 using GFrameworkGodotTemplate.scripts.options_menu;
+using GFrameworkGodotTemplate.scripts.tests;
 using global::GFrameworkGodotTemplate.global;
 using Godot;
 
@@ -81,6 +83,7 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
         // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
+        _sceneRouter = this.GetSystem<ISceneRouter>()!;
         SetupEventHandlers();
         // 延迟调用初始化方法
         CallDeferred(nameof(CallDeferredInit));
@@ -96,5 +99,6 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         // 绑定制作组按钮点击事件
         CreditsButton.Pressed += () => { _uiRouter.Push(Credits.UiKeyStr); };
         OptionsMenuButton.Pressed += () => { _uiRouter.Show(OptionsMenu.UiKeyStr, UiLayer.Modal, param: null); };
+        NewGameButton.Pressed += () => { _uiRouter.Replace(HomeUi.UiKeyStr); };
     }
 }
