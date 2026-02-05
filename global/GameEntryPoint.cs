@@ -6,6 +6,7 @@ using GFramework.Core.architecture;
 using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.setting;
 using GFramework.Game.setting.events;
+using GFramework.Godot.coroutine;
 using GFramework.Godot.logging;
 using GFramework.Godot.scene;
 using GFramework.Godot.ui;
@@ -100,6 +101,13 @@ public partial class GameEntryPoint : Node
         }
 
         _log.Debug("GameEntryPoint ready.");
+        CallDeferred(nameof(CallDeferredInit));
+    }
+
+    private static void CallDeferredInit()
+    {
+        // 协程预热
+        Timing.Prewarm();
     }
 
     /// <summary>
