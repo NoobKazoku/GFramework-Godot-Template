@@ -30,6 +30,7 @@ buses/default_bus_layout="res://resource/project_bus_layout.tres"
 [autoload]
 
 GameEntryPoint="*res://global/game_entry_point.tscn"
+SceneRoot="*uid://bxquqjahyr8v2"
 UiRoot="*res://global/ui_root.tscn"
 GlobalInputController="*res://global/GlobalInputController.cs"
 AudioManager="*res://global/audio_manager.tscn"
