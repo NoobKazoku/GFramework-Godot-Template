@@ -28,10 +28,8 @@ public class MainMenuState : ContextAwareStateBase
     /// <param name="to">将要切换到的目标状态，可能为空</param>
     public override void OnExit(IState? to)
     {
-        // 从界面栈中弹出当前UI，隐藏主菜单界面
-        this.GetSystem<IUiRouter>()!.Pop();
     }
-    
+
     /// <summary>
     /// 判断是否可以切换到下一个状态
     /// </summary>

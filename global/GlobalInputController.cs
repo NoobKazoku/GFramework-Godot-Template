@@ -1,5 +1,4 @@
 using GFramework.Core.Abstractions.state;
-using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
@@ -42,24 +41,19 @@ public partial class GlobalInputController : GameInputController
         }
 
         var current = _stateMachineSystem.Current;
-        if (current is not PlayingState)
-        {
-            return;
-        }
 
-        // 根据当前游戏暂停状态决定执行暂停或恢复命令
         if (current is PausedState)
         {
             _log.Debug("恢复游戏");
-            // 当前是暂停 → 恢复游戏 → 关闭暂停菜单
             this.SendEvent<ClosePauseMenuEvent>();
-            this.SendCommand(new ResumeGameCommand(new ResumeGameCommandInput { Node = this }));
+            this.SendCommand(new ResumeGameCommand(
+                new ResumeGameCommandInput { Node = this }));
         }
-        else
+        else if (current is PlayingState)
         {
             _log.Debug("暂停游戏");
-            // 当前是运行 → 暂停游戏 → 打开暂停菜单
-            this.SendCommand(new PauseGameCommand(new PauseGameCommandInput { Node = this }));
+            this.SendCommand(new PauseGameCommand(
+                new PauseGameCommandInput { Node = this }));
             this.SendEvent<OpenPauseMenuEvent>();
         }
     }

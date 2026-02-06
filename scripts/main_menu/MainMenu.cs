@@ -1,5 +1,5 @@
 using GFramework.Core.Abstractions.controller;
-using GFramework.Core.extensions;
+using GFramework.Core.Abstractions.state;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.ui;
@@ -7,12 +7,11 @@ using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.game;
 using GFrameworkGodotTemplate.scripts.command.game.input;
-using GFrameworkGodotTemplate.scripts.constants;
+using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.credits;
 using GFrameworkGodotTemplate.scripts.enums.ui;
 using GFrameworkGodotTemplate.scripts.options_menu;
-using GFrameworkGodotTemplate.scripts.tests;
 using global::GFrameworkGodotTemplate.global;
 using Godot;
 
@@ -31,8 +30,9 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
     /// </summary>
     private IUiPageBehavior? _page;
 
-    private IUiRouter _uiRouter = null!;
+    private IStateMachineSystem _stateMachineSystem = null!;
 
+    private IUiRouter _uiRouter = null!;
     private Button NewGameButton => GetNode<Button>("%NewGameButton");
     private Button ContinueGameButton => GetNode<Button>("%ContinueGameButton");
     private Button OptionsMenuButton => GetNode<Button>("%OptionsMenuButton");
@@ -59,12 +59,6 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
     /// </summary>
     private void CallDeferredInit()
     {
-        var env = this.GetEnvironment();
-        // 在开发环境中且当前页面不在路由栈顶时，将页面推入路由栈
-        if (GameConstants.Development.Equals(env.Name, StringComparison.Ordinal) && !_uiRouter.IsTop(UiKeyStr))
-        {
-            _uiRouter.Push(GetPage());
-        }
     }
 
     /// <summary>
@@ -82,6 +76,7 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
         // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
+        _stateMachineSystem = this.GetSystem<IStateMachineSystem>()!;
         SetupEventHandlers();
         // 延迟调用初始化方法
         CallDeferred(nameof(CallDeferredInit));
@@ -97,6 +92,6 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         // 绑定制作组按钮点击事件
         CreditsButton.Pressed += () => { _uiRouter.Push(Credits.UiKeyStr); };
         OptionsMenuButton.Pressed += () => { _uiRouter.Show(OptionsMenu.UiKeyStr, UiLayer.Modal, param: null); };
-        NewGameButton.Pressed += () => { _uiRouter.Replace(HomeUi.UiKeyStr); };
+        NewGameButton.Pressed += () => { _stateMachineSystem.ChangeTo<PlayingState>(); };
     }
 }
