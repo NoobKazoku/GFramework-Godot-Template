@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbre52flpko63"]
+[gd_scene format=3 uid="uid://bbre52flpko63"]
 
 [ext_resource type="Script" uid="uid://ho3ysfoco5rh" path="res://global/GlobalInputController.cs" id="1_1mywl"]
 
-[node name="GlobalInputController" type="Node"]
+[node name="GlobalInputController" type="Node" unique_id=598694994]
+process_mode = 3
 script = ExtResource("1_1mywl")

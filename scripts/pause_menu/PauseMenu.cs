@@ -6,7 +6,6 @@ using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.game;
-using GFrameworkGodotTemplate.scripts.command.game.input;
 using GFrameworkGodotTemplate.scripts.command.menu;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
@@ -90,14 +89,14 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         ResumeButton.Pressed += () =>
         {
             this.SendCommand(new ResumeGameWithClosePauseMenuCommand(
-                new ResumeGameCommandInput { Node = this }));
+            ));
         };
         // 绑定保存游戏按钮点击事件
         SaveButton.Pressed += () =>
         {
             // 在此保存游戏
             this.SendCommand(new ResumeGameWithClosePauseMenuCommand(
-                new ResumeGameCommandInput { Node = this }));
+            ));
             _log.Debug("保存游戏");
         };
         // 绑定加载游戏按钮点击事件
@@ -109,11 +108,11 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         MainMenuButton.Pressed += () =>
         {
             this.SendCommand(new ResumeGameWithClosePauseMenuCommand(
-                new ResumeGameCommandInput { Node = this }));
+            ));
             _stateMachineSystem.ChangeTo<MainMenuState>();
         };
 
         // 绑定退出游戏按钮点击事件
-        QuitButton.Pressed += () => this.SendCommand(new ExitGameCommand(new ExitGameCommandInput { Node = this }));
+        QuitButton.Pressed += () => this.SendCommand(new ExitGameCommand());
     }
 }

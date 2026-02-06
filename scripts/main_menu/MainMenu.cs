@@ -6,7 +6,6 @@ using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.game;
-using GFrameworkGodotTemplate.scripts.command.game.input;
 using GFrameworkGodotTemplate.scripts.command.menu;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
@@ -76,7 +75,7 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
     private void SetupEventHandlers()
     {
         // 绑定退出游戏按钮点击事件
-        ExitButton.Pressed += () => this.SendCommand(new ExitGameCommand(new ExitGameCommandInput { Node = this }));
+        ExitButton.Pressed += () => this.SendCommand(new ExitGameCommand());
         // 绑定制作组按钮点击事件
         CreditsButton.Pressed += () => { _uiRouter.Push(Credits.UiKeyStr); };
         OptionsMenuButton.Pressed += () => { this.SendCommand(new OpenOptionsMenuCommand()); };

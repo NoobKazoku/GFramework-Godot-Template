@@ -13,7 +13,6 @@
 
 using GFramework.Core.command;
 using GFramework.Core.extensions;
-using GFrameworkGodotTemplate.scripts.command.game.input;
 using GFrameworkGodotTemplate.scripts.command.menu;
 
 namespace GFrameworkGodotTemplate.scripts.command.game;
@@ -22,21 +21,19 @@ namespace GFrameworkGodotTemplate.scripts.command.game;
 /// 恢复游戏并关闭暂停菜单的命令类。
 /// 继承自 AbstractCommand，用于处理恢复游戏逻辑，并在执行时发送关闭暂停菜单和恢复游戏的命令。
 /// </summary>
-/// <param name="input">ResumeGameCommandInput 类型的输入参数，包含恢复游戏所需的数据。</param>
-public class ResumeGameWithClosePauseMenuCommand(ResumeGameCommandInput input)
-    : AbstractCommand<ResumeGameCommandInput>(input)
+public class ResumeGameWithClosePauseMenuCommand
+    : AbstractCommand
 {
     /// <summary>
     /// 执行命令的核心逻辑。
     /// 首先发送关闭暂停菜单的命令，然后发送恢复游戏的命令。
     /// </summary>
-    /// <param name="input">ResumeGameCommandInput 类型的输入参数，传递给具体命令执行逻辑。</param>
-    protected override void OnExecute(ResumeGameCommandInput input)
+    protected override void OnExecute()
     {
         // 发送关闭暂停菜单的命令
         this.SendCommand(new ClosePauseMenuCommand());
 
         // 发送恢复游戏的命令
-        this.SendCommand(new ResumeGameCommand(input));
+        this.SendCommand(new ResumeGameCommand());
     }
 }

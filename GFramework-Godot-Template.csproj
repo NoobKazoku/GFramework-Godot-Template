@@ -52,6 +52,7 @@
         <Folder Include="scripts\enums\game\"/>
         <Folder Include="scripts\events\menu\"/>
       <Folder Include="scripts\events\settings\" />
+        <Folder Include="scripts\extensions\"/>
       <Folder Include="scripts\main_menu\" />
       <Folder Include="scripts\tests\" />
     </ItemGroup>

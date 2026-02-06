@@ -35,6 +35,7 @@ public partial class GameEntryPoint : Node
     private ISettingsSystem _settingsSystem = null!;
     private IGodotUiRegistry _uiRegistry = null!;
     public static IArchitecture Architecture { get; private set; } = null!;
+    public static SceneTree Tree { get; private set; } = null!;
     [Export] public bool IsDev { get; set; } = true;
 
     /// <summary>
@@ -53,6 +54,8 @@ public partial class GameEntryPoint : Node
     /// </summary>
     public override void _Ready()
     {
+        // 获取游戏根节点
+        Tree = GetTree();
         // 创建并初始化游戏架构实例
         // 配置架构的日志记录属性，设置Godot日志工厂提供程序并指定最低日志级别为调试级别
         // 然后初始化架构实例以准备游戏运行环境

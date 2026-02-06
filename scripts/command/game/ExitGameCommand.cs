@@ -1,20 +1,18 @@
 ﻿using GFramework.Core.command;
-using GFrameworkGodotTemplate.scripts.command.game.input;
+using GFrameworkGodotTemplate.scripts.core.utils;
 
 namespace GFrameworkGodotTemplate.scripts.command.game;
 
 /// <summary>
 /// 退出游戏命令类，用于处理游戏退出逻辑
 /// </summary>
-/// <param name="input">退出游戏命令输入参数</param>
-public sealed class ExitGameCommand(ExitGameCommandInput input) : AbstractCommand<ExitGameCommandInput>(input)
+public sealed class ExitGameCommand : AbstractCommand
 {
     /// <summary>
     /// 执行退出游戏命令的具体逻辑
     /// </summary>
-    /// <param name="input">退出游戏命令输入参数，包含执行退出操作所需的节点信息</param>
-    protected override void OnExecute(ExitGameCommandInput input)
+    protected override void OnExecute()
     {
-        input.Node.GetTree().Quit();
+        GameUtil.GetTree().Quit();
     }
 }
