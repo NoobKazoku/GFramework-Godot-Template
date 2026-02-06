@@ -37,7 +37,15 @@ public class OpenPauseMenuCommand : AbstractCommand
         // - UiLayer.Modal：指定菜单显示在模态层
         // - param: null：传递给菜单的参数为空
         // - instancePolicy: UiInstancePolicy.Reuse：复用已存在的菜单实例
-        this.GetSystem<IUiRouter>()!.Show(PauseMenu.UiKeyStr, UiLayer.Modal,
-            param: null);
+        var uiRouter = this.GetSystem<IUiRouter>()!;
+        var isExist = uiRouter.GetFromLayer(PauseMenu.UiKeyStr, UiLayer.Modal) is not null;
+        if (isExist)
+        {
+            uiRouter.Resume(PauseMenu.UiKeyStr, UiLayer.Modal);
+        }
+        else
+        {
+            uiRouter.Show(PauseMenu.UiKeyStr, UiLayer.Modal);
+        }
     }
 }

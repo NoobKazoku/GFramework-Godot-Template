@@ -33,6 +33,6 @@ public class ClosePauseMenuCommand : AbstractCommand
     {
         // 获取 UI 路由系统实例，并调用 Hide 方法隐藏暂停菜单界面
         this.GetSystem<IUiRouter>()!
-            .Hide(PauseMenu.UiKeyStr, UiLayer.Modal, destroy: true);
+            .Hide(PauseMenu.UiKeyStr, UiLayer.Modal);
     }
 }
