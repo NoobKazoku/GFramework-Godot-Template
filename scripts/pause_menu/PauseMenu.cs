@@ -100,7 +100,7 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         }
 
         this.SendCommand(new ResumeGameWithClosePauseMenuCommand());
-        GetViewport().SetInputAsHandled();
+        AcceptEvent();
     }
 
     /// <summary>

@@ -44,16 +44,9 @@ public partial class GlobalInputController : GameInputController
             return;
 
         // 根据当前状态执行相应操作
-        switch (_stateMachineSystem.Current)
-        {
-            case PlayingState:
-                _log.Debug("暂停游戏");
-                this.SendCommand(new PauseGameWithOpenPauseMenuCommand());
-                break;
-            // case PausedState:
-            //     _log.Debug("恢复游戏");
-            //     this.SendCommand(new ResumeGameWithClosePauseMenuCommand());
-            //     break;
-        }
+        if (_stateMachineSystem.Current is not PlayingState) return;
+        _log.Debug("暂停游戏");
+        this.SendCommand(new PauseGameWithOpenPauseMenuCommand());
+        GetViewport().SetInputAsHandled();
     }
 }
