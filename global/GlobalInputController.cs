@@ -1,4 +1,5 @@
 using GFramework.Core.Abstractions.state;
+using GFramework.Core.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.game;
@@ -49,10 +50,10 @@ public partial class GlobalInputController : GameInputController
                 _log.Debug("暂停游戏");
                 this.SendCommand(new PauseGameWithOpenPauseMenuCommand());
                 break;
-            case PausedState:
-                _log.Debug("恢复游戏");
-                this.SendCommand(new ResumeGameWithClosePauseMenuCommand());
-                break;
+            // case PausedState:
+            //     _log.Debug("恢复游戏");
+            //     this.SendCommand(new ResumeGameWithClosePauseMenuCommand());
+            //     break;
         }
     }
 }

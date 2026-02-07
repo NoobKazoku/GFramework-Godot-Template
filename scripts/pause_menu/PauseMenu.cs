@@ -18,6 +18,8 @@ namespace GFrameworkGodotTemplate.scripts.pause_menu;
 [Log]
 public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, ISimpleUiPage
 {
+    private bool _justOpened = false;
+
     /// <summary>
     /// 页面行为实例的私有字段
     /// </summary>
@@ -77,6 +79,28 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
     {
         SetupEventHandlers();
         _stateMachineSystem = this.GetSystem<IStateMachineSystem>()!;
+        _justOpened = true;
+    }
+
+    public override void _Process(double delta)
+    {
+        if (_justOpened)
+        {
+            _justOpened = false;
+        }
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (_justOpened) return;
+
+        if (!@event.IsActionPressed("ui_cancel"))
+        {
+            return;
+        }
+
+        this.SendCommand(new ResumeGameWithClosePauseMenuCommand());
+        GetViewport().SetInputAsHandled();
     }
 
     /// <summary>
