@@ -25,7 +25,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.174" />
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.176" />
         <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.174" />
         <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.174" />
         <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.174" />
