@@ -14,6 +14,7 @@ public partial class SceneRoot : Node2D, ISceneRoot
 {
     private Node? _current;
     private IGodotSceneRegistry _registry = null!;
+    public Node? Current => _current;
 
     public void Replace(string key)
     {

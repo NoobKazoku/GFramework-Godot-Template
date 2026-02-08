@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://c5sxf7tcun6yq"]
+
+[ext_resource type="Script" uid="uid://d0h041va5wqpm" path="res://global/SceneTransitionManager.cs" id="1_cw311"]
+
+[node name="SceneTransitionManager" type="Node" unique_id=1746108794]
+script = ExtResource("1_cw311")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1579051533]
+
+[node name="SceneTransitionRect" type="ColorRect" parent="CanvasLayer" unique_id=1516818283]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[node name="FromViewport" type="SubViewport" parent="." unique_id=603858978]
+unique_name_in_owner = true
+
+[node name="ToViewport" type="SubViewport" parent="." unique_id=984873779]
+unique_name_in_owner = true

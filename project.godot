@@ -15,6 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="GFramework-Godot-Template"
+config/tags=PackedStringArray("gamelab")
 run/main_scene="uid://6s2urcdmkpbt"
 config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="uid://p5dak2wsc1nk"
@@ -22,7 +23,6 @@ config/save/setting_path="user://"
 config/save/save_path="user://saves"
 config/save/save_slot_prefix="slot_"
 config/save/save_file_name="save.json"
-config/tags=PackedStringArray("gamelab")
 
 [audio]
 
@@ -35,6 +35,7 @@ SceneRoot="*uid://bxquqjahyr8v2"
 UiRoot="*res://global/ui_root.tscn"
 GlobalInputController="*res://global/GlobalInputController.cs"
 AudioManager="*res://global/audio_manager.tscn"
+SceneTransitionManager="*uid://c5sxf7tcun6yq"
 
 [display]
 
