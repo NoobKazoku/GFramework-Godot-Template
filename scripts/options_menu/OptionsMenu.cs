@@ -138,7 +138,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// <summary>
     /// 处理未处理的输入事件，用于 ESC 关闭设置窗口
     /// </summary>
-    public override void _UnhandledInput(InputEvent @event)
+    public override void _Input(InputEvent @event)
     {
         if (!@event.IsActionPressed("ui_cancel"))
         {
