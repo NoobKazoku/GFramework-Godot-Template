@@ -7,12 +7,12 @@ using GFrameworkGodotTemplate.scripts.core.utils;
 namespace GFrameworkGodotTemplate.scripts.command.game;
 
 /// <summary>
-/// 暂停游戏命令类，用于执行暂停游戏的操作
+///     暂停游戏命令类，用于执行暂停游戏的操作
 /// </summary>
 public sealed class PauseGameCommand : AbstractCommand
 {
     /// <summary>
-    /// 执行暂停游戏命令的具体逻辑
+    ///     执行暂停游戏命令的具体逻辑
     /// </summary>
     protected override void OnExecute()
     {

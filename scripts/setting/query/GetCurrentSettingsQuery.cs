@@ -20,12 +20,12 @@ using GFrameworkGodotTemplate.scripts.setting.query.view;
 namespace GFrameworkGodotTemplate.scripts.setting.query;
 
 /// <summary>
-/// 获取当前设置的查询类
+///     获取当前设置的查询类
 /// </summary>
 public sealed class GetCurrentSettingsQuery : AbstractQuery<SettingsView>
 {
     /// <summary>
-    /// 执行获取当前设置的查询操作
+    ///     执行获取当前设置的查询操作
     /// </summary>
     /// <returns>包含当前设置信息的SettingsView对象</returns>
     protected override SettingsView OnDo()
@@ -38,7 +38,7 @@ public sealed class GetCurrentSettingsQuery : AbstractQuery<SettingsView>
         {
             Audio = model.GetData<AudioSettings>(),
             Graphics = model.GetData<GraphicsSettings>(),
-            Localization = model.GetData<LocalizationSettings>(),
+            Localization = model.GetData<LocalizationSettings>()
         };
     }
 }

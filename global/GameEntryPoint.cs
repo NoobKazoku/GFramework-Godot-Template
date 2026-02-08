@@ -24,7 +24,7 @@ using Godot.Collections;
 namespace GFrameworkGodotTemplate.global;
 
 /// <summary>
-/// 游戏入口点节点类，负责初始化游戏架构和管理全局游戏状态
+///     游戏入口点节点类，负责初始化游戏架构和管理全局游戏状态
 /// </summary>
 [Log]
 [ContextAware]
@@ -39,10 +39,10 @@ public partial class GameEntryPoint : Node
     [Export] public bool IsDev { get; set; } = true;
 
     /// <summary>
-    /// UI页面配置数组，包含所有可用的UI页面配置项
+    ///     UI页面配置数组，包含所有可用的UI页面配置项
     /// </summary>
     /// <value>
-    /// 存储UiPageConfig对象的数组集合
+    ///     存储UiPageConfig对象的数组集合
     /// </value>
     [Export]
     public Array<UiPageConfig> UiPageConfigs { get; set; } = null!;
@@ -50,7 +50,7 @@ public partial class GameEntryPoint : Node
     [Export] public Array<SceneConfig> GameSceneConfigs { get; set; } = null!;
 
     /// <summary>
-    /// Godot引擎调用的节点就绪方法，在此方法中初始化游戏架构和相关组件
+    ///     Godot引擎调用的节点就绪方法，在此方法中初始化游戏架构和相关组件
     /// </summary>
     public override void _Ready()
     {
@@ -65,9 +65,9 @@ public partial class GameEntryPoint : Node
             {
                 LoggerFactoryProvider = new GodotLoggerFactoryProvider
                 {
-                    MinLevel = LogLevel.Debug,
-                },
-            },
+                    MinLevel = LogLevel.Debug
+                }
+            }
         }, IsDev ? new GameDevEnvironment() : new GameMainEnvironment());
         Architecture.Initialize();
         _settingsModel = this.GetModel<ISettingsModel>()!;
@@ -82,26 +82,18 @@ public partial class GameEntryPoint : Node
         _sceneRegistry = this.GetUtility<IGodotSceneRegistry>()!;
         _uiRegistry = this.GetUtility<IGodotUiRegistry>()!;
         // 注册所有游戏场景配置到场景注册表中
-        foreach (var gameSceneConfig in GameSceneConfigs)
-        {
-            _sceneRegistry.Registry(gameSceneConfig);
-        }
+        foreach (var gameSceneConfig in GameSceneConfigs) _sceneRegistry.Registry(gameSceneConfig);
 
         // 注册所有UI页面配置到UI注册表中
-        foreach (var uiPageConfig in UiPageConfigs)
-        {
-            _uiRegistry.Registry(uiPageConfig);
-        }
+        foreach (var uiPageConfig in UiPageConfigs) _uiRegistry.Registry(uiPageConfig);
 
         // 检查是否应该进入主菜单状态，如果是则注册UI根节点就绪事件来切换到主菜单状态
         if (ShouldEnterMainMenu())
-        {
             this.RegisterEvent<UiRoot.UiRootReadyEvent>(_ =>
             {
                 this.GetSystem<IStateMachineSystem>()!
                     .ChangeTo<MainMenuState>();
             });
-        }
 
         _log.Debug("GameEntryPoint ready.");
         CallDeferred(nameof(CallDeferredInit));
@@ -114,7 +106,7 @@ public partial class GameEntryPoint : Node
     }
 
     /// <summary>
-    /// 判断当前场景是否为主菜单场景，决定是否需要进入主菜单状态
+    ///     判断当前场景是否为主菜单场景，决定是否需要进入主菜单状态
     /// </summary>
     /// <returns>如果当前场景是主菜单场景则返回true，否则返回false</returns>
     private bool ShouldEnterMainMenu()
@@ -131,7 +123,7 @@ public partial class GameEntryPoint : Node
     }
 
     /// <summary>
-    /// 当节点从场景树中移除时调用，保存当前设置数据到存储
+    ///     当节点从场景树中移除时调用，保存当前设置数据到存储
     /// </summary>
     public override void _ExitTree()
     {

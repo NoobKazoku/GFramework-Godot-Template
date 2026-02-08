@@ -16,8 +16,8 @@ using GFramework.Core.state;
 namespace GFrameworkGodotTemplate.scripts.core.state.impls;
 
 /// <summary>
-/// 表示启动状态的类，继承自 ContextAwareStateBase。
-/// 该类用于定义系统或应用程序启动时的状态行为。
+///     表示启动状态的类，继承自 ContextAwareStateBase。
+///     该类用于定义系统或应用程序启动时的状态行为。
 /// </summary>
 public class BootStartState : ContextAwareStateBase
 {

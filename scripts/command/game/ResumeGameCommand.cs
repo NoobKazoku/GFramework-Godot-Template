@@ -7,12 +7,12 @@ using GFrameworkGodotTemplate.scripts.core.utils;
 namespace GFrameworkGodotTemplate.scripts.command.game;
 
 /// <summary>
-/// 恢复游戏命令类，用于取消游戏暂停状态
+///     恢复游戏命令类，用于取消游戏暂停状态
 /// </summary>
 public sealed class ResumeGameCommand : AbstractCommand
 {
     /// <summary>
-    /// 执行恢复游戏命令的具体逻辑
+    ///     执行恢复游戏命令的具体逻辑
     /// </summary>
     protected override void OnExecute()
     {

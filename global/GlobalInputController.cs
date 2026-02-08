@@ -13,8 +13,8 @@ using Godot;
 namespace GFrameworkGodotTemplate.global;
 
 /// <summary>
-/// 全局输入控制器类，继承自 GameInputController。
-/// 负责处理游戏中的全局输入事件，包括暂停和恢复游戏的功能。
+///     全局输入控制器类，继承自 GameInputController。
+///     负责处理游戏中的全局输入事件，包括暂停和恢复游戏的功能。
 /// </summary>
 [ContextAware]
 [Log]
@@ -23,13 +23,13 @@ public partial class GlobalInputController : GameInputController
     private UiHandle? _pauseMenuUiHandle;
 
     /// <summary>
-    /// 状态机系统实例，用于管理游戏状态。
+    ///     状态机系统实例，用于管理游戏状态。
     /// </summary>
     private IStateMachineSystem _stateMachineSystem = null!;
 
     /// <summary>
-    /// 初始化方法，在节点准备就绪时调用。
-    /// 获取并初始化状态机系统实例。
+    ///     初始化方法，在节点准备就绪时调用。
+    ///     获取并初始化状态机系统实例。
     /// </summary>
     public override void _Ready()
     {

@@ -3,7 +3,7 @@ name: Release on Tag
 # 触发条件：当有标签被推送到仓库时触发该工作流。
 # 支持任意格式的标签名，例如 `1.0.0` 或 `v1.0.0`。
 on:
-#  手动触发
+  #  手动触发
   workflow_dispatch:
 # 如果触发条件满足，则执行以下步骤
 #  push:
@@ -184,7 +184,7 @@ jobs:
           prerelease: false
           files: dist/**/*.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # 调试用途：列出已成功上传到 Release 的附件信息
       - name: List uploaded release assets (debug)
         env:

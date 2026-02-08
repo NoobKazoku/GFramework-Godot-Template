@@ -10,8 +10,8 @@ using Godot;
 namespace GFrameworkGodotTemplate.global;
 
 /// <summary>
-/// UI画布层根节点，用于管理UI页面的添加和组织
-/// 继承自CanvasLayer并实现IUiRoot接口
+///     UI画布层根节点，用于管理UI页面的添加和组织
+///     继承自CanvasLayer并实现IUiRoot接口
 /// </summary>
 [Log]
 [ContextAware]
@@ -21,7 +21,7 @@ public partial class UiRoot : CanvasLayer, IUiRoot
     private readonly List<IUiPageBehavior> _pages = new();
 
     /// <summary>
-    /// 向UI根节点添加UI页面
+    ///     向UI根节点添加UI页面
     /// </summary>
     /// <param name="child">要添加的UI页面行为对象</param>
     public void AddUiPage(IUiPageBehavior child)
@@ -30,7 +30,7 @@ public partial class UiRoot : CanvasLayer, IUiRoot
     }
 
     /// <summary>
-    /// 向指定UI层添加UI页面
+    ///     向指定UI层添加UI页面
     /// </summary>
     /// <param name="child">要添加的UI页面行为对象</param>
     /// <param name="layer">目标UI层</param>
@@ -44,13 +44,8 @@ public partial class UiRoot : CanvasLayer, IUiRoot
             throw new InvalidOperationException($"UiLayer not found: {layer}");
 
         if (item.GetParent() == null)
-        {
             container.AddChild(item);
-        }
-        else if (item.GetParent() != container)
-        {
-            item.Reparent(container);
-        }
+        else if (item.GetParent() != container) item.Reparent(container);
 
         // 设置Z轴索引以控制渲染顺序
         item.ZIndex = (int)layer * 100 + orderInLayer;
@@ -64,7 +59,7 @@ public partial class UiRoot : CanvasLayer, IUiRoot
 
 
     /// <summary>
-    /// 从UI根节点移除UI页面
+    ///     从UI根节点移除UI页面
     /// </summary>
     /// <param name="child">要移除的UI页面行为对象</param>
     public void RemoveUiPage(IUiPageBehavior child)
@@ -79,7 +74,7 @@ public partial class UiRoot : CanvasLayer, IUiRoot
     }
 
     /// <summary>
-    /// 设置UI页面的Z轴顺序
+    ///     设置UI页面的Z轴顺序
     /// </summary>
     /// <param name="page">目标UI页面</param>
     /// <param name="zOrder">Z轴排序值</param>
@@ -98,7 +93,7 @@ public partial class UiRoot : CanvasLayer, IUiRoot
     }
 
     /// <summary>
-    /// 获取当前可见的UI页面列表
+    ///     获取当前可见的UI页面列表
     /// </summary>
     /// <returns>可见UI页面的只读列表</returns>
     public IReadOnlyList<IUiPageBehavior> GetVisiblePages()
@@ -109,8 +104,8 @@ public partial class UiRoot : CanvasLayer, IUiRoot
     }
 
     /// <summary>
-    /// Godot节点就绪时的回调方法
-    /// 初始化UI层设置、绑定路由根节点，并切换到游戏主菜单状态
+    ///     Godot节点就绪时的回调方法
+    ///     初始化UI层设置、绑定路由根节点，并切换到游戏主菜单状态
     /// </summary>
     public override void _Ready()
     {
@@ -124,8 +119,8 @@ public partial class UiRoot : CanvasLayer, IUiRoot
     }
 
     /// <summary>
-    /// 初始化所有UI层容器
-    /// 为每个UI层创建对应的Control容器节点
+    ///     初始化所有UI层容器
+    ///     为每个UI层创建对应的Control容器节点
     /// </summary>
     private void InitLayers()
     {
@@ -138,7 +133,7 @@ public partial class UiRoot : CanvasLayer, IUiRoot
                 AnchorTop = 0,
                 AnchorRight = 1,
                 AnchorBottom = 1,
-                MouseFilter = Control.MouseFilterEnum.Ignore,
+                MouseFilter = Control.MouseFilterEnum.Ignore
             };
 
             AddChild(container);

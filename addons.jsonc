@@ -13,11 +13,11 @@
   // "path": "addons", // default
   // "cache": ".addons", // default
   "addons": {
-//    "rename_tool": { // name must match the folder name in the repository
-//      "url": "https://github.com/GeWuYou/rename_tool_plugin.git",
-//      // "source": "remote", // default
-//       "checkout": "master", // default
-//      "subfolder": "addons/rename_tool"
-//    }
+    //    "rename_tool": { // name must match the folder name in the repository
+    //      "url": "https://github.com/GeWuYou/rename_tool_plugin.git",
+    //      // "source": "remote", // default
+    //       "checkout": "master", // default
+    //      "subfolder": "addons/rename_tool"
+    //    }
   }
 }

@@ -29,8 +29,8 @@ using Godot;
 namespace GFrameworkGodotTemplate.scripts.options_menu;
 
 /// <summary>
-/// 选项设置界面控制器
-/// 负责处理游戏设置界面的UI逻辑，包括音量控制、分辨率和全屏模式设置
+///     选项设置界面控制器
+///     负责处理游戏设置界面的UI逻辑，包括音量控制、分辨率和全屏模式设置
 /// </summary>
 [ContextAware]
 [Log]
@@ -40,7 +40,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     private readonly string[] _languages =
     [
         "简体中文",
-        "English",
+        "English"
     ];
 
     // 分辨率选项
@@ -49,55 +49,55 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
         new(1920, 1080),
         new(1366, 768),
         new(1280, 720),
-        new(1024, 768),
+        new(1024, 768)
     ];
 
     private bool _initializing;
 
     /// <summary>
-    /// 页面行为实例的私有字段
+    ///     页面行为实例的私有字段
     /// </summary>
     private IUiPageBehavior? _page;
 
     private IUiRouter _uiRouter = null!;
 
     /// <summary>
-    ///  Ui Key的字符串形式
+    ///     Ui Key的字符串形式
     /// </summary>
     public static string UiKeyStr => nameof(UiKey.OptionsMenu);
 
     /// <summary>
-    /// 主音量控制容器
+    ///     主音量控制容器
     /// </summary>
     private VolumeContainer MasterVolume => GetNode<VolumeContainer>("%MasterVolumeContainer");
 
     /// <summary>
-    /// 背景音乐音量控制容器
+    ///     背景音乐音量控制容器
     /// </summary>
     private VolumeContainer BgmVolume => GetNode<VolumeContainer>("%BgmVolumeContainer");
 
     /// <summary>
-    /// 音效音量控制容器
+    ///     音效音量控制容器
     /// </summary>
     private VolumeContainer SfxVolume => GetNode<VolumeContainer>("%SfxVolumeContainer");
 
     /// <summary>
-    /// 分辨率选择按钮
+    ///     分辨率选择按钮
     /// </summary>
     private OptionButton ResolutionOptionButton => GetNode<OptionButton>("%ResolutionOptionButton");
 
     /// <summary>
-    /// 全屏模式选择按钮
+    ///     全屏模式选择按钮
     /// </summary>
     private OptionButton FullscreenOptionButton => GetNode<OptionButton>("%FullscreenOptionButton");
 
     /// <summary>
-    /// 语言选择按钮
+    ///     语言选择按钮
     /// </summary>
     private OptionButton LanguageOptionButton => GetNode<OptionButton>("%LanguageOptionButton");
 
     /// <summary>
-    /// 获取页面行为实例，如果不存在则创建新的CanvasItemUiPageBehavior实例
+    ///     获取页面行为实例，如果不存在则创建新的CanvasItemUiPageBehavior实例
     /// </summary>
     /// <returns>返回IUiPageBehavior类型的页面行为实例</returns>
     public IUiPageBehavior GetPage()
@@ -107,7 +107,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 检查当前UI是否在路由栈顶，如果不在则将页面推入路由栈
+    ///     检查当前UI是否在路由栈顶，如果不在则将页面推入路由栈
     /// </summary>
     private void CallDeferredInit()
     {
@@ -115,8 +115,8 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 节点准备就绪时的回调方法
-    /// 在节点添加到场景树后调用
+    ///     节点准备就绪时的回调方法
+    ///     在节点添加到场景树后调用
     /// </summary>
     public override void _Ready()
     {
@@ -136,21 +136,18 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 处理未处理的输入事件，用于 ESC 关闭设置窗口
+    ///     处理未处理的输入事件，用于 ESC 关闭设置窗口
     /// </summary>
     public override void _Input(InputEvent @event)
     {
-        if (!@event.IsActionPressed("ui_cancel"))
-        {
-            return;
-        }
+        if (!@event.IsActionPressed("ui_cancel")) return;
 
         OnBackPressed();
         AcceptEvent();
     }
 
     /// <summary>
-    /// 当按下返回键时的处理方法
+    ///     当按下返回键时的处理方法
     /// </summary>
     private void OnBackPressed()
     {
@@ -158,7 +155,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 开始保存设置协程
+    ///     开始保存设置协程
     /// </summary>
     private void StartSaving()
     {
@@ -167,8 +164,8 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
 
 
     /// <summary>
-    /// 初始化用户界面
-    /// 设置音量控制组件和分辨率选项的初始值
+    ///     初始化用户界面
+    ///     设置音量控制组件和分辨率选项的初始值
     /// </summary>
     private void InitializeUi()
     {
@@ -195,9 +192,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
             ResolutionOptionButton.AddItem($"{r.X}x{r.Y}");
 
             if (r.X == graphicsSettings.ResolutionWidth && r.Y == graphicsSettings.ResolutionHeight)
-            {
                 ResolutionOptionButton.Selected = i; // ⭐ 正确方式
-            }
         }
 
         var localizationSettings = view.Localization;
@@ -210,8 +205,8 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 设置事件处理器
-    /// 为音量控制、分辨率和全屏模式选择器绑定事件处理逻辑
+    ///     设置事件处理器
+    ///     为音量控制、分辨率和全屏模式选择器绑定事件处理逻辑
     /// </summary>
     private void SetupEventHandlers()
     {
@@ -244,7 +239,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 语言改变事件
+    ///     语言改变事件
     /// </summary>
     /// <param name="index">选择的语言索引</param>
     private async Task OnLanguageChanged(long index)
@@ -262,7 +257,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 分辨率改变事件
+    ///     分辨率改变事件
     /// </summary>
     /// <param name="index">选择的分辨率索引</param>
     private async Task OnResolutionChanged(long index)
@@ -275,7 +270,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 全屏模式改变事件
+    ///     全屏模式改变事件
     /// </summary>
     /// <param name="index">选择的全屏模式索引</param>
     private async Task OnFullscreenChanged(long index)
@@ -289,7 +284,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     }
 
     /// <summary>
-    /// 初始化协程，用于设置界面的初始化流程
+    ///     初始化协程，用于设置界面的初始化流程
     /// </summary>
     /// <returns>返回一个IYieldInstruction类型的IEnumerator，用于协程执行</returns>
     private IEnumerator<IYieldInstruction> InitCoroutine()
@@ -298,17 +293,15 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
         var settings = this.GetModel<ISettingsModel>()!;
         var eventBus = this.GetService<IEventBus>()!;
         if (!settings.IsInitialized)
-        {
             // 等待设置初始化事件完成
             yield return new WaitForEvent<SettingsInitializedEvent>(eventBus);
-        }
 
         InitializeUi();
         Show();
     }
 
     /// <summary>
-    /// 保存命令协程，用于处理设置保存操作
+    ///     保存命令协程，用于处理设置保存操作
     /// </summary>
     /// <returns>返回一个IYieldInstruction类型的IEnumerator，用于协程执行</returns>
     private IEnumerator<IYieldInstruction> SaveCommandCoroutine()
@@ -322,13 +315,9 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
                 _log.Info("设置已保存");
                 var handle = GetPage().Handle;
                 if (handle.HasValue)
-                {
-                    _uiRouter.Hide(handle.Value, UiLayer.Modal, destroy: true);
-                }
+                    _uiRouter.Hide(handle.Value, UiLayer.Modal, true);
                 else
-                {
                     _log.Warn("页面句柄为空，无法隐藏页面");
-                }
             });
     }
 }
