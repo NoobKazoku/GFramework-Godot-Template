@@ -30,12 +30,14 @@ public partial class _CLASS_ :_BASE_,IController,IUiPageBehaviorProvider,ISimple
     public static string UiKeyStr => nameof(UiKey._CLASS_);
     
     /// <summary>
-    /// 获取页面行为实例，如果不存在则创建新的CanvasItemUiPageBehavior实例
+    /// 获取当前UI页面的行为实例。
+    /// 如果_page字段尚未初始化，则通过UiPageBehaviorFactory创建一个新的实例并赋值给_page。
+    /// 返回类型为IUiPageBehavior，表示UI页面的行为接口。
     /// </summary>
-    /// <returns>返回IUiPageBehavior类型的页面行为实例</returns>
+    /// <returns>返回当前UI页面的行为实例。</returns>
     public IUiPageBehavior GetPage()
     {
-        _page ??= new CanvasItemUiPageBehavior<_BASE_>(this,UiKeyStr);
+        _page ??= UiPageBehaviorFactory.Create<_BASE_>(this, UiKeyStr, UiLayer.Modal,UiLayer.Page);
         return _page;
     }
 	

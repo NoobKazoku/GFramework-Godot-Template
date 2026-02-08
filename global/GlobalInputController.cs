@@ -1,8 +1,10 @@
 using GFramework.Core.Abstractions.state;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.game;
+using GFrameworkGodotTemplate.scripts.command.menu.input;
 using GFrameworkGodotTemplate.scripts.core.controller;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.enums;
@@ -18,6 +20,8 @@ namespace GFrameworkGodotTemplate.global;
 [Log]
 public partial class GlobalInputController : GameInputController
 {
+    private UiHandle? _pauseMenuUiHandle;
+
     /// <summary>
     /// 状态机系统实例，用于管理游戏状态。
     /// </summary>
@@ -46,7 +50,8 @@ public partial class GlobalInputController : GameInputController
         // 根据当前状态执行相应操作
         if (_stateMachineSystem.Current is not PlayingState) return;
         _log.Debug("暂停游戏");
-        this.SendCommand(new PauseGameWithOpenPauseMenuCommand());
+        _pauseMenuUiHandle = this.SendCommand(new PauseGameWithOpenPauseMenuCommand(new OpenPauseMenuCommandInput
+            { Handle = _pauseMenuUiHandle }));
         GetViewport().SetInputAsHandled();
     }
 }

@@ -13,7 +13,9 @@
 
 using GFramework.Core.command;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.ui;
 using GFrameworkGodotTemplate.scripts.command.menu;
+using GFrameworkGodotTemplate.scripts.command.menu.input;
 
 namespace GFrameworkGodotTemplate.scripts.command.game;
 
@@ -23,8 +25,8 @@ namespace GFrameworkGodotTemplate.scripts.command.game;
 /// 1. 暂停游戏命令（PauseGameCommand）
 /// 2. 打开选项菜单命令（OpenOptionsMenuCommand）
 /// </summary>
-public class PauseGameWithOpenPauseMenuCommand
-    : AbstractCommand
+public class PauseGameWithOpenPauseMenuCommand(OpenPauseMenuCommandInput input)
+    : AbstractCommand<OpenPauseMenuCommandInput, UiHandle>(input)
 {
     /// <summary>
     /// 执行暂停游戏并打开暂停菜单的核心逻辑。
@@ -32,12 +34,12 @@ public class PauseGameWithOpenPauseMenuCommand
     /// 1. 发送暂停游戏命令，传入当前输入参数。
     /// 2. 发送打开选项菜单命令，无需额外参数。
     /// </summary>
-    protected override void OnExecute()
+    protected override UiHandle OnExecute(OpenPauseMenuCommandInput input)
     {
         // 发送暂停游戏命令
         this.SendCommand(new PauseGameCommand());
 
         // 发送打开选项菜单命令
-        this.SendCommand(new OpenPauseMenuCommand());
+        return this.SendCommand(new OpenPauseMenuCommand(input));
     }
 }

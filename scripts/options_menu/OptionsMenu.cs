@@ -102,7 +102,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// <returns>返回IUiPageBehavior类型的页面行为实例</returns>
     public IUiPageBehavior GetPage()
     {
-        _page ??= new CanvasItemUiPageBehavior<Control>(this, UiKeyStr);
+        _page ??= UiPageBehaviorFactory.Create<Control>(this, UiKeyStr, UiLayer.Modal);
         return _page;
     }
 
@@ -320,7 +320,15 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
             .Then(() =>
             {
                 _log.Info("设置已保存");
-                _uiRouter.Hide(UiKeyStr, UiLayer.Modal, destroy: true);
+                var handle = GetPage().Handle;
+                if (handle.HasValue)
+                {
+                    _uiRouter.Hide(handle.Value, UiLayer.Modal, destroy: true);
+                }
+                else
+                {
+                    _log.Warn("页面句柄为空，无法隐藏页面");
+                }
             });
     }
 }

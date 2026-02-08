@@ -1,12 +1,14 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.state;
 using GFramework.Core.extensions;
+using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.game;
 using GFrameworkGodotTemplate.scripts.command.menu;
+using GFrameworkGodotTemplate.scripts.command.menu.input;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.enums.ui;
@@ -60,13 +62,10 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
     /// </summary>
     public static string UiKeyStr => nameof(UiKey.PauseMenu);
 
-    /// <summary>
-    /// 获取页面行为实例，如果不存在则创建新的CanvasItemUiPageBehavior实例
-    /// </summary>
-    /// <returns>返回IUiPageBehavior类型的页面行为实例</returns>
+
     public IUiPageBehavior GetPage()
     {
-        _page ??= new CanvasItemUiPageBehavior<Control>(this, UiKeyStr);
+        _page ??= UiPageBehaviorFactory.Create<Control>(this, UiKeyStr, UiLayer.Modal);
         return _page;
     }
 
@@ -86,7 +85,10 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
             return;
         }
 
-        this.SendCommand(new ResumeGameWithClosePauseMenuCommand());
+        this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
+        {
+            Handle = GetPage().Handle!.Value,
+        }));
         AcceptEvent();
     }
 
@@ -99,15 +101,19 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         // 绑定恢复游戏按钮点击事件
         ResumeButton.Pressed += () =>
         {
-            this.SendCommand(new ResumeGameWithClosePauseMenuCommand(
-            ));
+            this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
+            {
+                Handle = GetPage().Handle!.Value,
+            }));
         };
         // 绑定保存游戏按钮点击事件
         SaveButton.Pressed += () =>
         {
             // 在此保存游戏
-            this.SendCommand(new ResumeGameWithClosePauseMenuCommand(
-            ));
+            this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
+            {
+                Handle = GetPage().Handle!.Value,
+            }));
             _log.Debug("保存游戏");
         };
         // 绑定加载游戏按钮点击事件
@@ -118,7 +124,10 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         // 绑定返回主菜单按钮点击事件
         MainMenuButton.Pressed += () =>
         {
-            this.SendCommand(new ResumeGameWithClosePauseMenuCommand());
+            this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
+            {
+                Handle = GetPage().Handle!.Value,
+            }));
             _stateMachineSystem.ChangeTo<MainMenuState>();
         };
 
