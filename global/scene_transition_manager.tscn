@@ -10,18 +10,21 @@ shader_parameter/hex_size = 0.08
 shader_parameter/randomness = 0.05
 shader_parameter/edge_softness = 0.01
 shader_parameter/transition_speed = 0.3
+shader_parameter/resolution = Vector2(1920, 1080)
 
-[node name="SceneTransitionManager" type="Node" unique_id=1746108794]
+[node name="SceneTransitionManager" type="Node"]
 script = ExtResource("1_cw311")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1579051533]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
 
-[node name="SceneTransitionRect" type="ColorRect" parent="CanvasLayer" unique_id=1516818283]
+[node name="SceneTransitionRect" type="ColorRect" parent="CanvasLayer"]
 unique_name_in_owner = true
+visible = false
 material = SubResource("ShaderMaterial_cw311")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0)
+mouse_filter = 2

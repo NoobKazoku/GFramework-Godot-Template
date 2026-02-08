@@ -91,7 +91,7 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
         IEnumerator<IYieldInstruction> ReplaceScene(string key)
         {
             _sceneRouter.Replace(key);
-            return null;
+            yield return null;
         }
 
         Scene1Button.Pressed += () => transitionManager

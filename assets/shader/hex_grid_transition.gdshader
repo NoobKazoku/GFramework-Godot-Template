@@ -1,12 +1,13 @@
 shader_type canvas_item;
 
-uniform sampler2D from_tex : hint_default_white;
-uniform sampler2D to_tex : hint_default_white;
+uniform sampler2D from_tex : hint_default_white, filter_linear;
+uniform sampler2D to_tex : hint_default_white, filter_linear;
 uniform float progress : hint_range(0.0, 1.0) = 0.0;
 uniform float hex_size : hint_range(0.01, 0.5) = 0.08;
 uniform float randomness = 0.05;
 uniform float edge_softness = 0.01;
 uniform float transition_speed = 0.3;
+uniform vec2 resolution = vec2(1920.0, 1080.0); // 添加分辨率参数
 
 float hash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -33,14 +34,12 @@ void fragment() {
     vec4 from_col = texture(from_tex, uv);
     vec4 to_col = texture(to_tex, uv);
     
-    // 使用 if-else 替代 return
     if (progress <= 0.0) {
         COLOR = from_col;
     } else if (progress >= 1.0) {
         COLOR = to_col;
     } else {
-        // 计算六边形遮罩
-        vec2 resolution = 1.0 / SCREEN_PIXEL_SIZE;
+        // 使用传入的分辨率而不是 SCREEN_PIXEL_SIZE
         float aspect = resolution.x / resolution.y;
         
         // 将 UV 转换到屏幕空间

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b1vjila6v2iyw"]
 
-[ext_resource type="Texture2D" uid="uid://p5dak2wsc1nk" path="res://nooblogo.png" id="1_x7k20"]
+[ext_resource type="Texture2D" uid="uid://6aq7b0pqd1dp" path="res://assets/art/textures/boot_start/godot.jpg" id="1_x7k20"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8jw84"]
 
@@ -8,5 +8,5 @@
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1110659108]
 material = SubResource("CanvasItemMaterial_8jw84")
-position = Vector2(1539, 249)
+position = Vector2(960, 540)
 texture = ExtResource("1_x7k20")
