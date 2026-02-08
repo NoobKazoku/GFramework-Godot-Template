@@ -125,7 +125,7 @@ if ($WhatIf) {
 
 Write-Host "`n1. 更新文件内容..." -ForegroundColor Cyan
 
-$filePatterns = @('*.cs', '*.csproj', '*.sln', 'project.godot', 'README.md', '.gitignore')
+$filePatterns = @('*.cs', '*.csproj', '*.sln', 'project.godot', 'README.md', '.gitignore','*.yml')
 $processedFiles = 0
 
 $currentDir = Get-Location

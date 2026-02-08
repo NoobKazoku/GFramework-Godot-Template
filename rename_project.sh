@@ -158,7 +158,7 @@ echo "1. 更新文件内容..."
 processed_files=0
 
 # Use find with multiple patterns
-file_pattern_cmd='find . -type f \( -name "*.cs" -o -name "*.csproj" -o -name "*.sln" -o -name "project.godot" -o -name "README.md" -o -name ".gitignore" \) 2>/dev/null'
+file_pattern_cmd='find . -type f \( -name "*.cs" -o -name "*.csproj" -o -name "*.sln" -o -name "project.godot" -o -name "README.md" -o -name ".gitignore" -o -name "*.yml" \) 2>/dev/null'
 
 while IFS= read -r file; do
     if [[ "$file" =~ $EXCLUDE_PATTERN ]]; then
