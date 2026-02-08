@@ -59,12 +59,19 @@ public partial class SceneTransitionManager : Node, IController
         float duration = 0.6f)
     {
         IsTransitioning = true;
-        SceneTransitionRect.Visible = true;
-        // 1. 截图整个屏幕（包括所有 UI 层）
+
+        // 1. 先截图旧画面
         var captureInstruction = CaptureScreenshot().AsCoroutineInstruction();
         yield return captureInstruction;
         var fromTexture = captureInstruction.Result;
+
+        // 重要：先设置纹理，再显示 ColorRect
         _material.SetShaderParameter("from_tex", fromTexture);
+        _material.SetShaderParameter("progress", 0.0f);
+        SceneTransitionRect.Visible = true;
+
+        // 等待一帧确保显示
+        yield return new WaitOneFrame();
 
         // 2. 前半段动画（0 → 0.5，六边形遮盖旧画面）
         yield return TweenProgress(0f, 0.5f, duration * 0.5f).AsCoroutineInstruction();
@@ -102,7 +109,7 @@ public partial class SceneTransitionManager : Node, IController
         // 获取视口的纹理
         var viewport = GetViewport();
         var image = viewport.GetTexture().GetImage();
-
+        _log.Debug($"截图尺寸: {image.GetWidth()}x{image.GetHeight()}");
         // 转换为 ImageTexture
         var texture = ImageTexture.CreateFromImage(image);
 

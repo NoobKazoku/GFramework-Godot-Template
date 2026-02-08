@@ -86,17 +86,22 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     /// </summary>
     private void SetupEventHandlers()
     {
-        IEnumerator<IYieldInstruction> ReplaceScene1()
+        var transitionManager = SceneTransitionManager.Instance!;
+
+        IEnumerator<IYieldInstruction> ReplaceScene(string key)
         {
-            _sceneRouter.Replace(nameof(SceneKey.Scene1));
+            _sceneRouter.Replace(key);
             return null;
         }
 
-        Scene1Button.Pressed += () =>
-        {
-            SceneTransitionManager.Instance!.PlayTransitionCoroutine(ReplaceScene1()).RunCoroutine();
-        };
-        Scene2Button.Pressed += () => _sceneRouter.Replace(nameof(SceneKey.Scene2));
-        HomeUiButton.Pressed += () => _sceneRouter.Replace(nameof(SceneKey.Home));
+        Scene1Button.Pressed += () => transitionManager
+            .PlayTransitionCoroutine(ReplaceScene(nameof(SceneKey.Scene1)))
+            .RunCoroutine();
+        Scene2Button.Pressed += () => transitionManager
+            .PlayTransitionCoroutine(ReplaceScene(nameof(SceneKey.Scene2)))
+            .RunCoroutine();
+        HomeUiButton.Pressed += () => transitionManager
+            .PlayTransitionCoroutine(ReplaceScene(nameof(SceneKey.Home)))
+            .RunCoroutine();
     }
 }

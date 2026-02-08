@@ -1,11 +1,13 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.coroutine;
+using GFramework.Core.Abstractions.environment;
 using GFramework.Core.Abstractions.state;
 using GFramework.Core.coroutine.instructions;
 using GFramework.Core.extensions;
 using GFramework.Godot.coroutine;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
+using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.enums.resources;
 using GFrameworkGodotTemplate.scripts.utility;
@@ -48,22 +50,26 @@ public partial class Intro : Node2D, IController
     /// </summary>
     private IEnumerator<IYieldInstruction> PlayAnimationCoroutine()
     {
-        // 播放淡入动画
-        AnimationPlayer.Play("fade_in");
-        yield return new Delay(3);
+        if (!GameConstants.Development.Equals(this.GetEnvironment<IEnvironment>()?.Name, StringComparison.Ordinal))
+        {
+            // 播放淡入动画
+            AnimationPlayer.Play("fade_in");
+            yield return new Delay(3);
 
-        // 播放淡出动画
-        AnimationPlayer.Play("fade_out");
-        yield return new Delay(3);
-        Sprite.Texture = _textureRegistry.Get(nameof(TextureKey.GodotStart)) as Texture2D;
-        yield return new Delay(0.1);
-        // 再次播放淡入动画
-        AnimationPlayer.Play("fade_in");
-        yield return new Delay(3);
+            // 播放淡出动画
+            AnimationPlayer.Play("fade_out");
+            yield return new Delay(3);
+            Sprite.Texture = _textureRegistry.Get(nameof(TextureKey.GodotStart)) as Texture2D;
+            yield return new Delay(0.1);
+            // 再次播放淡入动画
+            AnimationPlayer.Play("fade_in");
+            yield return new Delay(3);
 
-        // 最后播放淡出动画
-        AnimationPlayer.Play("fade_out");
-        yield return new Delay(3);
+            // 最后播放淡出动画
+            AnimationPlayer.Play("fade_out");
+            yield return new Delay(3);
+        }
+
         // 切换到主菜单
         this.GetSystem<IStateMachineSystem>()!
             .ChangeTo<MainMenuState>();
