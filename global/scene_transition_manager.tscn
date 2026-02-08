@@ -1,6 +1,15 @@
 [gd_scene format=3 uid="uid://c5sxf7tcun6yq"]
 
 [ext_resource type="Script" uid="uid://d0h041va5wqpm" path="res://global/SceneTransitionManager.cs" id="1_cw311"]
+[ext_resource type="Shader" uid="uid://b711kyryhjn0l" path="res://assets/shader/hex_grid_transition.gdshader" id="2_oxs4f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cw311"]
+shader = ExtResource("2_oxs4f")
+shader_parameter/progress = 0.0
+shader_parameter/hex_size = 0.08
+shader_parameter/randomness = 0.05
+shader_parameter/edge_softness = 0.01
+shader_parameter/transition_speed = 0.3
 
 [node name="SceneTransitionManager" type="Node" unique_id=1746108794]
 script = ExtResource("1_cw311")
@@ -9,15 +18,10 @@ script = ExtResource("1_cw311")
 
 [node name="SceneTransitionRect" type="ColorRect" parent="CanvasLayer" unique_id=1516818283]
 unique_name_in_owner = true
+material = SubResource("ShaderMaterial_cw311")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
-
-[node name="FromViewport" type="SubViewport" parent="." unique_id=603858978]
-unique_name_in_owner = true
-
-[node name="ToViewport" type="SubViewport" parent="." unique_id=984873779]
-unique_name_in_owner = true

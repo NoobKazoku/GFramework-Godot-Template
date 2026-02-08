@@ -1,8 +1,10 @@
 using GFramework.Core.Abstractions.controller;
+using GFramework.Core.Abstractions.coroutine;
 using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.scene;
 using GFramework.Game.Abstractions.ui;
+using GFramework.Godot.coroutine;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
@@ -84,7 +86,16 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     /// </summary>
     private void SetupEventHandlers()
     {
-        Scene1Button.Pressed += () => _sceneRouter.Replace(nameof(SceneKey.Scene1));
+        IEnumerator<IYieldInstruction> ReplaceScene1()
+        {
+            _sceneRouter.Replace(nameof(SceneKey.Scene1));
+            return null;
+        }
+
+        Scene1Button.Pressed += () =>
+        {
+            SceneTransitionManager.Instance!.PlayTransitionCoroutine(ReplaceScene1()).RunCoroutine();
+        };
         Scene2Button.Pressed += () => _sceneRouter.Replace(nameof(SceneKey.Scene2));
         HomeUiButton.Pressed += () => _sceneRouter.Replace(nameof(SceneKey.Home));
     }

@@ -2,12 +2,8 @@ using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.coroutine;
 using GFramework.Core.coroutine.extensions;
 using GFramework.Core.coroutine.instructions;
-using GFramework.Core.extensions;
-using GFramework.Game.Abstractions.scene;
-using GFramework.Godot.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
-using GFrameworkGodotTemplate.scripts.core.scene;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -27,11 +23,6 @@ public partial class SceneTransitionManager : Node, IController
     private ShaderMaterial _material = null!;
 
     /// <summary>
-    /// 场景路由器，用于管理场景的加载和切换。
-    /// </summary>
-    private ISceneRouter _sceneRouter = null!;
-
-    /// <summary>
     /// 获取或设置场景过渡管理器的单例实例。
     /// </summary>
     public static SceneTransitionManager? Instance { get; private set; }
@@ -40,16 +31,6 @@ public partial class SceneTransitionManager : Node, IController
     /// 获取用于显示过渡效果的 ColorRect 节点。
     /// </summary>
     private ColorRect SceneTransitionRect => GetNode<ColorRect>("%SceneTransitionRect");
-
-    /// <summary>
-    /// 获取源视口，用于捕获当前场景的画面。
-    /// </summary>
-    private SubViewport FromViewport => GetNode<SubViewport>("%FromViewport");
-
-    /// <summary>
-    /// 获取目标视口，用于捕获新场景的画面。
-    /// </summary>
-    private SubViewport ToViewport => GetNode<SubViewport>("%ToViewport");
 
     /// <summary>
     /// 获取或设置是否正在进行场景过渡。
@@ -65,56 +46,69 @@ public partial class SceneTransitionManager : Node, IController
         Instance = this;
         _material = (ShaderMaterial)SceneTransitionRect.Material;
         SceneTransitionRect.Visible = false;
-        _sceneRouter = this.GetSystem<ISceneRouter>()!;
     }
 
+
     /// <summary>
-    /// 异步播放场景过渡动画。
-    /// 包括捕获当前场景、执行过渡动画、切换场景以及捕获新场景。
+    /// 执行场景过渡的协程逻辑，包括捕获当前画面、执行过渡动画、切换场景以及捕获新画面。
     /// </summary>
-    /// <param name="onSwitch">在场景切换时执行的协程。</param>
-    /// <param name="duration">过渡动画的总持续时间（秒）。</param>
-    /// <returns>返回一个可等待的协程指令枚举。</returns>
-    public IEnumerator<IYieldInstruction> PlayTransitionAsync(IEnumerator<IYieldInstruction> onSwitch,
+    /// <param name="onSwitch">在场景切换时执行的协程逻辑。</param>
+    /// <param name="duration">整个过渡过程的总持续时间（单位：秒），默认值为 0.6 秒。</param>
+    /// <returns>返回一个可枚举的协程指令，用于控制过渡流程的执行。</returns>
+    public IEnumerator<IYieldInstruction> PlayTransitionCoroutine(IEnumerator<IYieldInstruction> onSwitch,
         float duration = 0.6f)
     {
-        // 捕获当前画面
-        CaptureCurrentScene(FromViewport);
+        IsTransitioning = true;
+        SceneTransitionRect.Visible = true;
+        // 1. 截图整个屏幕（包括所有 UI 层）
+        var captureInstruction = CaptureScreenshot().AsCoroutineInstruction();
+        yield return captureInstruction;
+        var fromTexture = captureInstruction.Result;
+        _material.SetShaderParameter("from_tex", fromTexture);
 
-        // 执行过渡动画的第一阶段：从 0 到 0.5
+        // 2. 前半段动画（0 → 0.5，六边形遮盖旧画面）
         yield return TweenProgress(0f, 0.5f, duration * 0.5f).AsCoroutineInstruction();
 
-        // 唯一一次“切”的机会：执行场景切换逻辑
+        // 3. 执行实际切换（场景/UI）
         yield return new WaitForCoroutine(onSwitch);
 
-        // 捕获新画面
-        CaptureCurrentScene(ToViewport);
+        // 4. 等待一帧让新场景渲染
+        yield return new WaitOneFrame();
 
-        // 执行过渡动画的第二阶段：从 0.5 到 1
+        // 5. 截图新画面
+        var toTextureInstruction = CaptureScreenshot().AsCoroutineInstruction();
+        yield return toTextureInstruction;
+        var toTexture = toTextureInstruction.Result;
+        _material.SetShaderParameter("to_tex", toTexture);
+
+        // 6. 后半段动画（0.5 → 1.0，显示新画面）
         yield return TweenProgress(0.5f, 1f, duration * 0.5f).AsCoroutineInstruction();
+
+        // 7. 清理
+        SceneTransitionRect.Visible = false;
+        fromTexture.Dispose();
+        toTexture.Dispose();
+        IsTransitioning = false;
     }
 
     /// <summary>
-    /// 捕获指定视口中的当前场景画面。
-    /// 清除视口中的现有子节点，并将当前场景的副本添加到视口中。
+    /// 捕获整个屏幕的截图（包括所有 UI 层和场景）
     /// </summary>
-    /// <param name="viewport">要捕获画面的目标视口。</param>
-    private void CaptureCurrentScene(SubViewport viewport)
+    private async Task<ImageTexture> CaptureScreenshot()
     {
-        foreach (var child in viewport.GetChildren())
-        {
-            child.QueueFreeX();
-        }
+        // 等待渲染完成
+        await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
 
-        var sceneRouter = _sceneRouter as SceneRouter;
+        // 获取视口的纹理
+        var viewport = GetViewport();
+        var image = viewport.GetTexture().GetImage();
 
-        var current = sceneRouter!.SceneRoot;
-        if (current == null)
-            return;
-        var clone = current.Duplicate((int)DuplicateFlags.UseInstantiation);
+        // 转换为 ImageTexture
+        var texture = ImageTexture.CreateFromImage(image);
 
-        viewport.AddChild(clone);
+        return texture;
     }
+
 
     /// <summary>
     /// 异步执行过渡进度的插值动画。
