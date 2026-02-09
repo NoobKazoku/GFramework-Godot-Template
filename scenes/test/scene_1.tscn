@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dyrf2o3rqfqic"]
 
-[ext_resource type="Texture2D" uid="uid://p5dak2wsc1nk" path="res://nooblogo.png" id="1_8tm01"]
+[ext_resource type="Texture2D" uid="uid://d0tcs4pj5rn3u" path="res://assets/art/textures/boot_start/made by noobkazoku.png" id="1_8tm01"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fmqly"]
 
@@ -8,5 +8,6 @@
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1461216630]
 material = SubResource("CanvasItemMaterial_fmqly")
-position = Vector2(280, 220)
+position = Vector2(960, 540)
+scale = Vector2(3, 3)
 texture = ExtResource("1_8tm01")
