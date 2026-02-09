@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://db7uqtqvqp4dn"]
 
 [ext_resource type="Script" uid="uid://kief88kpnnn8" path="res://scripts/intro/Intro.cs" id="1_iatiw"]
-[ext_resource type="Texture2D" uid="uid://p5dak2wsc1nk" path="res://nooblogo.png" id="2_iatiw"]
+[ext_resource type="Texture2D" uid="uid://dojjkiihj80mu" path="res://assets/art/textures/boot_start/noobkazoku.png" id="2_iatiw"]
 
 [sub_resource type="Animation" id="Animation_iatiw"]
 length = 0.001

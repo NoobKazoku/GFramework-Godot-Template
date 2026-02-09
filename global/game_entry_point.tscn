@@ -80,6 +80,7 @@ Texture = ExtResource("13_fgqit")
 
 [node name="GameEntryPoint" type="Node" unique_id=729277825]
 script = ExtResource("1_a14y6")
+IsDev = false
 UiPageConfigs = Array[Object]([SubResource("Resource_pn3ws"), SubResource("Resource_f22d5"), SubResource("Resource_inr81"), SubResource("Resource_rtbxk"), SubResource("Resource_d4hg6")])
 GameSceneConfigs = Array[Object]([SubResource("Resource_1yddw"), SubResource("Resource_fgqit"), SubResource("Resource_hjx06"), SubResource("Resource_iumd8"), SubResource("Resource_qdo7l")])
 TextureConfigs = Array[Object]([SubResource("Resource_k055p")])
