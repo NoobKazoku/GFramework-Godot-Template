@@ -60,6 +60,7 @@ public partial class Intro : Node2D, IController
             AnimationPlayer.Play("fade_out");
             yield return new Delay(3);
             Sprite.Texture = _textureRegistry.Get(nameof(TextureKey.GodotStart)) as Texture2D;
+            Sprite.Scale = new Vector2(1f, 1f);
             yield return new Delay(0.1);
             // 再次播放淡入动画
             AnimationPlayer.Play("fade_in");
