@@ -85,14 +85,17 @@ public partial class SceneTransitionManager : Node, IController
         _log.Debug($"SceneTransitionManager初始化: Shader={_material.Shader?.ResourcePath}");
     }
 
+
     /// <summary>
-    /// 执行场景过渡的协程方法。
-    /// 包括截图、场景切换、过渡动画和资源清理等步骤。
+    /// 执行场景过渡的协程方法（使用预渲染）。
     /// </summary>
     /// <param name="onSwitch">场景切换逻辑的协程。</param>
+    /// <param name="scenePreloader">场景预加载委托，返回要预渲染的场景实例。</param>
     /// <param name="duration">过渡动画的持续时间（秒）。</param>
     /// <returns>协程指令枚举器。</returns>
-    public IEnumerator<IYieldInstruction> PlayTransitionCoroutine(IEnumerator<IYieldInstruction> onSwitch,
+    public IEnumerator<IYieldInstruction> PlayTransitionCoroutine(
+        IEnumerator<IYieldInstruction> onSwitch,
+        Func<Node> scenePreloader,
         float duration = 0.6f)
     {
         if (IsTransitioning)
@@ -102,7 +105,7 @@ public partial class SceneTransitionManager : Node, IController
         }
 
         IsTransitioning = true;
-        _log.Debug("=== 开始场景过渡 ===");
+        _log.Debug("=== 开始场景过渡（预渲染模式） ===");
 
         // 1. 截图当前画面
         _log.Debug("步骤1: 捕获当前画面");
@@ -112,25 +115,16 @@ public partial class SceneTransitionManager : Node, IController
 
         _log.Debug($"旧画面: {fromTexture.GetWidth()}x{fromTexture.GetHeight()}");
 
-        // 2. 执行场景切换
-        _log.Debug("步骤2: 执行场景切换");
-        yield return new WaitForCoroutine(onSwitch);
-
-        // 3. 等待新场景渲染完成
-        _log.Debug("步骤3: 等待新场景渲染");
-        yield return new WaitOneFrame();
-        yield return new WaitOneFrame();
-
-        // 4. 截图新画面
-        _log.Debug("步骤4: 捕获新画面");
-        var captureToInstruction = CaptureScreenshot().AsCoroutineInstruction();
-        yield return captureToInstruction;
-        var toTexture = captureToInstruction.Result;
+        // 2. 在预览视口中预渲染新场景
+        _log.Debug("步骤2: 预渲染新场景");
+        var previewSceneInstruction = PreviewSceneInViewport(scenePreloader).AsCoroutineInstruction();
+        yield return previewSceneInstruction;
+        var toTexture = previewSceneInstruction.Result;
 
         _log.Debug($"新画面: {toTexture.GetWidth()}x{toTexture.GetHeight()}");
 
-        // 5. 设置shader参数
-        _log.Debug("步骤5: 设置shader参数");
+        // 3. 设置shader参数并显示遮挡层
+        _log.Debug("步骤3: 设置shader并显示遮挡层");
         var viewport = GetViewport();
         var viewportSize = viewport.GetVisibleRect().Size;
 
@@ -139,21 +133,24 @@ public partial class SceneTransitionManager : Node, IController
         _material.SetShaderParameter("resolution", viewportSize);
         _material.SetShaderParameter(Progress, 0.0f);
 
-        _log.Debug($"分辨率: {viewportSize}");
-
-        // 6. 显示过渡层
-        _log.Debug("步骤6: 显示过渡层");
         SceneTransitionRect.Visible = true;
-
-        // 等待一帧确保显示
         yield return new WaitOneFrame();
 
-        // 7. 执行过渡动画
-        _log.Debug($"步骤7: 执行过渡动画 (时长: {duration}s)");
+        _log.Debug($"分辨率: {viewportSize}");
+
+        // 4. 执行场景切换（此时屏幕已被遮挡）
+        _log.Debug("步骤4: 执行场景切换");
+        yield return new WaitForCoroutine(onSwitch);
+
+        // 等待新场景稳定
+        yield return new WaitOneFrame();
+
+        // 5. 执行过渡动画
+        _log.Debug($"步骤5: 执行过渡动画 (时长: {duration}s)");
         yield return new WaitForCoroutine(TweenProgressCoroutine(0f, 1f, duration));
 
-        // 8. 清理
-        _log.Debug("步骤8: 清理资源");
+        // 6. 清理
+        _log.Debug("步骤6: 清理资源");
         SceneTransitionRect.Visible = false;
         _material.SetShaderParameter(Progress, 0.0f);
 
@@ -162,6 +159,64 @@ public partial class SceneTransitionManager : Node, IController
 
         IsTransitioning = false;
         _log.Debug("=== 场景过渡完成 ===");
+    }
+
+    /// <summary>
+    /// 在预览视口中渲染场景并截图。
+    /// </summary>
+    /// <param name="scenePreloader">场景预加载委托。</param>
+    /// <returns>包含截图结果的图像纹理任务。</returns>
+    private async Task<ImageTexture> PreviewSceneInViewport(Func<Node> scenePreloader)
+    {
+        Node? previewScene = null;
+
+        try
+        {
+            // 1. 加载场景实例
+            previewScene = scenePreloader();
+
+            // 2. 设置预览视口大小
+            var mainViewport = GetViewport();
+            var viewportSize = mainViewport.GetVisibleRect().Size;
+            PreviewViewport.Size = new Vector2I((int)viewportSize.X, (int)viewportSize.Y);
+
+            _log.Debug($"预览视口大小: {PreviewViewport.Size}");
+
+            // 3. 将场景添加到预览视口
+            PreviewViewport.AddChild(previewScene);
+
+            // 4. 触发渲染
+            PreviewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
+
+            // 等待渲染完成（需要等待多帧确保完全渲染）
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+
+            // 5. 获取渲染结果
+            var viewportTexture = PreviewViewport.GetTexture();
+            var image = viewportTexture.GetImage();
+
+            // 6. 转换为 ImageTexture
+            var texture = ImageTexture.CreateFromImage(image);
+
+            _log.Debug("预览场景渲染完成");
+
+            return texture;
+        }
+        finally
+        {
+            // 7. 清理预览场景
+            if (previewScene != null && IsInstanceValid(previewScene))
+            {
+                PreviewViewport.RemoveChild(previewScene);
+                previewScene.QueueFree();
+                _log.Debug("清理预览场景");
+            }
+
+            // 禁用视口渲染
+            PreviewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
+        }
     }
 
     /// <summary>

@@ -12,19 +12,19 @@ shader_parameter/edge_softness = 0.01
 shader_parameter/transition_speed = 0.3
 shader_parameter/resolution = Vector2(1920, 1080)
 
-[node name="SceneTransitionManager" type="Node"]
+[node name="SceneTransitionManager" type="Node" unique_id=866978893]
 script = ExtResource("1_cw311")
 
-[node name="PreviewViewport" type="SubViewport" parent="."]
+[node name="PreviewViewport" type="SubViewport" parent="." unique_id=1667163664]
 unique_name_in_owner = true
-transparent_bg = false
 handle_input_locally = false
 render_target_update_mode = 4
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=944753704]
+unique_name_in_owner = true
 layer = 100
 
-[node name="SceneTransitionRect" type="ColorRect" parent="CanvasLayer"]
+[node name="SceneTransitionRect" type="ColorRect" parent="CanvasLayer" unique_id=1027798644]
 unique_name_in_owner = true
 visible = false
 material = SubResource("ShaderMaterial_cw311")

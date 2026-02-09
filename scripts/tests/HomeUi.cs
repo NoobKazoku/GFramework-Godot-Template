@@ -5,6 +5,7 @@ using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.scene;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.coroutine;
+using GFramework.Godot.scene;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
@@ -24,6 +25,8 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     ///     页面行为实例的私有字段
     /// </summary>
     private IUiPageBehavior? _page;
+
+    private IGodotSceneRegistry _sceneRegistry = null!;
 
     private ISceneRouter _sceneRouter = null!;
 
@@ -73,6 +76,7 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
         Hide();
         await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
         _sceneRouter = this.GetSystem<ISceneRouter>()!;
+        _sceneRegistry = this.GetUtility<IGodotSceneRegistry>()!;
 
         // 在此添加就绪逻辑
         SetupEventHandlers();
@@ -94,14 +98,44 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
             yield return null;
         }
 
-        Scene1Button.Pressed += () => transitionManager
-            .PlayTransitionCoroutine(ReplaceScene(nameof(SceneKey.Scene1)))
-            .RunCoroutine();
-        Scene2Button.Pressed += () => transitionManager
-            .PlayTransitionCoroutine(ReplaceScene(nameof(SceneKey.Scene2)))
-            .RunCoroutine();
-        HomeUiButton.Pressed += () => transitionManager
-            .PlayTransitionCoroutine(ReplaceScene(nameof(SceneKey.Home)))
-            .RunCoroutine();
+        // 场景预加载器 - 根据场景key加载对应的场景
+        Node PreloadScene(string sceneKey)
+        {
+            var packedScene = _sceneRegistry.Get(sceneKey);
+            return packedScene.Instantiate();
+        }
+
+        Scene1Button.Pressed += () =>
+        {
+            var sceneKey = nameof(SceneKey.Scene1);
+            transitionManager
+                .PlayTransitionCoroutine(
+                    ReplaceScene(sceneKey),
+                    () => PreloadScene(sceneKey)
+                )
+                .RunCoroutine();
+        };
+
+        Scene2Button.Pressed += () =>
+        {
+            var sceneKey = nameof(SceneKey.Scene2);
+            transitionManager
+                .PlayTransitionCoroutine(
+                    ReplaceScene(sceneKey),
+                    () => PreloadScene(sceneKey)
+                )
+                .RunCoroutine();
+        };
+
+        HomeUiButton.Pressed += () =>
+        {
+            var sceneKey = nameof(SceneKey.Home);
+            transitionManager
+                .PlayTransitionCoroutine(
+                    ReplaceScene(sceneKey),
+                    () => PreloadScene(sceneKey)
+                )
+                .RunCoroutine();
+        };
     }
 }
