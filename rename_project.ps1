@@ -60,7 +60,7 @@ function Test-ProjectName {
 }
 
 function Get-ExcludeDirs {
-    @('.godot', '.git', '.idea', '.vscode', 'bin', 'obj', '.mono', 'data_*')
+    @('.godot', '.git', '.idea', '.vscode', 'bin', 'obj', '.mono')
 }
 
 function Update-FileContent {

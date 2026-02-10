@@ -53,7 +53,7 @@ test_project_name() {
 }
 
 get_exclude_dirs() {
-    echo ".godot|.git|.idea|.vscode|bin|obj|.mono|data_*"
+    echo ".godot|.git|.idea|.vscode|bin|obj|.mono"
 }
 
 update_file_content() {
