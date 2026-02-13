@@ -1,6 +1,7 @@
 using GFramework.Core.Abstractions.state;
 using GFramework.Core.extensions;
 using GFramework.Core.state;
+using GFramework.Game.Abstractions.scene;
 using GFramework.Game.Abstractions.ui;
 using GFrameworkGodotTemplate.scripts.main_menu;
 
@@ -18,8 +19,12 @@ public class MainMenuState : ContextAwareStateBase
     /// <param name="from">从哪个状态切换过来，可能为空</param>
     public override void OnEnter(IState? from)
     {
+        // 回到主菜单需要销毁其它所有Ui界面以及场景
+        var uiRouter = this.GetSystem<IUiRouter>()!;
+        uiRouter.Clear();
+        this.GetSystem<ISceneRouter>()!.Unload();
         // 推送主菜单UI到界面栈中，显示主菜单界面
-        this.GetSystem<IUiRouter>()!.Push(MainMenu.UiKeyStr);
+        uiRouter.Push(MainMenu.UiKeyStr);
     }
 
     /// <summary>
