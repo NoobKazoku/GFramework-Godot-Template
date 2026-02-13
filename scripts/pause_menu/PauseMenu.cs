@@ -80,7 +80,7 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
 
     public override void _Input(InputEvent @event)
     {
-        if (!@event.IsActionPressed("ui_cancel")) return;
+        if (!@event.IsActionPressed("ui_cancel") || !Visible) return;
 
         this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
         {
