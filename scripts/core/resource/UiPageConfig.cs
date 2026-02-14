@@ -14,13 +14,13 @@ public partial class UiPageConfig : Resource, IKeyValue<string, PackedScene>
     ///     获取或设置UI界面的唯一标识键
     /// </summary>
     [Export]
-    public UiKey UiKey { get; set; }
+    public UiKey UiKey { get; private set; }
 
     /// <summary>
     ///     获取或设置UI界面对应的场景资源
     /// </summary>
     [Export]
-    public PackedScene Scene { get; set; } = null!;
+    public PackedScene Scene { get; private set; } = null!;
 
     /// <summary>
     ///     获取UI键的名称作为键值对的键
