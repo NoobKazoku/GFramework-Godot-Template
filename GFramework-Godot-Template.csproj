@@ -27,7 +27,7 @@
         </PackageReference>
         <PackageReference Include="GeWuYou.GFramework" Version="0.0.177"/>
         <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.177"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.177"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.179"/>
         <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.177"/>
     </ItemGroup>
     <ItemGroup>
