@@ -4,18 +4,27 @@ name: Auto Increment Version and Tag
 # 当向 main 或 master 分支推送代码时触发
 # 或者当针对 main 或 master 的 PR 被合并关闭时触发
 on:
-  push:
-    branches: [ main, master ]
-
+  workflow_run:
+    workflows: [ "CI - Build" ]
+    types:
+      - completed
+  workflow_dispatch:
 jobs:
   auto-tag:
     name: Auto Increment Version and Create Tag
     runs-on: ubuntu-latest
     # 条件判断：仅在推送事件执行
     if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == 'main'&&
-      contains(github.event.workflow_run.head_commit.message, '[release ci]')
+      github.ref == 'refs/heads/main' &&
+      (
+        (
+          github.event_name == 'workflow_run' &&
+          github.event.workflow_run.conclusion == 'success' &&
+          contains(github.event.workflow_run.head_commit.message, '[release ci]')
+        )
+        ||
+        github.event_name == 'workflow_dispatch'
+      )
     permissions:
       contents: write
     
