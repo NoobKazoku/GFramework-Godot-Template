@@ -1,6 +1,6 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.state;
-using GFramework.Core.extensions;
+using GFramework.Core.coroutine.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.ui;
@@ -80,6 +80,6 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         // 绑定制作组按钮点击事件
         CreditsButton.Pressed += () => { _uiRouter.Push(Credits.UiKeyStr); };
         OptionsMenuButton.Pressed += () => { this.SendCommand(new OpenOptionsMenuCommand()); };
-        NewGameButton.Pressed += () => { _stateMachineSystem.ChangeTo<PlayingState>(); };
+        NewGameButton.Pressed += () => { _stateMachineSystem.ChangeToAsync<PlayingState>().AsCoroutineInstruction(); };
     }
 }

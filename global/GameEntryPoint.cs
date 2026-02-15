@@ -3,7 +3,6 @@ using GFramework.Core.Abstractions.logging;
 using GFramework.Core.Abstractions.properties;
 using GFramework.Core.Abstractions.state;
 using GFramework.Core.architecture;
-using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.setting;
 using GFramework.Game.setting.events;
 using GFramework.Godot.coroutine;
@@ -97,10 +96,10 @@ public partial class GameEntryPoint : Node
 
         // 检查是否应该进入主菜单状态，如果是则注册UI根节点就绪事件来切换到主菜单状态
         if (ShouldEnterMainMenu())
-            this.RegisterEvent<UiRoot.UiRootReadyEvent>(_ =>
+            this.RegisterEvent<UiRoot.UiRootReadyEvent>(async _ =>
             {
-                this.GetSystem<IStateMachineSystem>()!
-                    .ChangeTo<BootStartState>();
+                await this.GetSystem<IStateMachineSystem>()!
+                    .ChangeToAsync<BootStartState>();
             });
 
         _log.Debug("GameEntryPoint ready.");

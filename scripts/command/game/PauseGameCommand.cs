@@ -1,6 +1,8 @@
 ﻿using GFramework.Core.Abstractions.state;
 using GFramework.Core.command;
+using GFramework.Core.coroutine.extensions;
 using GFramework.Core.extensions;
+using GFramework.Godot.coroutine;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.utils;
 
@@ -18,6 +20,6 @@ public sealed class PauseGameCommand : AbstractCommand
     {
         // 设置游戏树的暂停状态为true，实现游戏暂停功能
         GameUtil.GetTree().Paused = true;
-        this.GetSystem<IStateMachineSystem>()!.ChangeTo<PausedState>();
+        this.GetSystem<IStateMachineSystem>()!.ChangeToAsync<PausedState>().ToCoroutineEnumerator().RunCoroutine();
     }
 }

@@ -1,4 +1,3 @@
-using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.extensions;
@@ -71,36 +70,6 @@ public partial class UiRoot : CanvasLayer, IUiRoot
         _pages.Remove(child);
         node.QueueFreeX();
         _log.Debug($"Remove UI [{child.Key}]");
-    }
-
-    /// <summary>
-    ///     设置UI页面的Z轴顺序
-    /// </summary>
-    /// <param name="page">目标UI页面</param>
-    /// <param name="zOrder">Z轴排序值</param>
-    public void SetZOrder(IUiPageBehavior page, int zOrder)
-    {
-        if (page.View is not CanvasItem item)
-            return;
-
-        // 查找页面所在的UI层
-        var layer = _containers
-            .FirstOrDefault(p => item.GetParent() == p.Value)
-            .Key;
-
-        item.ZIndex = (int)layer * 100 + zOrder;
-        item.ZAsRelative = false;
-    }
-
-    /// <summary>
-    ///     获取当前可见的UI页面列表
-    /// </summary>
-    /// <returns>可见UI页面的只读列表</returns>
-    public IReadOnlyList<IUiPageBehavior> GetVisiblePages()
-    {
-        return _pages
-            .Where(p => p.View is CanvasItem { Visible: true })
-            .ToList();
     }
 
     /// <summary>

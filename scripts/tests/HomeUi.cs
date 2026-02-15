@@ -1,6 +1,6 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.coroutine;
-using GFramework.Core.extensions;
+using GFramework.Core.coroutine.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.scene;
 using GFramework.Game.Abstractions.ui;
@@ -94,7 +94,7 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
 
         IEnumerator<IYieldInstruction> ReplaceScene(string key)
         {
-            _sceneRouter.Replace(key);
+            _sceneRouter.ReplaceAsync(key).AsTask().AsCoroutineInstruction();
             yield return null;
         }
 

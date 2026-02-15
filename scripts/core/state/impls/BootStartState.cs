@@ -23,15 +23,10 @@ namespace GFrameworkGodotTemplate.scripts.core.state.impls;
 ///     表示启动状态的类，继承自 ContextAwareStateBase。
 ///     该类用于定义系统或应用程序启动时的状态行为。
 /// </summary>
-public class BootStartState : ContextAwareStateBase
+public class BootStartState : AsyncContextAwareStateBase
 {
-    public override void OnEnter(IState? from)
+    public override async Task OnEnterAsync(IState? from)
     {
-        this.GetSystem<ISceneRouter>()!.Replace(nameof(SceneKey.Boot));
-    }
-
-    public override void OnExit(IState? to)
-    {
-        this.GetSystem<ISceneRouter>()!.Unload();
+        await this.GetSystem<ISceneRouter>()!.ReplaceAsync(nameof(SceneKey.Boot)).ConfigureAwait(false);
     }
 }

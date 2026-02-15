@@ -1,8 +1,9 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.state;
-using GFramework.Core.extensions;
+using GFramework.Core.coroutine.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
+using GFramework.Godot.coroutine;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
@@ -125,7 +126,7 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
             {
                 Handle = GetPage().Handle!.Value
             }));
-            _stateMachineSystem.ChangeTo<MainMenuState>();
+            _stateMachineSystem.ChangeToAsync<MainMenuState>().ToCoroutineEnumerator().RunCoroutine();
         };
 
         // 绑定退出游戏按钮点击事件
