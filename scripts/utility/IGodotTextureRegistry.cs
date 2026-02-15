@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Game.Abstractions.ui;
+using GFramework.Game.Abstractions.asset;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.utility;

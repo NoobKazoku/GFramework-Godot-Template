@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using GFramework.Game.scene;
+using GFramework.Game.scene.handler;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.core.scene;
@@ -29,10 +30,12 @@ public class SceneRouter : SceneRouterBase
     public Node? SceneRoot => Root as Node;
 
     /// <summary>
-    /// 初始化方法，在场景路由器创建时调用
-    /// 可在此处添加场景路由相关的初始化逻辑
+    /// 注册场景转换处理器
+    /// 重写基类方法，注册日志记录转换处理器
+    /// 用于在场景切换过程中记录相关日志信息
     /// </summary>
-    protected override void OnInit()
+    protected override void RegisterHandlers()
     {
+        RegisterHandler(new LoggingTransitionHandler());
     }
 }
