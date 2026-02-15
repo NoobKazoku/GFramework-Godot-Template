@@ -8,13 +8,14 @@
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Remove="script_templates\**"/>
         <Compile Remove="scripts\core\ui\UiFactory.cs"/>
         <Compile Remove="scenes\**"/>
+        <Compile Include="script_templates\Node\SimpleSceneControllerTemplate.cs"/>
+        <Compile Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Remove="script_templates\**"/>
         <EmbeddedResource Remove="scenes\**"/>
+        <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Update="Meziantou.Analyzer" Version="2.0.301">
@@ -25,10 +26,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.180"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.180"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.180"/>
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.180"/>
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.185"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.185"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.185"/>
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.185"/>
     </ItemGroup>
     <ItemGroup>
         <Content Include=".github\dependabot.yml"/>
@@ -55,5 +56,6 @@
         <Folder Include="scripts\intro\"/>
         <Folder Include="scripts\main_menu\"/>
         <Folder Include="scripts\tests\"/>
+        <Folder Include="scripts\test\"/>
     </ItemGroup>
 </Project>

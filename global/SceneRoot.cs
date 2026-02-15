@@ -1,4 +1,3 @@
-using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.scene;
 using GFramework.Godot.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
@@ -38,7 +37,7 @@ public partial class SceneRoot : Node2D, ISceneRoot
     /// <exception cref="InvalidOperationException">当场景行为未继承Godot Node时抛出异常</exception>
     public void AddScene(ISceneBehavior scene)
     {
-        if (scene is not Node node)
+        if (scene.Original is not Node node)
             throw new InvalidOperationException(
                 $"SceneBehavior must inherit Godot Node. Key={scene.Key}");
 
@@ -61,7 +60,7 @@ public partial class SceneRoot : Node2D, ISceneRoot
     /// <param name="scene">要移除的场景行为对象</param>
     public void RemoveScene(ISceneBehavior scene)
     {
-        if (scene is not Node node)
+        if (scene.Original is not Node node)
             return;
 
         node.GetParent()?.RemoveChild(node);

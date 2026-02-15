@@ -3,7 +3,6 @@ using GFramework.Core.Abstractions.coroutine;
 using GFramework.Core.Abstractions.environment;
 using GFramework.Core.Abstractions.state;
 using GFramework.Core.coroutine.instructions;
-using GFramework.Core.extensions;
 using GFramework.Godot.coroutine;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
@@ -72,8 +71,8 @@ public partial class Intro : Node2D, IController
         }
 
         // 切换到主菜单
-        this.GetSystem<IStateMachineSystem>()!
-            .ChangeTo<MainMenuState>();
+        yield return this.GetSystem<IStateMachineSystem>()!
+            .ChangeToAsync<MainMenuState>().AsCoroutineInstruction();
         yield return new Delay(0.1);
     }
 }

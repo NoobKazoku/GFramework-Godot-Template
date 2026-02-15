@@ -11,18 +11,18 @@ namespace GFrameworkGodotTemplate.scripts.core.state.impls;
 ///     主菜单状态
 ///     负责管理主菜单界面的显示和隐藏逻辑
 /// </summary>
-public class MainMenuState : ContextAwareStateBase
+public class MainMenuState : AsyncContextAwareStateBase
 {
     /// <summary>
     ///     状态进入时的处理方法
     /// </summary>
     /// <param name="from">从哪个状态切换过来，可能为空</param>
-    public override void OnEnter(IState? from)
+    public override async Task OnEnterAsync(IState? from)
     {
         // 回到主菜单需要销毁其它所有Ui界面以及场景
         var uiRouter = this.GetSystem<IUiRouter>()!;
         uiRouter.Clear();
-        this.GetSystem<ISceneRouter>()!.Unload();
+        await this.GetSystem<ISceneRouter>()!.ClearAsync().ConfigureAwait(false);
         // 推送主菜单UI到界面栈中，显示主菜单界面
         uiRouter.Push(MainMenu.UiKeyStr);
     }
@@ -32,8 +32,8 @@ public class MainMenuState : ContextAwareStateBase
     /// </summary>
     /// <param name="target">目标状态</param>
     /// <returns>始终返回true，表示可以切换到任意状态</returns>
-    public override bool CanTransitionTo(IState target)
+    public override Task<bool> CanTransitionToAsync(IState target)
     {
-        return true;
+        return Task.FromResult(true);
     }
 }
