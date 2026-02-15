@@ -1,6 +1,5 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.state;
-using GFramework.Core.coroutine.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.coroutine;

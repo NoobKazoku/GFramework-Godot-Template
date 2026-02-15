@@ -25,3 +25,7 @@ global using LanguageExt.Common;
 global using LanguageExt.Effects;
 global using LanguageExt.Pretty;
 global using static LanguageExt.Prelude;
+
+// 全局导入GFramework
+global using GFramework.Core.extensions;
+global using GFramework.Core.coroutine.extensions;
