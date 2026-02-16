@@ -96,11 +96,9 @@ public partial class GameEntryPoint : Node
 
         // 检查是否应该进入主菜单状态，如果是则注册UI根节点就绪事件来切换到主菜单状态
         if (ShouldEnterMainMenu())
-            this.RegisterEvent<UiRoot.UiRootReadyEvent>(async _ =>
-            {
-                await this.GetSystem<IStateMachineSystem>()!
-                    .ChangeToAsync<BootStartState>();
-            });
+        {
+            this.RegisterEvent<UiRoot.UiRootReadyEvent>(_ => { CallDeferred(nameof(StartBootState)); });
+        }
 
         _log.Debug("GameEntryPoint ready.");
         CallDeferred(nameof(CallDeferredInit));
@@ -111,6 +109,15 @@ public partial class GameEntryPoint : Node
         // 协程预热
         Timing.Prewarm();
     }
+
+    private void StartBootState()
+    {
+        this.GetSystem<IStateMachineSystem>()!
+            .ChangeToAsync<BootStartState>()
+            .ToCoroutineEnumerator()
+            .RunCoroutine();
+    }
+
 
     /// <summary>
     ///     判断当前场景是否为主菜单场景，决定是否需要进入主菜单状态
