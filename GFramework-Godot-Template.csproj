@@ -18,7 +18,7 @@
         <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Update="Meziantou.Analyzer" Version="2.0.301">
+        <PackageReference Update="Meziantou.Analyzer" Version="2.0.302">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
@@ -26,10 +26,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.185"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.185"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.185"/>
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.185"/>
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.186"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.186"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.186"/>
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.186"/>
         <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

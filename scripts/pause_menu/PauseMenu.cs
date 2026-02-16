@@ -11,6 +11,7 @@ using GFrameworkGodotTemplate.scripts.command.menu;
 using GFrameworkGodotTemplate.scripts.command.menu.input;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
+using GFrameworkGodotTemplate.scripts.cqrs.game.command;
 using GFrameworkGodotTemplate.scripts.enums.ui;
 using Godot;
 
@@ -129,6 +130,6 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         };
 
         // 绑定退出游戏按钮点击事件
-        QuitButton.Pressed += () => this.SendCommand(new ExitGameCommand());
+        QuitButton.Pressed += () => this.RunCommandCoroutine(new ExitGameCommand());
     }
 }
