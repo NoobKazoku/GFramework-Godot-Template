@@ -12,9 +12,8 @@
 // limitations under the License.
 
 using GFramework.Core.command;
-using GFramework.Core.extensions;
 using GFrameworkGodotTemplate.scripts.command.menu;
-using GFrameworkGodotTemplate.scripts.command.menu.input;
+using GFrameworkGodotTemplate.scripts.cqrs.pause_menu.command.input;
 
 namespace GFrameworkGodotTemplate.scripts.command.game;
 

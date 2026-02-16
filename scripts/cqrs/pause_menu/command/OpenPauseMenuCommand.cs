@@ -11,18 +11,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Abstractions.command;
 using GFramework.Game.Abstractions.ui;
+using GFrameworkGodotTemplate.scripts.cqrs.pause_menu.command.input;
+using Mediator;
 
-namespace GFrameworkGodotTemplate.scripts.command.menu.input;
+namespace GFrameworkGodotTemplate.scripts.cqrs.pause_menu.command;
 
 /// <summary>
-///     表示关闭暂停菜单命令的输入数据结构。
+///     打开暂停菜单命令类，用于表示打开暂停菜单的指令
+///     继承自ICommand接口，作为CQRS模式中的命令对象，返回UiHandle类型的结果
 /// </summary>
-public struct ClosePauseMenuCommandInput : ICommandInput
+/// <param name="input">打开暂停菜单命令的输入参数</param>
+public sealed class OpenPauseMenuCommand(OpenPauseMenuCommandInput input) : ICommand<UiHandle>
 {
     /// <summary>
-    ///     用于标识和操作UI元素的句柄。
+    ///     获取打开暂停菜单命令的输入参数
     /// </summary>
-    public UiHandle Handle { get; init; }
+    public OpenPauseMenuCommandInput Input => input;
 }
