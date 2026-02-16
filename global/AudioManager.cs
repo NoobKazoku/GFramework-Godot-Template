@@ -1,5 +1,4 @@
 using GFramework.Core.Abstractions.controller;
-using GFramework.Core.extensions;
 using GFramework.Godot.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;

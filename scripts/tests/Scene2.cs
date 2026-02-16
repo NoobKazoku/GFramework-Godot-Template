@@ -27,31 +27,23 @@ namespace GFrameworkGodotTemplate.scripts.tests;
 public partial class Scene2 : Node2D, IController, ISceneBehaviorProvider, ISimpleScene
 {
     /// <summary>
-    /// 场景行为实例，用于管理具体的场景逻辑
+    ///     场景行为实例，用于管理具体的场景逻辑
     /// </summary>
     private ISceneBehavior? _scene;
 
     /// <summary>
-    /// 获取场景键值字符串
+    ///     获取场景键值字符串
     /// </summary>
     public static string SceneKeyStr => nameof(SceneKey.Scene2);
 
     /// <summary>
-    /// 获取场景行为实例
-    /// 使用工厂模式创建场景行为，确保单例模式
+    ///     获取场景行为实例
+    ///     使用工厂模式创建场景行为，确保单例模式
     /// </summary>
     /// <returns>ISceneBehavior接口的场景行为实例</returns>
     public ISceneBehavior GetScene()
     {
         _scene ??= SceneBehaviorFactory.Create<Node2D>(this, SceneKeyStr);
         return _scene;
-    }
-
-    /// <summary>
-    /// 节点准备就绪时的回调方法
-    /// 在节点添加到场景树后调用
-    /// </summary>
-    public override void _Ready()
-    {
     }
 }
