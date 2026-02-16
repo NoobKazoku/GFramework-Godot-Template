@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test:*)",
+      "Bash(git -C \"F:/gewuyou/Project/Rider/GFramework-Godot-Template\" log --oneline -10)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(git -C \"F:/gewuyou/Project/Rider/GFramework-Godot-Template\" ls-files)",
+      "Bash(dotnet build:*)"
+    ]
+  }
+}
