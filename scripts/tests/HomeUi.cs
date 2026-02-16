@@ -1,6 +1,5 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.coroutine;
-using GFramework.Core.coroutine.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.scene;
 using GFramework.Game.Abstractions.ui;
@@ -91,51 +90,63 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     private void SetupEventHandlers()
     {
         var transitionManager = SceneTransitionManager.Instance!;
+        var buttons = new[] { Scene1Button, Scene2Button, HomeUiButton };
 
         IEnumerator<IYieldInstruction> ReplaceScene(string key)
         {
-            _sceneRouter.ReplaceAsync(key).AsTask().AsCoroutineInstruction();
-            yield return null;
+            yield return _sceneRouter.ReplaceAsync(key).AsTask().AsCoroutineInstruction();
         }
 
-        // 场景预加载器 - 根据场景key加载对应的场景
         Node PreloadScene(string sceneKey)
         {
             var packedScene = _sceneRegistry.Get(sceneKey);
             return packedScene.Instantiate();
         }
 
-        Scene1Button.Pressed += () =>
-        {
-            var sceneKey = nameof(SceneKey.Scene1);
-            transitionManager
-                .PlayTransitionCoroutine(
-                    ReplaceScene(sceneKey),
-                    () => PreloadScene(sceneKey)
-                )
-                .RunCoroutine();
-        };
+        Scene1Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene1));
+        Scene2Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene2));
+        HomeUiButton.Pressed += () => SwitchScene(nameof(SceneKey.Home));
+        return;
 
-        Scene2Button.Pressed += () =>
+        void SwitchScene(string sceneKey)
         {
-            var sceneKey = nameof(SceneKey.Scene2);
-            transitionManager
-                .PlayTransitionCoroutine(
-                    ReplaceScene(sceneKey),
-                    () => PreloadScene(sceneKey)
-                )
-                .RunCoroutine();
-        };
+            // 检查是否是当前场景
+            if (string.Equals(_sceneRouter.CurrentKey, sceneKey, StringComparison.Ordinal))
+            {
+                _log.Debug($"已在场景 {sceneKey}，忽略切换请求");
+                return;
+            }
 
-        HomeUiButton.Pressed += () =>
-        {
-            var sceneKey = nameof(SceneKey.Home);
-            transitionManager
-                .PlayTransitionCoroutine(
-                    ReplaceScene(sceneKey),
-                    () => PreloadScene(sceneKey)
-                )
-                .RunCoroutine();
-        };
+            // 检查是否正在过渡中
+            if (transitionManager.IsTransitioning)
+            {
+                _log.Debug("场景正在过渡中，忽略新的切换请求");
+                return;
+            }
+
+            // 禁用所有按钮，防止重复点击
+            foreach (var btn in buttons)
+                btn.Disabled = true;
+
+            try
+            {
+                transitionManager
+                    .PlayTransitionCoroutine(
+                        ReplaceScene(sceneKey),
+                        () => PreloadScene(sceneKey)
+                    )
+                    .RunCoroutine();
+            }
+            catch (Exception ex)
+            {
+                _log.Error($"场景切换失败: {ex.Message}");
+            }
+            finally
+            {
+                // 重新启用所有按钮
+                foreach (var btn in buttons)
+                    btn.Disabled = false;
+            }
+        }
     }
 }
