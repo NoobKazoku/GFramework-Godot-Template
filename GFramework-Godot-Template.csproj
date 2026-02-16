@@ -30,6 +30,10 @@
         <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.185"/>
         <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.185"/>
         <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.185"/>
+        <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
     <ItemGroup>
         <Content Include=".github\dependabot.yml"/>
