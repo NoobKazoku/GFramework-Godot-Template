@@ -1,9 +1,7 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.coroutine;
 using GFramework.Core.Abstractions.events;
-using GFramework.Core.coroutine.extensions;
 using GFramework.Core.coroutine.instructions;
-using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.setting;
 using GFramework.Game.Abstractions.ui;
@@ -13,14 +11,14 @@ using GFramework.Godot.extensions.signal;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
-using GFrameworkGodotTemplate.scripts.command.audio;
-using GFrameworkGodotTemplate.scripts.command.audio.input;
-using GFrameworkGodotTemplate.scripts.command.graphics;
-using GFrameworkGodotTemplate.scripts.command.graphics.input;
-using GFrameworkGodotTemplate.scripts.command.setting;
-using GFrameworkGodotTemplate.scripts.command.setting.input;
 using GFrameworkGodotTemplate.scripts.component;
 using GFrameworkGodotTemplate.scripts.core.ui;
+using GFrameworkGodotTemplate.scripts.cqrs.audio.command;
+using GFrameworkGodotTemplate.scripts.cqrs.audio.command.input;
+using GFrameworkGodotTemplate.scripts.cqrs.graphics.command;
+using GFrameworkGodotTemplate.scripts.cqrs.graphics.command.input;
+using GFrameworkGodotTemplate.scripts.cqrs.setting.command;
+using GFrameworkGodotTemplate.scripts.cqrs.setting.command.input;
 using GFrameworkGodotTemplate.scripts.enums.ui;
 using GFrameworkGodotTemplate.scripts.setting.query;
 using global::GFrameworkGodotTemplate.global;
@@ -214,24 +212,22 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
         MasterVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                this.SendCommandCoroutineWithErrorHandler(
-                        new ChangeMasterVolumeCommand(new ChangeMasterVolumeCommandInput { Volume = v }))
-                    .RunCoroutine()))
+                this.RunCommandCoroutine(
+                    new ChangeMasterVolumeCommand(new ChangeMasterVolumeCommandInput { Volume = v }))))
             .End();
         BgmVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                this.SendCommandCoroutineWithErrorHandler(
-                        new ChangeBgmVolumeCommand(
-                            new ChangeBgmVolumeCommandInput { Volume = v }))
-                    .RunCoroutine()))
+                this.RunCommandCoroutine(
+                    new ChangeBgmVolumeCommand(
+                        new ChangeBgmVolumeCommandInput { Volume = v }))))
             .End();
         SfxVolume
             .Signal(signalName)
             .To(Callable.From<float>(v =>
-                Timing.RunCoroutine(this.SendCommandCoroutineWithErrorHandler(
+                this.RunCommandCoroutine(
                     new ChangeSfxVolumeCommand(
-                        new ChangeSfxVolumeCommandInput { Volume = v })))))
+                        new ChangeSfxVolumeCommandInput { Volume = v }))))
             .End();
         ResolutionOptionButton.ItemSelected += async index => await OnResolutionChanged(index).ConfigureAwait(false);
         FullscreenOptionButton.ItemSelected += async index => await OnFullscreenChanged(index).ConfigureAwait(false);
@@ -306,7 +302,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// <returns>返回一个IYieldInstruction类型的IEnumerator，用于协程执行</returns>
     private IEnumerator<IYieldInstruction> SaveCommandCoroutine()
     {
-        return this.SendCommandCoroutineWithErrorHandler(
+        return this.SendCommandCoroutine(
                 new SaveSettingsCommand(),
                 e => _log.Error("保存失败！", e)
             )

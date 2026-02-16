@@ -1,5 +1,4 @@
 using GFramework.Core.Abstractions.state;
-using GFramework.Core.extensions;
 using GFramework.Core.state;
 using GFramework.Game.Abstractions.ui;
 using GFrameworkGodotTemplate.scripts.tests;

@@ -17,7 +17,7 @@ public partial class SceneConfig : Resource, IKeyValue<string, PackedScene>
     public SceneKey SceneKey { get; private set; }
 
     /// <summary>
-    /// Z轴深度（控制渲染顺序）
+    ///     Z轴深度（控制渲染顺序）
     /// </summary>
     [Export]
     public int ZIndex { get; private set; }

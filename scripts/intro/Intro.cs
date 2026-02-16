@@ -23,8 +23,8 @@ public partial class Intro : Node2D, IController
     private Sprite2D Sprite => GetNode<Sprite2D>("%Sprite");
 
     /// <summary>
-    /// 节点准备就绪时的回调方法
-    /// 在节点添加到场景树后调用
+    ///     节点准备就绪时的回调方法
+    ///     在节点添加到场景树后调用
     /// </summary>
     public override void _Ready()
     {
@@ -34,8 +34,8 @@ public partial class Intro : Node2D, IController
     }
 
     /// <summary>
-    /// 执行动画播放逻辑的方法
-    /// 启动协程以播放动画
+    ///     执行动画播放逻辑的方法
+    ///     启动协程以播放动画
     /// </summary>
     private void Run()
     {
@@ -44,8 +44,8 @@ public partial class Intro : Node2D, IController
     }
 
     /// <summary>
-    /// 播放一个交替淡入淡出的动画序列。
-    /// 该协程会依次播放"fade_in"和"fade_out"动画，并在每次播放后等待3秒。
+    ///     播放一个交替淡入淡出的动画序列。
+    ///     该协程会依次播放"fade_in"和"fade_out"动画，并在每次播放后等待3秒。
     /// </summary>
     private IEnumerator<IYieldInstruction> PlayAnimationCoroutine()
     {

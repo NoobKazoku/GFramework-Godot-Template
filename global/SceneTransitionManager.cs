@@ -1,6 +1,5 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.coroutine;
-using GFramework.Core.coroutine.extensions;
 using GFramework.Core.coroutine.instructions;
 using GFramework.Godot.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
@@ -10,60 +9,60 @@ using Godot;
 namespace GFrameworkGodotTemplate.global;
 
 /// <summary>
-/// 场景过渡管理器，负责处理场景之间的平滑过渡效果。
-/// 该类通过Shader材质实现过渡动画，并支持截图、参数设置和协程控制。
+///     场景过渡管理器，负责处理场景之间的平滑过渡效果。
+///     该类通过Shader材质实现过渡动画，并支持截图、参数设置和协程控制。
 /// </summary>
 [ContextAware]
 [Log]
 public partial class SceneTransitionManager : Node, IController
 {
     /// <summary>
-    /// Shader参数名称，用于控制过渡进度。
+    ///     Shader参数名称，用于控制过渡进度。
     /// </summary>
     private static readonly string Progress = "progress";
 
     /// <summary>
-    /// 当前使用的Shader材质实例。
+    ///     当前使用的Shader材质实例。
     /// </summary>
     private ShaderMaterial _material = null!;
 
     /// <summary>
-    /// 画布层节点，用于确保过渡效果显示在最上层。
+    ///     画布层节点，用于确保过渡效果显示在最上层。
     /// </summary>
     private CanvasLayer CanvasLayer => GetNode<CanvasLayer>("%CanvasLayer");
 
     /// <summary>
-    /// 场景过渡管理器的单例实例。
+    ///     场景过渡管理器的单例实例。
     /// </summary>
     public static SceneTransitionManager? Instance { get; private set; }
 
     /// <summary>
-    /// 获取场景过渡矩形节点。
+    ///     获取场景过渡矩形节点。
     /// </summary>
     /// <remarks>
-    /// 该属性通过节点路径 "%SceneTransitionRect" 获取一个 ColorRect 类型的节点，
-    /// 用于表示场景过渡时的视觉效果区域。
+    ///     该属性通过节点路径 "%SceneTransitionRect" 获取一个 ColorRect 类型的节点，
+    ///     用于表示场景过渡时的视觉效果区域。
     /// </remarks>
     private ColorRect SceneTransitionRect => GetNode<ColorRect>("%SceneTransitionRect");
 
     /// <summary>
-    /// 获取预览视口节点。
+    ///     获取预览视口节点。
     /// </summary>
     /// <remarks>
-    /// 该属性通过节点路径 "%PreviewViewport" 获取一个 SubViewport 类型的节点，
-    /// 用于渲染和显示预览内容。
+    ///     该属性通过节点路径 "%PreviewViewport" 获取一个 SubViewport 类型的节点，
+    ///     用于渲染和显示预览内容。
     /// </remarks>
     private SubViewport PreviewViewport => GetNode<SubViewport>("%PreviewViewport");
 
 
     /// <summary>
-    /// 标识当前是否正在执行场景过渡。
+    ///     标识当前是否正在执行场景过渡。
     /// </summary>
     public bool IsTransitioning { get; private set; }
 
     /// <summary>
-    /// 节点初始化方法，在场景加载完成后调用。
-    /// 初始化画布层、Shader材质以及相关参数。
+    ///     节点初始化方法，在场景加载完成后调用。
+    ///     初始化画布层、Shader材质以及相关参数。
     /// </summary>
     public override void _Ready()
     {
@@ -88,7 +87,7 @@ public partial class SceneTransitionManager : Node, IController
 
 
     /// <summary>
-    /// 执行场景过渡的协程方法（使用预渲染）。
+    ///     执行场景过渡的协程方法（使用预渲染）。
     /// </summary>
     /// <param name="onSwitch">场景切换逻辑的协程。</param>
     /// <param name="scenePreloader">场景预加载委托，返回要预渲染的场景实例。</param>
@@ -99,10 +98,7 @@ public partial class SceneTransitionManager : Node, IController
         Func<Node> scenePreloader,
         float duration = 0.6f)
     {
-        if (IsTransitioning)
-        {
-            yield break;
-        }
+        if (IsTransitioning) yield break;
 
         IsTransitioning = true;
         _log.Debug("=== 开始场景过渡（预渲染模式） ===");
@@ -160,7 +156,7 @@ public partial class SceneTransitionManager : Node, IController
     }
 
     /// <summary>
-    /// 在预览视口中渲染场景并截图。
+    ///     在预览视口中渲染场景并截图。
     /// </summary>
     /// <param name="scenePreloader">场景预加载委托。</param>
     /// <returns>包含截图结果的图像纹理任务。</returns>
@@ -218,8 +214,8 @@ public partial class SceneTransitionManager : Node, IController
     }
 
     /// <summary>
-    /// 异步方法，用于捕获当前屏幕截图并返回图像纹理。
-    /// 在截图过程中会临时隐藏过渡层以避免干扰。
+    ///     异步方法，用于捕获当前屏幕截图并返回图像纹理。
+    ///     在截图过程中会临时隐藏过渡层以避免干扰。
     /// </summary>
     /// <returns>包含截图结果的图像纹理任务。</returns>
     private async Task<ImageTexture> CaptureScreenshot()
@@ -244,8 +240,8 @@ public partial class SceneTransitionManager : Node, IController
     }
 
     /// <summary>
-    /// 执行过渡进度的Tween动画协程。
-    /// 通过修改Shader参数实现平滑的过渡效果。
+    ///     执行过渡进度的Tween动画协程。
+    ///     通过修改Shader参数实现平滑的过渡效果。
     /// </summary>
     /// <param name="from">起始进度值。</param>
     /// <param name="to">目标进度值。</param>
@@ -270,11 +266,8 @@ public partial class SceneTransitionManager : Node, IController
         // 连接完成信号
         tween.Finished += () => tweenFinished = true;
         // 等待Tween完成
-        while (!tweenFinished)
-        {
-            yield return new WaitOneFrame();
-        }
+        while (!tweenFinished) yield return new WaitOneFrame();
 
-        _log.Debug($"Tween动画完成");
+        _log.Debug("Tween动画完成");
     }
 }

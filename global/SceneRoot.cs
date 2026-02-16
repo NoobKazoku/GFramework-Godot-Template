@@ -7,31 +7,31 @@ using Godot;
 namespace GFrameworkGodotTemplate.global;
 
 /// <summary>
-/// 场景根节点类
-/// 继承自Node2D并实现ISceneRoot接口
-/// 负责管理场景行为和视图节点
+///     场景根节点类
+///     继承自Node2D并实现ISceneRoot接口
+///     负责管理场景行为和视图节点
 /// </summary>
 [Log]
 [ContextAware]
 public partial class SceneRoot : Node2D, ISceneRoot
 {
     /// <summary>
-    /// 存储场景行为列表
+    ///     存储场景行为列表
     /// </summary>
     private readonly List<ISceneBehavior> _scenes = [];
 
     /// <summary>
-    /// 当前视图节点引用
+    ///     当前视图节点引用
     /// </summary>
     private Node? _currentView;
 
     /// <summary>
-    /// 获取当前视图节点
+    ///     获取当前视图节点
     /// </summary>
     public Node? Current => _currentView;
 
     /// <summary>
-    /// 添加场景到根节点
+    ///     添加场景到根节点
     /// </summary>
     /// <param name="scene">要添加的场景行为对象</param>
     /// <exception cref="InvalidOperationException">当场景行为未继承Godot Node时抛出异常</exception>
@@ -55,7 +55,7 @@ public partial class SceneRoot : Node2D, ISceneRoot
     }
 
     /// <summary>
-    /// 从根节点移除场景
+    ///     从根节点移除场景
     /// </summary>
     /// <param name="scene">要移除的场景行为对象</param>
     public void RemoveScene(ISceneBehavior scene)
@@ -75,8 +75,8 @@ public partial class SceneRoot : Node2D, ISceneRoot
     }
 
     /// <summary>
-    /// 节点准备就绪时调用
-    /// 初始化场景路由器并发送准备完成事件
+    ///     节点准备就绪时调用
+    ///     初始化场景路由器并发送准备完成事件
     /// </summary>
     public override void _Ready()
     {
@@ -88,8 +88,8 @@ public partial class SceneRoot : Node2D, ISceneRoot
     }
 
     /// <summary>
-    /// 场景根节点准备完成事件结构体
-    /// 用于通知系统场景根节点已准备就绪
+    ///     场景根节点准备完成事件结构体
+    ///     用于通知系统场景根节点已准备就绪
     /// </summary>
     public struct SceneRootReadyEvent;
 }

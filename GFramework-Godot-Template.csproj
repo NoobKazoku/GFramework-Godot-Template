@@ -26,10 +26,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.187"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.187"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.187"/>
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.187"/>
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.188"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.188"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.188"/>
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.188"/>
         <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -43,7 +43,6 @@
         <Content Include=".github\workflows\release.yml"/>
         <Content Include="addons.jsonc"/>
         <Content Include="global\README.md"/>
-        <Content Include="scripts\command\README.md"/>
         <Content Include="scripts\data\model\README.md"/>
         <Content Include="scripts\data\README.md"/>
         <Content Include="scripts\entities\README.md"/>
@@ -51,9 +50,6 @@
         <Content Include="scripts\module\README.md"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="scripts\command\audio\input\"/>
-        <Folder Include="scripts\command\graphics\input\"/>
-        <Folder Include="scripts\command\setting\input\"/>
         <Folder Include="scripts\enums\game\"/>
         <Folder Include="scripts\events\settings\"/>
         <Folder Include="scripts\extensions\"/>
