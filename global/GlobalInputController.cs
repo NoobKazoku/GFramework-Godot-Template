@@ -1,12 +1,11 @@
 using GFramework.Core.Abstractions.state;
-using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.command.game;
-using GFrameworkGodotTemplate.scripts.command.menu.input;
 using GFrameworkGodotTemplate.scripts.core.controller;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
+using GFrameworkGodotTemplate.scripts.cqrs.pause_menu.command.input;
 using GFrameworkGodotTemplate.scripts.enums;
 using Godot;
 

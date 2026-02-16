@@ -12,10 +12,9 @@
 // limitations under the License.
 
 using GFramework.Core.command;
-using GFramework.Core.extensions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
-using GFrameworkGodotTemplate.scripts.command.menu.input;
+using GFrameworkGodotTemplate.scripts.cqrs.pause_menu.command.input;
 
 namespace GFrameworkGodotTemplate.scripts.command.menu;
 

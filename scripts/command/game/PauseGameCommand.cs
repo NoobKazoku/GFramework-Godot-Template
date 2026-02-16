@@ -1,7 +1,5 @@
 ﻿using GFramework.Core.Abstractions.state;
 using GFramework.Core.command;
-using GFramework.Core.coroutine.extensions;
-using GFramework.Core.extensions;
 using GFramework.Godot.coroutine;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.utils;
