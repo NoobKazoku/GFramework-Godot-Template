@@ -94,10 +94,6 @@ public partial class GameEntryPoint : Node
         // 注册所有纹理配置
         foreach (var textureConfig in TextureConfigs) _textureRegistry.Registry(textureConfig);
 
-        // 检查是否应该进入主菜单状态，如果是则注册UI根节点就绪事件来切换到主菜单状态
-        if (ShouldEnterMainMenu())
-            this.RegisterEvent<UiRoot.UiRootReadyEvent>(_ => { CallDeferred(nameof(StartBootState)); });
-
         _log.Debug("GameEntryPoint ready.");
         CallDeferred(nameof(CallDeferredInit));
     }

@@ -1,9 +1,11 @@
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
+using GFramework.Godot.coroutine;
 using GFramework.Godot.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.constants;
+using GFrameworkGodotTemplate.scripts.cqrs.global.events;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -83,8 +85,17 @@ public partial class UiRoot : CanvasLayer, IUiRoot
         InitLayers();
         var router = this.GetSystem<IUiRouter>()!;
         router.BindRoot(this);
-        this.SendEvent<UiRootReadyEvent>();
+        CallDeferred(nameof(CallDeferredCallback));
         _log.Debug($"[UiRoot] Ready. Path={GetPath()} InTree={IsInsideTree()}");
+    }
+
+    /// <summary>
+    ///     延迟调用回调方法
+    ///     发布UI根节点就绪事件，通知其他系统UI已准备完成
+    /// </summary>
+    private void CallDeferredCallback()
+    {
+        this.RunPublishCoroutine(new UiRootReadyEvent());
     }
 
     /// <summary>
@@ -109,7 +120,4 @@ public partial class UiRoot : CanvasLayer, IUiRoot
             _containers[layer] = container;
         }
     }
-
-
-    public struct UiRootReadyEvent;
 }
