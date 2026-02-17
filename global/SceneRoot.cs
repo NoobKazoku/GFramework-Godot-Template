@@ -1,7 +1,9 @@
 using GFramework.Game.Abstractions.scene;
+using GFramework.Godot.coroutine;
 using GFramework.Godot.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
+using GFrameworkGodotTemplate.scripts.cqrs.scene.events;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -82,14 +84,16 @@ public partial class SceneRoot : Node2D, ISceneRoot
     {
         var router = this.GetSystem<ISceneRouter>()!;
         router.BindRoot(this);
-
-        this.SendEvent<SceneRootReadyEvent>();
+        CallDeferred(nameof(CallDeferredCallback));
         _log.Debug($"[SceneRoot] Ready Path={GetPath()}");
     }
 
     /// <summary>
-    ///     场景根节点准备完成事件结构体
-    ///     用于通知系统场景根节点已准备就绪
+    ///     延迟调用回调方法
+    ///     发布场景根节点就绪事件，通知其他系统场景已准备完成
     /// </summary>
-    public struct SceneRootReadyEvent;
+    private void CallDeferredCallback()
+    {
+        this.RunPublishCoroutine(new SceneRootReadyEvent());
+    }
 }
