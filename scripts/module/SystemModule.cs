@@ -1,6 +1,7 @@
 ﻿using GFramework.Core.Abstractions.architecture;
 using GFramework.Game.architecture;
 using GFramework.Game.setting;
+using GFrameworkGodotTemplate.scripts.core.audio.system;
 using GFrameworkGodotTemplate.scripts.core.scene;
 using GFrameworkGodotTemplate.scripts.core.ui;
 
@@ -21,5 +22,6 @@ public class SystemModule : AbstractModule
         architecture.RegisterSystem(new UiRouter());
         architecture.RegisterSystem(new SceneRouter());
         architecture.RegisterSystem(new SettingsSystem());
+        architecture.RegisterSystem(new GodotAudioSystem());
     }
 }

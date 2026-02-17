@@ -12,19 +12,18 @@
 // limitations under the License.
 
 using GFramework.Core.cqrs.notification;
-using GFrameworkGodotTemplate.scripts.core.utils;
-using global::GFrameworkGodotTemplate.global;
+using GFrameworkGodotTemplate.scripts.core.audio.system;
 
 namespace GFrameworkGodotTemplate.scripts.cqrs.audio.events;
 
 /// <summary>
 /// 背景音乐变更事件处理器
-/// 负责处理BgmChangedEvent事件，通过音频管理器切换背景音乐
+/// 负责处理BgmChangedEvent事件，通过音频系统切换背景音乐
 /// 继承自AbstractNotificationHandler，专门处理背景音乐切换相关的通知消息
 /// </summary>
 public class BgmChangedHandler : AbstractNotificationHandler<BgmChangedEvent>
 {
-    private AudioManager? _audioManager;
+    private IAudioSystem? _audioSystem;
 
     /// <summary>
     /// 处理背景音乐变更事件
@@ -35,8 +34,8 @@ public class BgmChangedHandler : AbstractNotificationHandler<BgmChangedEvent>
     /// <returns>异步任务，表示音乐切换操作的完成</returns>
     public override ValueTask Handle(BgmChangedEvent notification, CancellationToken cancellationToken)
     {
-        _audioManager ??= GameUtil.GetTree().Root.GetNode<AudioManager>("/root/AudioManager");
-        _audioManager?.PlayBgm(notification.BgmType);
+        _audioSystem ??= this.GetSystem<IAudioSystem>()!;
+        _audioSystem.PlayBgm(notification.BgmType);
         return ValueTask.CompletedTask;
     }
 }
