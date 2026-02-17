@@ -168,7 +168,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     private async Task InitializeUiAsync()
     {
         _initializing = true;
-        var view = await this.SendQueryAsync(new GetCurrentSettingsQuery()).ConfigureAwait(false);
+        var view = await this.SendQueryAsync(new GetCurrentSettingsQuery()).ConfigureAwait(true);
         var audioSettings = view.Audio;
         MasterVolume.Initialize("主音量", audioSettings.MasterVolume);
         BgmVolume.Initialize("音乐音量", audioSettings.BgmVolume);
