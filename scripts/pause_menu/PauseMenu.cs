@@ -116,7 +116,7 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         // 绑定加载游戏按钮点击事件
         LoadButton.Pressed += () => { _log.Debug("加载游戏"); };
         // 绑定选项按钮点击事件
-        OptionsButton.Pressed += () => { this.SendCommand(new OpenOptionsMenuCommand()); };
+        OptionsButton.Pressed += () => { this.RunCommandCoroutine(new OpenOptionsMenuCommand()); };
 
         // 绑定返回主菜单按钮点击事件
         MainMenuButton.Pressed += () =>

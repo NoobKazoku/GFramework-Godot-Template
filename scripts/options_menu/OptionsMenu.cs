@@ -109,7 +109,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// </summary>
     private void CallDeferredInit()
     {
-        InitCoroutine().RunCoroutine();
+        InitCoroutine().RunCoroutine(segment: Segment.ProcessIgnorePause);
     }
 
     /// <summary>
@@ -157,7 +157,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// </summary>
     private void StartSaving()
     {
-        SaveCommandCoroutine().RunCoroutine();
+        SaveCommandCoroutine().RunCoroutine(Segment.ProcessIgnorePause);
     }
 
 
