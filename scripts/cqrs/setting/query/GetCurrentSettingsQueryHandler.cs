@@ -11,33 +11,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.query;
+using GFramework.Core.cqrs.query;
 using GFramework.Game.Abstractions.setting;
 using GFramework.Game.Abstractions.setting.data;
-using GFrameworkGodotTemplate.scripts.setting.query.view;
+using GFrameworkGodotTemplate.scripts.cqrs.setting.query.view;
 
-namespace GFrameworkGodotTemplate.scripts.setting.query;
+namespace GFrameworkGodotTemplate.scripts.cqrs.setting.query;
 
 /// <summary>
-///     获取当前设置的查询类
+/// 当前设置查询处理器
+/// 处理获取当前设置信息的查询请求，从设置模型中提取各类设置数据并构建成视图对象
 /// </summary>
-public sealed class GetCurrentSettingsQuery : AbstractQuery<SettingsView>
+public class GetCurrentSettingsQueryHandler : AbstractQueryHandler<GetCurrentSettingsQuery, SettingsView>
 {
     /// <summary>
-    ///     执行获取当前设置的查询操作
+    /// 处理获取当前设置的查询请求
     /// </summary>
-    /// <returns>包含当前设置信息的SettingsView对象</returns>
-    protected override SettingsView OnDo()
+    /// <param name="query">获取当前设置的查询对象</param>
+    /// <param name="cancellationToken">取消令牌，用于取消操作</param>
+    /// <returns>包含音频、图形和本地化设置的设置视图对象</returns>
+    public override ValueTask<SettingsView> Handle(GetCurrentSettingsQuery query, CancellationToken cancellationToken)
     {
         // 从模型中获取设置数据
         var model = this.GetModel<ISettingsModel>()!;
         // 再此可以校验设置数据
         // 构建并返回设置视图对象
-        return new SettingsView
+        return ValueTask.FromResult(new SettingsView
         {
             Audio = model.GetData<AudioSettings>(),
             Graphics = model.GetData<GraphicsSettings>(),
-            Localization = model.GetData<LocalizationSettings>()
-        };
+            Localization = model.GetData<LocalizationSettings>(),
+        });
     }
 }

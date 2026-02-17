@@ -19,8 +19,8 @@ using GFrameworkGodotTemplate.scripts.cqrs.graphics.command;
 using GFrameworkGodotTemplate.scripts.cqrs.graphics.command.input;
 using GFrameworkGodotTemplate.scripts.cqrs.setting.command;
 using GFrameworkGodotTemplate.scripts.cqrs.setting.command.input;
+using GFrameworkGodotTemplate.scripts.cqrs.setting.query;
 using GFrameworkGodotTemplate.scripts.enums.ui;
-using GFrameworkGodotTemplate.scripts.setting.query;
 using global::GFrameworkGodotTemplate.global;
 using Godot;
 
@@ -162,13 +162,13 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
 
 
     /// <summary>
-    ///     初始化用户界面
+    ///     异步初始化用户界面
     ///     设置音量控制组件和分辨率选项的初始值
     /// </summary>
-    private void InitializeUi()
+    private async Task InitializeUiAsync()
     {
         _initializing = true;
-        var view = this.SendQuery(new GetCurrentSettingsQuery());
+        var view = await this.SendQueryAsync(new GetCurrentSettingsQuery()).ConfigureAwait(false);
         var audioSettings = view.Audio;
         MasterVolume.Initialize("主音量", audioSettings.MasterVolume);
         BgmVolume.Initialize("音乐音量", audioSettings.BgmVolume);
@@ -292,7 +292,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
             // 等待设置初始化事件完成
             yield return new WaitForEvent<SettingsInitializedEvent>(eventBus);
 
-        InitializeUi();
+        yield return InitializeUiAsync().AsCoroutineInstruction();
         Show();
     }
 

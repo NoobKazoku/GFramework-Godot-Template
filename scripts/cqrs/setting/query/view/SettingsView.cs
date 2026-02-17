@@ -14,7 +14,7 @@
 
 using GFramework.Game.Abstractions.setting.data;
 
-namespace GFrameworkGodotTemplate.scripts.setting.query.view;
+namespace GFrameworkGodotTemplate.scripts.cqrs.setting.query.view;
 
 /// <summary>
 ///     表示游戏设置视图的数据模型，包含音频和显示设置信息
@@ -24,15 +24,15 @@ public sealed class SettingsView
     /// <summary>
     ///     音频设置配置对象，包含所有音频相关的设置选项
     /// </summary>
-    public AudioSettings Audio { get; set; } = new();
+    public AudioSettings Audio { get; init; } = new();
 
     /// <summary>
     ///     图形设置配置对象，包含所有图形渲染相关的设置选项
     /// </summary>
-    public GraphicsSettings Graphics { get; set; } = new();
+    public GraphicsSettings Graphics { get; init; } = new();
 
     /// <summary>
     ///     本地化设置配置对象，包含所有语言和区域相关的设置选项
     /// </summary>
-    public LocalizationSettings Localization { get; set; } = new();
+    public LocalizationSettings Localization { get; init; } = new();
 }
