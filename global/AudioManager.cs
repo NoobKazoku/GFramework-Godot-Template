@@ -1,10 +1,9 @@
 using GFramework.Core.Abstractions.controller;
-using GFramework.Godot.extensions;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.constants;
+using GFrameworkGodotTemplate.scripts.core.audio.system;
 using GFrameworkGodotTemplate.scripts.enums.audio;
-using GFrameworkGodotTemplate.scripts.events.audio;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -67,27 +66,7 @@ public partial class AudioManager : Node, IController
     public override void _Ready()
     {
         BgmAudioStreamPlayer.Bus = GameConstants.Bgm;
-        // 注册背景音乐变更事件监听器
-        this.RegisterEvent<BgmChangedEvent>(@event =>
-        {
-            // 停止当前播放的背景音乐
-            BgmAudioStreamPlayer.Stop();
-
-            // 根据事件中的背景音乐类型设置对应的音频流
-            BgmAudioStreamPlayer.Stream = @event.BgmType switch
-            {
-                BgmType.Gaming => GamingAudioStream,
-                BgmType.MainMenu => BgmAudioStream,
-                BgmType.Ready => ReadyAudioStream,
-                _ => null
-            };
-
-            // 如果音频流不为空则开始播放
-            if (BgmAudioStreamPlayer.Stream is not null) BgmAudioStreamPlayer.Play();
-        }).UnRegisterWhenNodeExitTree(this);
-        // 注册音效播放事件监听器
-        this.RegisterEvent<PlaySfxEvent>(OnPlaySfx)
-            .UnRegisterWhenNodeExitTree(this);
+        this.GetSystem<IAudioSystem>()!.BindAudioManager(this);
     }
 
     /// <summary>
@@ -127,10 +106,33 @@ public partial class AudioManager : Node, IController
     }
 
     /// <summary>
-    ///     处理音效播放事件
+    ///     播放指定类型的背景音乐
     /// </summary>
-    /// <param name="event">音效播放事件</param>
-    private void OnPlaySfx(PlaySfxEvent @event)
+    /// <param name="bgmType">背景音乐类型</param>
+    public void PlayBgm(BgmType bgmType)
+    {
+        // 停止当前播放的背景音乐
+        BgmAudioStreamPlayer.Stop();
+
+        // 根据背景音乐类型设置对应的音频流
+        BgmAudioStreamPlayer.Stream = bgmType switch
+        {
+            BgmType.Gaming => GamingAudioStream,
+            BgmType.MainMenu => BgmAudioStream,
+            BgmType.Ready => ReadyAudioStream,
+            _ => null
+        };
+
+        // 如果音频流不为空则开始播放
+        if (BgmAudioStreamPlayer.Stream is not null)
+            BgmAudioStreamPlayer.Play();
+    }
+
+    /// <summary>
+    ///     播放指定类型的音效
+    /// </summary>
+    /// <param name="sfxType">音效类型</param>
+    public void PlaySfx(SfxType sfxType)
     {
         var player = GetAvailableSfxPlayer();
         if (player == null)
@@ -138,7 +140,7 @@ public partial class AudioManager : Node, IController
 
         player.Stop();
 
-        player.Stream = @event.SfxType switch
+        player.Stream = sfxType switch
         {
             SfxType.ShipFire => ShipFireSfx,
             SfxType.Explosion => ExplosionSfx,

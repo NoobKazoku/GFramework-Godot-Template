@@ -18,7 +18,7 @@
         <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Update="Meziantou.Analyzer" Version="2.0.302">
+        <PackageReference Update="Meziantou.Analyzer" Version="3.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
@@ -26,10 +26,10 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.188"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.188"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.188"/>
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.188"/>
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.189"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.189"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.189"/>
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.189"/>
         <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -46,12 +46,10 @@
         <Content Include="scripts\data\model\README.md"/>
         <Content Include="scripts\data\README.md"/>
         <Content Include="scripts\entities\README.md"/>
-        <Content Include="scripts\events\README.md"/>
         <Content Include="scripts\module\README.md"/>
     </ItemGroup>
     <ItemGroup>
         <Folder Include="scripts\enums\game\"/>
-        <Folder Include="scripts\events\settings\"/>
         <Folder Include="scripts\extensions\"/>
         <Folder Include="scripts\intro\"/>
         <Folder Include="scripts\main_menu\"/>
