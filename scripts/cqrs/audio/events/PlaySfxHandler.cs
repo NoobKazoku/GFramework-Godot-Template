@@ -12,19 +12,18 @@
 // limitations under the License.
 
 using GFramework.Core.cqrs.notification;
-using GFrameworkGodotTemplate.scripts.core.utils;
-using global::GFrameworkGodotTemplate.global;
+using GFrameworkGodotTemplate.scripts.core.audio.system;
 
 namespace GFrameworkGodotTemplate.scripts.cqrs.audio.events;
 
 /// <summary>
 /// 音效播放事件处理器
-/// 负责处理PlaySfxEvent事件，通过音频管理器播放音效
+/// 负责处理PlaySfxEvent事件，通过音频系统播放音效
 /// 继承自AbstractNotificationHandler，专门处理音效播放相关的通知消息
 /// </summary>
 public class PlaySfxHandler : AbstractNotificationHandler<PlaySfxEvent>
 {
-    private AudioManager? _audioManager;
+    private IAudioSystem? _audioSystem;
 
     /// <summary>
     /// 处理音效播放事件
@@ -35,8 +34,8 @@ public class PlaySfxHandler : AbstractNotificationHandler<PlaySfxEvent>
     /// <returns>异步任务，表示音效播放操作的完成</returns>
     public override ValueTask Handle(PlaySfxEvent notification, CancellationToken cancellationToken)
     {
-        _audioManager ??= GameUtil.GetTree().Root.GetNode<AudioManager>("/root/AudioManager");
-        _audioManager?.PlaySfx(notification.SfxType);
+        _audioSystem ??= this.GetSystem<IAudioSystem>()!;
+        _audioSystem.PlaySfx(notification.SfxType);
         return ValueTask.CompletedTask;
     }
 }
