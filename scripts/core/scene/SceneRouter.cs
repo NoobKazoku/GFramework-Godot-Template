@@ -13,6 +13,8 @@
 
 using GFramework.Game.scene;
 using GFramework.Game.scene.handler;
+using GFramework.Godot.scene;
+using global::GFrameworkGodotTemplate.global;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.core.scene;
@@ -37,5 +39,8 @@ public class SceneRouter : SceneRouterBase
     protected override void RegisterHandlers()
     {
         RegisterHandler(new LoggingTransitionHandler());
+        var sceneRegistry = this.GetUtility<IGodotSceneRegistry>()!;
+        RegisterAroundHandler(
+            new SceneTransitionAnimationHandler(() => SceneTransitionManager.Instance!, sceneRegistry.GetAll()));
     }
 }
