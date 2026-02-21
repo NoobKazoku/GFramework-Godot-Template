@@ -42,6 +42,8 @@ public partial class SceneTransitionAnimationHandler(
         Func<Task> next,
         CancellationToken cancellationToken)
     {
+        // honor external cancellation before starting any transition logic
+        cancellationToken.ThrowIfCancellationRequested();
         // 正在过渡中，直接拦截，不往下传
         if (TransitionManager.IsTransitioning)
         {
