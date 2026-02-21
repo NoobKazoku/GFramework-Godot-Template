@@ -42,6 +42,13 @@ public partial class SceneTransitionAnimationHandler(
         Func<Task> next,
         CancellationToken cancellationToken)
     {
+        // 正在过渡中，直接拦截，不往下传
+        if (TransitionManager.IsTransitioning)
+        {
+            _log.Debug("Scene is transitioning, ignore new request.");
+            return;
+        }
+
         var toSceneKey = @event.ToSceneKey;
 
         // 没有目标场景 key，直接跳过过渡动画
