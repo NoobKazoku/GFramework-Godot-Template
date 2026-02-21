@@ -20,10 +20,10 @@ public class MainMenuState : AsyncContextAwareStateBase
     {
         // 回到主菜单需要销毁其它所有Ui界面以及场景
         var uiRouter = this.GetSystem<IUiRouter>()!;
-        uiRouter.Clear();
+        await uiRouter.ClearAsync().ConfigureAwait(false);
         await this.GetSystem<ISceneRouter>()!.ClearAsync().ConfigureAwait(false);
         // 推送主菜单UI到界面栈中，显示主菜单界面
-        uiRouter.Push(MainMenu.UiKeyStr);
+        await uiRouter.PushAsync(MainMenu.UiKeyStr).ConfigureAwait(false);
     }
 
     /// <summary>

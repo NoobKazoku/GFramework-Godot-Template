@@ -1,6 +1,7 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
+using GFramework.Godot.coroutine;
 using GFramework.Godot.ui;
 using GFramework.SourceGenerators.Abstractions.logging;
 using GFramework.SourceGenerators.Abstractions.rule;
@@ -43,12 +44,12 @@ public partial class Credits : Control, IController, IUiPageBehaviorProvider, IS
     /// <summary>
     ///     检查当前UI是否在路由栈顶，如果不在则将页面推入路由栈
     /// </summary>
-    private void CallDeferredInit()
+    private async Task CallDeferredInit()
     {
         var env = this.GetEnvironment();
         // 开发环境下检查当前UI是否在路由栈顶，如果不在则将页面推入路由栈
         if (GameConstants.Development.Equals(env.Name, StringComparison.Ordinal) && !_uiRouter.IsTop(UiKeyStr))
-            _uiRouter.Push(GetPage());
+            await _uiRouter.PushAsync(GetPage()).ConfigureAwait(false);
         // 在此添加延迟初始化逻辑
     }
 
@@ -82,6 +83,6 @@ public partial class Credits : Control, IController, IUiPageBehaviorProvider, IS
 
     private void OnBackButton()
     {
-        _uiRouter.Pop();
+        _uiRouter.PopAsync().AsTask().ToCoroutineEnumerator().RunCoroutine();
     }
 }

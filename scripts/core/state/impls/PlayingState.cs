@@ -10,16 +10,11 @@ namespace GFrameworkGodotTemplate.scripts.core.state.impls;
 ///     表示游戏当前处于运行阶段的状态管理类。
 ///     继承自ContextAwareStateBase，用于处理游戏运行时的逻辑。
 /// </summary>
-public class PlayingState : ContextAwareStateBase
+public class PlayingState : AsyncContextAwareStateBase
 {
-    /// <summary>
-    ///     进入当前状态时调用的方法。
-    ///     替换当前UI为HomeUi界面。
-    /// </summary>
-    /// <param name="from">进入当前状态前的状态实例，可能为null。</param>
-    public override void OnEnter(IState? from)
+    public override async Task OnEnterAsync(IState? from)
     {
         // 获取UI路由系统并替换当前UI为HomeUi
-        this.GetSystem<IUiRouter>()!.Replace(HomeUi.UiKeyStr);
+        await this.GetSystem<IUiRouter>()!.ReplaceAsync(HomeUi.UiKeyStr).ConfigureAwait(false);
     }
 }

@@ -78,7 +78,10 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
         // 绑定退出游戏按钮点击事件
         ExitButton.Pressed += () => this.RunCommandCoroutine(new ExitGameCommand());
         // 绑定制作组按钮点击事件
-        CreditsButton.Pressed += () => { _uiRouter.Push(Credits.UiKeyStr); };
+        CreditsButton.Pressed += () =>
+        {
+            _uiRouter.PushAsync(Credits.UiKeyStr).AsTask().ToCoroutineEnumerator().RunCoroutine();
+        };
         OptionsMenuButton.Pressed += () => { this.RunCommandCoroutine(new OpenOptionsMenuCommand()); };
         NewGameButton.Pressed += () =>
         {
