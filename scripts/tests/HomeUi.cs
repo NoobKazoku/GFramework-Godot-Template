@@ -85,18 +85,17 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     /// </summary>
     private void SetupEventHandlers()
     {
-        var transitionManager = SceneTransitionManager.Instance!;
         var buttons = new[] { Scene1Button, Scene2Button, HomeUiButton };
-
-        IEnumerator<IYieldInstruction> ReplaceScene(string key)
-        {
-            yield return _sceneRouter.ReplaceAsync(key).AsTask().AsCoroutineInstruction();
-        }
 
         Scene1Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene1));
         Scene2Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene2));
         HomeUiButton.Pressed += () => SwitchScene(nameof(SceneKey.Home));
         return;
+
+        IEnumerator<IYieldInstruction> ReplaceScene(string key)
+        {
+            yield return _sceneRouter.ReplaceAsync(key).AsTask().AsCoroutineInstruction();
+        }
 
         void SwitchScene(string sceneKey)
         {
@@ -104,13 +103,6 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
             if (string.Equals(_sceneRouter.CurrentKey, sceneKey, StringComparison.Ordinal))
             {
                 _log.Debug($"已在场景 {sceneKey}，忽略切换请求");
-                return;
-            }
-
-            // 检查是否正在过渡中
-            if (transitionManager.IsTransitioning)
-            {
-                _log.Debug("场景正在过渡中，忽略新的切换请求");
                 return;
             }
 
