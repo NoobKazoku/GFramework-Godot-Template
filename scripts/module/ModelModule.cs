@@ -9,7 +9,7 @@ using GFrameworkGodotTemplate.scripts.setting;
 namespace GFrameworkGodotTemplate.scripts.module;
 
 /// <summary>
-///     ModelModule 类继承自 AbstractModule，用于在架构中安装和注册模型。
+///     ModelModule 类用于在架构中安装和注册模型。
 ///     该模块主要负责初始化设置相关的模型，并将其注册到架构中。
 /// </summary>
 public class ModelModule : IArchitectureModule
