@@ -17,7 +17,7 @@ permissions:
 
 # 定义环境变量供后续步骤使用
 env:
-  GODOT_VERSION: 4.6               # 指定使用的 Godot 版本
+  GODOT_VERSION: 4.6.1               # 指定使用的 Godot 版本
   EXPORT_NAME: GFrameworkGodotTemplate   # 导出项目名称前缀
 
 # 工作流中的任务定义部分
