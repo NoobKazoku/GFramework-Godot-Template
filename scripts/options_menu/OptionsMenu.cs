@@ -109,7 +109,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// </summary>
     private void CallDeferredInit()
     {
-        InitCoroutine().RunCoroutine(segment: Segment.ProcessIgnorePause);
+        CallDeferredInitCoroutine().RunCoroutine(segment: Segment.ProcessIgnorePause);
     }
 
     /// <summary>
@@ -118,10 +118,10 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// </summary>
     public override void _Ready()
     {
-        ReadyCoroutine().RunCoroutine();
+        InitCoroutine().RunCoroutine();
     }
 
-    private IEnumerator<IYieldInstruction> ReadyCoroutine()
+    private IEnumerator<IYieldInstruction> InitCoroutine()
     {
         // 等待游戏架构初始化完成
         yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
@@ -283,7 +283,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     ///     初始化协程，用于设置界面的初始化流程
     /// </summary>
     /// <returns>返回一个IYieldInstruction类型的IEnumerator，用于协程执行</returns>
-    private IEnumerator<IYieldInstruction> InitCoroutine()
+    private IEnumerator<IYieldInstruction> CallDeferredInitCoroutine()
     {
         Hide();
         var settings = this.GetModel<ISettingsModel>()!;
