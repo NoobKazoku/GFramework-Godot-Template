@@ -1,5 +1,6 @@
 using GFramework.Core.Abstractions.controller;
 using GFramework.Core.Abstractions.coroutine;
+using GFramework.Core.coroutine.instructions;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.coroutine;
@@ -9,7 +10,6 @@ using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.enums.ui;
-using global::GFrameworkGodotTemplate.global;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.credits;
@@ -68,13 +68,13 @@ public partial class Credits : Control, IController, IUiPageBehaviorProvider, IS
     /// </summary>
     private IEnumerator<IYieldInstruction> InitCoroutine()
     {
-        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         _uiRouter = this.GetSystem<IUiRouter>()!;
 
         // 在此添加就绪逻辑
         SetupEventHandlers();
+        yield return new WaitForNextFrame();
         // 这个需要延迟调用，因为UiRoot还没有添加到场景树中
-        CallDeferred(nameof(CallDeferredInit));
+        yield return CallDeferredInit().AsCoroutineInstruction();
     }
 
     private void SetupEventHandlers()

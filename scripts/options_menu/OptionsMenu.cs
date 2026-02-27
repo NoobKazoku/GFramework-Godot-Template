@@ -21,7 +21,6 @@ using GFrameworkGodotTemplate.scripts.cqrs.setting.command;
 using GFrameworkGodotTemplate.scripts.cqrs.setting.command.input;
 using GFrameworkGodotTemplate.scripts.cqrs.setting.query;
 using GFrameworkGodotTemplate.scripts.enums.ui;
-using global::GFrameworkGodotTemplate.global;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.options_menu;
@@ -123,14 +122,13 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
 
     private IEnumerator<IYieldInstruction> InitCoroutine()
     {
-        // 等待游戏架构初始化完成
-        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         GetNode<Button>("%Back").Pressed += OnBackPressed;
         SetupEventHandlers();
         // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
         // 延迟调用初始化方法
         CallDeferred(nameof(CallDeferredInit));
+        yield return new Delay(0);
     }
 
     /// <summary>
