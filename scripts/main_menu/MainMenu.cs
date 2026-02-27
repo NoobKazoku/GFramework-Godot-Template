@@ -1,4 +1,5 @@
 using GFramework.Core.Abstractions.controller;
+using GFramework.Core.Abstractions.coroutine;
 using GFramework.Core.Abstractions.state;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
@@ -60,13 +61,13 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
     /// </summary>
     public override void _Ready()
     {
-        _ = ReadyAsync();
+        InitCoroutine().RunCoroutine();
     }
 
-    private async Task ReadyAsync()
+    private IEnumerator<IYieldInstruction> InitCoroutine()
     {
         // 等待游戏架构初始化完成
-        await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
+        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
         _stateMachineSystem = this.GetSystem<IStateMachineSystem>()!;

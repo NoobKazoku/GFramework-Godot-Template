@@ -61,16 +61,16 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     /// </summary>
     public override void _Ready()
     {
-        _ = ReadyAsync();
+        InitCoroutine().RunCoroutine();
     }
 
     /// <summary>
-    ///     异步等待架构准备完成并获取UI路由器系统
+    ///     初始化协程
     /// </summary>
-    private async Task ReadyAsync()
+    private IEnumerator<IYieldInstruction> InitCoroutine()
     {
         Hide();
-        await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
+        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         _sceneRouter = this.GetSystem<ISceneRouter>()!;
 
         // 在此添加就绪逻辑

@@ -15,6 +15,6 @@ public class PlayingState : AsyncContextAwareStateBase
     public override async Task OnEnterAsync(IState? from)
     {
         // 获取UI路由系统并替换当前UI为HomeUi
-        await this.GetSystem<IUiRouter>()!.ReplaceAsync(HomeUi.UiKeyStr).ConfigureAwait(false);
+        await this.GetSystem<IUiRouter>()!.ReplaceAsync(HomeUi.UiKeyStr).ConfigureAwait(true);
     }
 }

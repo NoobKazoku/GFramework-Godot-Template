@@ -43,7 +43,7 @@ public class UiRootReadyHandler : AbstractNotificationHandler<UiRootReadyEvent>
         {
             // 获取状态机系统实例并切换到启动状态
             await (_stateMachine ??= this.GetSystem<IStateMachineSystem>()!)
-                .ChangeToAsync<BootStartState>().ConfigureAwait(false);
+                .ChangeToAsync<BootStartState>().ConfigureAwait(true);
         }
     }
 

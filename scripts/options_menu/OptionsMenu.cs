@@ -118,13 +118,13 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// </summary>
     public override void _Ready()
     {
-        _ = ReadyAsync();
+        ReadyCoroutine().RunCoroutine();
     }
 
-    private async Task ReadyAsync()
+    private IEnumerator<IYieldInstruction> ReadyCoroutine()
     {
         // 等待游戏架构初始化完成
-        await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
+        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         GetNode<Button>("%Back").Pressed += OnBackPressed;
         SetupEventHandlers();
         // 获取UI路由器实例
@@ -229,9 +229,9 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
                     new ChangeSfxVolumeCommand(
                         new ChangeSfxVolumeCommandInput { Volume = v }))))
             .End();
-        ResolutionOptionButton.ItemSelected += async index => await OnResolutionChanged(index).ConfigureAwait(false);
-        FullscreenOptionButton.ItemSelected += async index => await OnFullscreenChanged(index).ConfigureAwait(false);
-        LanguageOptionButton.ItemSelected += async index => await OnLanguageChanged(index).ConfigureAwait(false);
+        ResolutionOptionButton.ItemSelected += async index => await OnResolutionChanged(index).ConfigureAwait(true);
+        FullscreenOptionButton.ItemSelected += async index => await OnFullscreenChanged(index).ConfigureAwait(true);
+        LanguageOptionButton.ItemSelected += async index => await OnLanguageChanged(index).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -247,7 +247,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
 
         // 发送更改语言命令
         await this.SendCommandAsync(new ChangeLanguageCommand(new ChangeLanguageCommandInput
-            { Language = language })).ConfigureAwait(false);
+            { Language = language })).ConfigureAwait(true);
 
         _log.Debug($"语言更改为: {language}");
     }
@@ -261,7 +261,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
         if (_initializing) return;
         var resolution = _resolutions[index];
         await this.SendCommandAsync(new ChangeResolutionCommand(new ChangeResolutionCommandInput
-            { Width = resolution.X, Height = resolution.Y })).ConfigureAwait(false);
+            { Width = resolution.X, Height = resolution.Y })).ConfigureAwait(true);
         _log.Debug($"分辨率更改为: {resolution.X}x{resolution.Y}");
     }
 
@@ -273,7 +273,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     {
         var fullscreen = index == 0;
         await this.SendCommandAsync(new ToggleFullscreenCommand(new ToggleFullscreenCommandInput
-            { Fullscreen = fullscreen })).ConfigureAwait(false);
+            { Fullscreen = fullscreen })).ConfigureAwait(true);
         // ⭐ 禁用 / 启用分辨率选择
         ResolutionOptionButton.Disabled = fullscreen;
         _log.Debug($"全屏模式切换为: {fullscreen}");

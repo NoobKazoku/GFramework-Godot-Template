@@ -18,8 +18,7 @@ public class ChangeMasterVolumeCommandHandler : AbstractCommandHandler<ChangeMas
     {
         var input = command.Input;
         (_model ??= this.GetModel<ISettingsModel>()!).GetData<AudioSettings>().MasterVolume = input.Volume;
-        await (_settingsSystem ??= this.GetSystem<ISettingsSystem>())!.Apply<GodotAudioSettings>()
-            .ConfigureAwait(false);
+        await (_settingsSystem ??= this.GetSystem<ISettingsSystem>())!.Apply<GodotAudioSettings>().ConfigureAwait(true);
         return Unit.Value;
     }
 }

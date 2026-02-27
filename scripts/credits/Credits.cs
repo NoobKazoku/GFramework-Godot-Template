@@ -1,4 +1,5 @@
 using GFramework.Core.Abstractions.controller;
+using GFramework.Core.Abstractions.coroutine;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
 using GFramework.Godot.coroutine;
@@ -49,7 +50,7 @@ public partial class Credits : Control, IController, IUiPageBehaviorProvider, IS
         var env = this.GetEnvironment();
         // 开发环境下检查当前UI是否在路由栈顶，如果不在则将页面推入路由栈
         if (GameConstants.Development.Equals(env.Name, StringComparison.Ordinal) && !_uiRouter.IsTop(UiKeyStr))
-            await _uiRouter.PushAsync(GetPage()).ConfigureAwait(false);
+            await _uiRouter.PushAsync(GetPage()).ConfigureAwait(true);
         // 在此添加延迟初始化逻辑
     }
 
@@ -59,15 +60,15 @@ public partial class Credits : Control, IController, IUiPageBehaviorProvider, IS
     /// </summary>
     public override void _Ready()
     {
-        _ = ReadyAsync();
+        InitCoroutine().RunCoroutine();
     }
 
     /// <summary>
-    ///     异步等待架构准备完成并获取UI路由器系统
+    ///     初始化协程
     /// </summary>
-    private async Task ReadyAsync()
+    private IEnumerator<IYieldInstruction> InitCoroutine()
     {
-        await GameEntryPoint.Architecture.WaitUntilReadyAsync().ConfigureAwait(false);
+        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         _uiRouter = this.GetSystem<IUiRouter>()!;
 
         // 在此添加就绪逻辑

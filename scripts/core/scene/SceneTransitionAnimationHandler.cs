@@ -57,7 +57,7 @@ public partial class SceneTransitionAnimationHandler(
         if (string.IsNullOrEmpty(toSceneKey))
         {
             _log.Debug("No target scene key, skip transition.");
-            await next().ConfigureAwait(false);
+            await next().ConfigureAwait(true);
             return;
         }
 

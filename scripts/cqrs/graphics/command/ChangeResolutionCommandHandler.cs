@@ -21,7 +21,7 @@ public class ChangeResolutionCommandHandler : AbstractCommandHandler<ChangeResol
         settings.ResolutionWidth = input.Width;
         settings.ResolutionHeight = input.Height;
         await (_settingsSystem ??= this.GetSystem<ISettingsSystem>())!.Apply<GodotGraphicsSettings>()
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
         return Unit.Value;
     }
 }
