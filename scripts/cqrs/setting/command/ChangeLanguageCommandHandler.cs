@@ -20,7 +20,7 @@ public class ChangeLanguageCommandHandler : AbstractCommandHandler<ChangeLanguag
         var settings = (_model ??= this.GetModel<ISettingsModel>()!).GetData<LocalizationSettings>();
         settings.Language = input.Language;
         await (_settingsSystem ??= this.GetSystem<ISettingsSystem>())!.Apply<GodotLocalizationSettings>()
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
         return Unit.Value;
     }
 }

@@ -39,8 +39,8 @@ public class ToggleFullscreenCommandHandler : AbstractCommandHandler<ToggleFulls
         (_model ??= this.GetModel<ISettingsModel>()!).GetData<GraphicsSettings>().Fullscreen = command.Input.Fullscreen;
 
         // 应用图形设置更改到Godot引擎
-        await this.GetSystem<ISettingsSystem>()!.Apply<GodotGraphicsSettings>().ConfigureAwait(false);
+        await this.GetSystem<ISettingsSystem>()!.Apply<GodotGraphicsSettings>().ConfigureAwait(true);
 
-        return await ValueTask.FromResult(Unit.Value).ConfigureAwait(false);
+        return await ValueTask.FromResult(Unit.Value).ConfigureAwait(true);
     }
 }

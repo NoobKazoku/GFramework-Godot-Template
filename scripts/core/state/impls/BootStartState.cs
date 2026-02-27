@@ -26,6 +26,6 @@ public class BootStartState : AsyncContextAwareStateBase
 {
     public override async Task OnEnterAsync(IState? from)
     {
-        await this.GetSystem<ISceneRouter>()!.ReplaceAsync(nameof(SceneKey.Boot)).ConfigureAwait(false);
+        await this.GetSystem<ISceneRouter>()!.ReplaceAsync(nameof(SceneKey.Boot)).ConfigureAwait(true);
     }
 }

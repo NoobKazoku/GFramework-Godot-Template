@@ -18,8 +18,7 @@ public class ChangeSfxVolumeCommandHandler : AbstractCommandHandler<ChangeSfxVol
     {
         var input = command.Input;
         (_model ??= this.GetModel<ISettingsModel>()!).GetData<AudioSettings>().SfxVolume = input.Volume;
-        await (_settingsSystem ??= this.GetSystem<ISettingsSystem>())!.Apply<GodotAudioSettings>()
-            .ConfigureAwait(false);
+        await (_settingsSystem ??= this.GetSystem<ISettingsSystem>())!.Apply<GodotAudioSettings>().ConfigureAwait(true);
         return Unit.Value;
     }
 }
