@@ -17,17 +17,17 @@ using GFrameworkGodotTemplate.scripts.core.audio.system;
 namespace GFrameworkGodotTemplate.scripts.cqrs.audio.events;
 
 /// <summary>
-/// 音效播放事件处理器
-/// 负责处理PlaySfxEvent事件，通过音频系统播放音效
-/// 继承自AbstractNotificationHandler，专门处理音效播放相关的通知消息
+///     音效播放事件处理器
+///     负责处理PlaySfxEvent事件，通过音频系统播放音效
+///     继承自AbstractNotificationHandler，专门处理音效播放相关的通知消息
 /// </summary>
 public class PlaySfxHandler : AbstractNotificationHandler<PlaySfxEvent>
 {
     private IAudioSystem? _audioSystem;
 
     /// <summary>
-    /// 处理音效播放事件
-    /// 根据事件中的音效类型播放对应的音效
+    ///     处理音效播放事件
+    ///     根据事件中的音效类型播放对应的音效
     /// </summary>
     /// <param name="notification">音效播放事件通知对象</param>
     /// <param name="cancellationToken">取消令牌，用于取消异步操作</param>

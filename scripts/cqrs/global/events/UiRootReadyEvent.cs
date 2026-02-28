@@ -16,8 +16,8 @@ using Mediator;
 namespace GFrameworkGodotTemplate.scripts.cqrs.global.events;
 
 /// <summary>
-/// UI根节点就绪事件
-/// 用于通知系统UI根节点已经准备完成，可以进行后续的UI相关操作
-/// 该事件实现了INotification接口，可在CQRS架构中作为通知消息使用
+///     UI根节点就绪事件
+///     用于通知系统UI根节点已经准备完成，可以进行后续的UI相关操作
+///     该事件实现了INotification接口，可在CQRS架构中作为通知消息使用
 /// </summary>
 public class UiRootReadyEvent : INotification;

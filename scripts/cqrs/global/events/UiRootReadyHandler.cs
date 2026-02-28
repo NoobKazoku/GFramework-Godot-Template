@@ -21,17 +21,17 @@ using GFrameworkGodotTemplate.scripts.enums.scene;
 namespace GFrameworkGodotTemplate.scripts.cqrs.global.events;
 
 /// <summary>
-/// UI根节点就绪事件处理器
-/// 负责处理UiRootReadyEvent事件，当UI根节点准备就绪时触发状态机切换
-/// 继承自AbstractNotificationHandler，专门处理UI就绪相关的通知消息
+///     UI根节点就绪事件处理器
+///     负责处理UiRootReadyEvent事件，当UI根节点准备就绪时触发状态机切换
+///     继承自AbstractNotificationHandler，专门处理UI就绪相关的通知消息
 /// </summary>
 public class UiRootReadyHandler : AbstractNotificationHandler<UiRootReadyEvent>
 {
     private IStateMachineSystem? _stateMachine;
 
     /// <summary>
-    /// 处理UI根节点就绪事件
-    /// 当接收到UiRootReadyEvent通知时，将状态机切换到启动状态
+    ///     处理UI根节点就绪事件
+    ///     当接收到UiRootReadyEvent通知时，将状态机切换到启动状态
     /// </summary>
     /// <param name="notification">UI根节点就绪事件通知对象</param>
     /// <param name="cancellationToken">取消令牌，用于取消异步操作</param>
@@ -40,11 +40,9 @@ public class UiRootReadyHandler : AbstractNotificationHandler<UiRootReadyEvent>
     {
         // 检查是否应该进入主菜单状态，如果是则注册UI根节点就绪事件来切换到主菜单状态
         if (ShouldEnterMainMenu())
-        {
             // 获取状态机系统实例并切换到启动状态
             await (_stateMachine ??= this.GetSystem<IStateMachineSystem>()!)
                 .ChangeToAsync<BootStartState>().ConfigureAwait(true);
-        }
     }
 
     /// <summary>
