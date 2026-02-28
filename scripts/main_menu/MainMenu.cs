@@ -13,7 +13,6 @@ using GFrameworkGodotTemplate.scripts.cqrs.game.command;
 using GFrameworkGodotTemplate.scripts.cqrs.menu.command;
 using GFrameworkGodotTemplate.scripts.credits;
 using GFrameworkGodotTemplate.scripts.enums.ui;
-using global::GFrameworkGodotTemplate.global;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.main_menu;
@@ -66,12 +65,11 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
 
     private IEnumerator<IYieldInstruction> InitCoroutine()
     {
-        // 等待游戏架构初始化完成
-        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
         _stateMachineSystem = this.GetSystem<IStateMachineSystem>()!;
         SetupEventHandlers();
+        yield break;
     }
 
     private void SetupEventHandlers()

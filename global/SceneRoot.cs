@@ -62,7 +62,7 @@ public partial class SceneRoot : Node2D, ISceneRoot
     /// <param name="scene">要移除的场景行为对象</param>
     public void RemoveScene(ISceneBehavior scene)
     {
-        if (scene.Original is not Node node)
+        if (scene.Original is not Node node || node.IsInvalidNode())
             return;
 
         node.GetParent()?.RemoveChild(node);
