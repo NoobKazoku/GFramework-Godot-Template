@@ -10,7 +10,6 @@ using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.enums.scene;
 using GFrameworkGodotTemplate.scripts.enums.ui;
-using global::GFrameworkGodotTemplate.global;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.tests;
@@ -70,7 +69,6 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     private IEnumerator<IYieldInstruction> InitCoroutine()
     {
         Hide();
-        yield return GameEntryPoint.Architecture.WaitUntilReadyAsync().AsCoroutineInstruction();
         _sceneRouter = this.GetSystem<ISceneRouter>()!;
 
         // 在此添加就绪逻辑
@@ -78,6 +76,7 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
         // 这个需要延迟调用，因为UiRoot还没有添加到场景树中
         CallDeferred(nameof(CallDeferredInit));
         Show();
+        yield break;
     }
 
     /// <summary>
