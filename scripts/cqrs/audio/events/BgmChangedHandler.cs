@@ -17,17 +17,17 @@ using GFrameworkGodotTemplate.scripts.core.audio.system;
 namespace GFrameworkGodotTemplate.scripts.cqrs.audio.events;
 
 /// <summary>
-/// 背景音乐变更事件处理器
-/// 负责处理BgmChangedEvent事件，通过音频系统切换背景音乐
-/// 继承自AbstractNotificationHandler，专门处理背景音乐切换相关的通知消息
+///     背景音乐变更事件处理器
+///     负责处理BgmChangedEvent事件，通过音频系统切换背景音乐
+///     继承自AbstractNotificationHandler，专门处理背景音乐切换相关的通知消息
 /// </summary>
 public class BgmChangedHandler : AbstractNotificationHandler<BgmChangedEvent>
 {
     private IAudioSystem? _audioSystem;
 
     /// <summary>
-    /// 处理背景音乐变更事件
-    /// 根据事件中的背景音乐类型切换到对应的背景音乐
+    ///     处理背景音乐变更事件
+    ///     根据事件中的背景音乐类型切换到对应的背景音乐
     /// </summary>
     /// <param name="notification">背景音乐变更事件通知对象</param>
     /// <param name="cancellationToken">取消令牌，用于取消异步操作</param>

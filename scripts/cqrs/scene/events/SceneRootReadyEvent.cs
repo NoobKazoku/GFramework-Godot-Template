@@ -16,8 +16,8 @@ using Mediator;
 namespace GFrameworkGodotTemplate.scripts.cqrs.scene.events;
 
 /// <summary>
-/// 场景根节点就绪事件
-/// 用于通知系统场景根节点已经准备完成
-/// 该事件实现了INotification接口，可在CQRS架构中作为通知消息使用
+///     场景根节点就绪事件
+///     用于通知系统场景根节点已经准备完成
+///     该事件实现了INotification接口，可在CQRS架构中作为通知消息使用
 /// </summary>
 public class SceneRootReadyEvent : INotification;

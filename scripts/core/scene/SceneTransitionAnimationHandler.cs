@@ -22,7 +22,7 @@ using Godot;
 namespace GFrameworkGodotTemplate.scripts.core.scene;
 
 /// <summary>
-/// 场景过渡动画处理器，将 SceneTransitionManager 的过渡效果接入管道。
+///     场景过渡动画处理器，将 SceneTransitionManager 的过渡效果接入管道。
 /// </summary>
 [Log]
 public partial class SceneTransitionAnimationHandler(
@@ -34,8 +34,10 @@ public partial class SceneTransitionAnimationHandler(
     public int Priority => 0; // 最高优先级，最外层包裹
 
     public bool ShouldHandle(SceneTransitionEvent @event)
-        => !TransitionManager.IsTransitioning &&
-           !string.Equals(@event.ToSceneKey, nameof(SceneKey.Boot), StringComparison.Ordinal);
+    {
+        return !TransitionManager.IsTransitioning &&
+               !string.Equals(@event.ToSceneKey, nameof(SceneKey.Boot), StringComparison.Ordinal);
+    }
 
     public async Task HandleAsync(
         SceneTransitionEvent @event,

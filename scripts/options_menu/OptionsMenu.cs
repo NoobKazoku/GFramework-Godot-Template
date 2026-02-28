@@ -108,7 +108,7 @@ public partial class OptionsMenu : Control, IController, IUiPageBehaviorProvider
     /// </summary>
     private void CallDeferredInit()
     {
-        CallDeferredInitCoroutine().RunCoroutine(segment: Segment.ProcessIgnorePause);
+        CallDeferredInitCoroutine().RunCoroutine(Segment.ProcessIgnorePause);
     }
 
     /// <summary>

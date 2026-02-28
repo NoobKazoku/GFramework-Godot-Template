@@ -17,14 +17,14 @@ using Mediator;
 namespace GFrameworkGodotTemplate.scripts.cqrs.audio.events;
 
 /// <summary>
-/// 音效播放事件
-/// 当需要播放特定类型的音效时触发此事件
-/// 该事件实现了INotification接口，可在CQRS架构中作为通知消息使用
+///     音效播放事件
+///     当需要播放特定类型的音效时触发此事件
+///     该事件实现了INotification接口，可在CQRS架构中作为通知消息使用
 /// </summary>
 public class PlaySfxEvent : INotification
 {
     /// <summary>
-    /// 获取要播放的音效类型
+    ///     获取要播放的音效类型
     /// </summary>
     public SfxType SfxType { get; init; }
 }

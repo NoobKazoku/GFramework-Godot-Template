@@ -19,13 +19,13 @@ using GFrameworkGodotTemplate.scripts.cqrs.setting.query.view;
 namespace GFrameworkGodotTemplate.scripts.cqrs.setting.query;
 
 /// <summary>
-/// 当前设置查询处理器
-/// 处理获取当前设置信息的查询请求，从设置模型中提取各类设置数据并构建成视图对象
+///     当前设置查询处理器
+///     处理获取当前设置信息的查询请求，从设置模型中提取各类设置数据并构建成视图对象
 /// </summary>
 public class GetCurrentSettingsQueryHandler : AbstractQueryHandler<GetCurrentSettingsQuery, SettingsView>
 {
     /// <summary>
-    /// 处理获取当前设置的查询请求
+    ///     处理获取当前设置的查询请求
     /// </summary>
     /// <param name="query">获取当前设置的查询对象</param>
     /// <param name="cancellationToken">取消令牌，用于取消操作</param>
@@ -40,7 +40,7 @@ public class GetCurrentSettingsQueryHandler : AbstractQueryHandler<GetCurrentSet
         {
             Audio = model.GetData<AudioSettings>(),
             Graphics = model.GetData<GraphicsSettings>(),
-            Localization = model.GetData<LocalizationSettings>(),
+            Localization = model.GetData<LocalizationSettings>()
         });
     }
 }
