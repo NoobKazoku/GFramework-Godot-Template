@@ -28,7 +28,7 @@
         </PackageReference>
         <PackageReference Include="GeWuYou.GFramework" Version="0.0.193"/>
         <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.193"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.193"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.197"/>
         <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.193"/>
         <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
             <PrivateAssets>all</PrivateAssets>
