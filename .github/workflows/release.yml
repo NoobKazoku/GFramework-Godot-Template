@@ -90,7 +90,7 @@ jobs:
         run: |
           cd build/linux
           zip -r ../${{ env.EXPORT_NAME }}-linux.zip .
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: release-assets-windows-linux
           path: build/*.zip
@@ -158,7 +158,7 @@ jobs:
 
       # 上传压缩后的 macOS 构建产物
       - name: Upload macOS artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-assets-macos
           path: build/${{ env.EXPORT_NAME }}-macOS.zip
