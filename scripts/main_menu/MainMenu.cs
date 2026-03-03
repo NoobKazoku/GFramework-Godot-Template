@@ -1,5 +1,4 @@
 using GFramework.Core.Abstractions.controller;
-using GFramework.Core.Abstractions.coroutine;
 using GFramework.Core.Abstractions.state;
 using GFramework.Game.Abstractions.enums;
 using GFramework.Game.Abstractions.ui;
@@ -60,16 +59,9 @@ public partial class MainMenu : Control, IController, IUiPageBehaviorProvider, I
     /// </summary>
     public override void _Ready()
     {
-        InitCoroutine().RunCoroutine();
-    }
-
-    private IEnumerator<IYieldInstruction> InitCoroutine()
-    {
-        // 获取UI路由器实例
         _uiRouter = this.GetSystem<IUiRouter>()!;
         _stateMachineSystem = this.GetSystem<IStateMachineSystem>()!;
         SetupEventHandlers();
-        yield break;
     }
 
     private void SetupEventHandlers()

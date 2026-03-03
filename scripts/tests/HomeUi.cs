@@ -60,14 +60,6 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     /// </summary>
     public override void _Ready()
     {
-        InitCoroutine().RunCoroutine();
-    }
-
-    /// <summary>
-    ///     初始化协程
-    /// </summary>
-    private IEnumerator<IYieldInstruction> InitCoroutine()
-    {
         Hide();
         _sceneRouter = this.GetSystem<ISceneRouter>()!;
 
@@ -76,7 +68,6 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
         // 这个需要延迟调用，因为UiRoot还没有添加到场景树中
         CallDeferred(nameof(CallDeferredInit));
         Show();
-        yield break;
     }
 
     /// <summary>
