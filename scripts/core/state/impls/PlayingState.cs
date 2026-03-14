@@ -1,6 +1,6 @@
-using GFramework.Core.Abstractions.state;
-using GFramework.Core.state;
-using GFramework.Game.Abstractions.ui;
+using GFramework.Core.Abstractions.State;
+using GFramework.Core.State;
+using GFramework.Game.Abstractions.UI;
 using GFrameworkGodotTemplate.scripts.tests;
 
 namespace GFrameworkGodotTemplate.scripts.core.state.impls;

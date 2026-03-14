@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Abstractions.system;
+using GFramework.Core.Abstractions.Systems;
 using GFrameworkGodotTemplate.scripts.enums.audio;
 using global::GFrameworkGodotTemplate.global;
 

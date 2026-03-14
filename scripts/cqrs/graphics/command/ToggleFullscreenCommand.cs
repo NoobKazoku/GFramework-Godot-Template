@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.cqrs.command;
+using GFramework.Core.Cqrs.Command;
 using GFrameworkGodotTemplate.scripts.cqrs.graphics.command.input;
 using Unit = Mediator.Unit;
 

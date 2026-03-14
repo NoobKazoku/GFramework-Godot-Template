@@ -19,13 +19,17 @@ global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
 
-// 全局导入LanguageExt函数式编程库的核心组件，包括通用类型、效果系统和预定义函数
-global using LanguageExt;
-global using LanguageExt.Common;
-global using LanguageExt.Effects;
-global using LanguageExt.Pretty;
-global using static LanguageExt.Prelude;
-
 // 全局导入GFramework
-global using GFramework.Core.extensions;
-global using GFramework.Core.coroutine.extensions;
+global using GFramework.Core.Extensions;
+global using GFramework.Core.Environment;
+global using GFramework.Core.Coroutine.Extensions;
+global using GFramework.Core.Abstractions.Architecture;
+global using GFramework.Core.Abstractions.Environment;
+global using GFramework.Core.Abstractions.Coroutine;
+global using GFramework.Godot.Architecture;
+global using GFramework.Core.Abstractions.Controller;
+global using GFramework.SourceGenerators.Abstractions.Logging;
+global using GFramework.SourceGenerators.Abstractions.Rule;
+global using GFramework.Game.Abstractions.Scene;
+global using GFramework.Godot.Coroutine;
+global using GFramework.Godot.Extensions;

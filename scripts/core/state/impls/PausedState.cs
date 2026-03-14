@@ -1,4 +1,4 @@
-using GFramework.Core.state;
+using GFramework.Core.State;
 
 namespace GFrameworkGodotTemplate.scripts.core.state.impls;
 

@@ -1,6 +1,4 @@
-﻿using GFramework.Game.Abstractions.scene;
-
-namespace GFrameworkGodotTemplate.scripts.core.scene;
+﻿namespace GFrameworkGodotTemplate.scripts.core.scene;
 
 /// <summary>
 ///     简单场景接口

@@ -11,11 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Abstractions.controller;
-using GFramework.Game.Abstractions.scene;
-using GFramework.Godot.scene;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
+using GFramework.Godot.Scene;
 using GFrameworkGodotTemplate.scripts.core.scene;
 using GFrameworkGodotTemplate.scripts.enums.scene;
 using Godot;

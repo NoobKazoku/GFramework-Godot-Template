@@ -1,6 +1,4 @@
-﻿using GFramework.Core.Abstractions.controller;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFrameworkGodotTemplate.scripts.enums;
+﻿using GFrameworkGodotTemplate.scripts.enums;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.core.controller;

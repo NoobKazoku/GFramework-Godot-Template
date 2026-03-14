@@ -1,4 +1,4 @@
-using GFramework.Core.Abstractions.cqrs.command;
+using GFramework.Core.Abstractions.Cqrs.Command;
 
 namespace GFrameworkGodotTemplate.scripts.cqrs.setting.command.input;
 

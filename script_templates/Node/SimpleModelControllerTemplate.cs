@@ -1,14 +1,14 @@
-﻿// meta-name: 简单模态UI控制器类模板
+// meta-name: 简单模态UI控制器类模板
 // meta-description: 负责管理UI页面场景的生命周期和架构关联
 using Godot;
-using GFramework.Core.Abstractions.controller;
-using GFramework.Core.Abstractions.coroutine;
-using GFramework.Core.extensions;
-using GFramework.Game.Abstractions.ui;
-using GFramework.Godot.coroutine;
-using GFramework.Godot.ui;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
+using GFramework.Core.Abstractions.Controller;
+using GFramework.Core.Abstractions.Coroutine;
+using GFramework.Core.Extensions;
+using GFramework.Game.Abstractions.UI;
+using GFramework.Godot.Coroutine;
+using GFramework.Godot.UI;
+using GFramework.SourceGenerators.Abstractions.Logging;
+using GFramework.SourceGenerators.Abstractions.Rule;
 using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.enums.ui;

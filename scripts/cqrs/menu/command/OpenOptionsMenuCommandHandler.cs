@@ -1,6 +1,6 @@
-using GFramework.Core.cqrs.command;
-using GFramework.Game.Abstractions.enums;
-using GFramework.Game.Abstractions.ui;
+using GFramework.Core.Cqrs.Command;
+using GFramework.Game.Abstractions.Enums;
+using GFramework.Game.Abstractions.UI;
 using GFrameworkGodotTemplate.scripts.options_menu;
 using Unit = Mediator.Unit;
 

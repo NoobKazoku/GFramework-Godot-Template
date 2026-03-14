@@ -1,6 +1,3 @@
-using GFramework.Core.Abstractions.controller;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
 using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.core.audio.system;
 using GFrameworkGodotTemplate.scripts.enums.audio;

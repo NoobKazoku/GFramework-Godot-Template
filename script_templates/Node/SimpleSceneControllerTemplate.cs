@@ -1,4 +1,4 @@
-﻿// meta-name: 简单场景控制器类模板
+// meta-name: 简单场景控制器类模板
 // meta-description: 负责管理简单场景的生命周期和架构关联
 // Copyright (c) 2026 GeWuYou
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Abstractions.controller;
-using GFramework.Game.Abstractions.scene;
-using GFramework.Godot.scene;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
+using GFramework.Core.Abstractions.Controller;
+using GFramework.Game.Abstractions.Scene;
+using GFramework.Godot.Scene;
+using GFramework.SourceGenerators.Abstractions.Logging;
+using GFramework.SourceGenerators.Abstractions.Rule;
 using GFrameworkGodotTemplate.scripts.core.scene;
 using GFrameworkGodotTemplate.scripts.enums.scene;
 using Godot;

@@ -18,18 +18,18 @@
         <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Update="Meziantou.Analyzer" Version="3.0.18">
+        <PackageReference Update="Meziantou.Analyzer" Version="3.0.23">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Update="Meziantou.Polyfill" Version="1.0.101">
+        <PackageReference Update="Meziantou.Polyfill" Version="1.0.104">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.198"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.198"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.198"/>
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.198"/>
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.203"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.203"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.203"/>
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.203"/>
         <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
