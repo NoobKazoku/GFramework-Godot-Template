@@ -20,7 +20,7 @@ public class ModelModule : IArchitectureModule
     public void Install(IArchitecture architecture)
     {
         // 获取设置数据仓库的实例，用于后续模型的初始化
-        var settingsDataRepository = architecture.Context.GetUtility<ISettingsDataRepository>()!;
+        var settingsDataRepository = architecture.Context.GetUtility<ISettingsDataRepository>();
 
         // 注册设置模型，并配置其应用器（Applicator）
         architecture.RegisterModel(
