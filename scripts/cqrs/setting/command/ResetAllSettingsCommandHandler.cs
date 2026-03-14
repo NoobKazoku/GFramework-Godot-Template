@@ -1,5 +1,5 @@
-using GFramework.Core.cqrs.command;
-using GFramework.Game.Abstractions.setting;
+using GFramework.Core.Cqrs.Command;
+using GFramework.Game.Abstractions.Setting;
 using Unit = Mediator.Unit;
 
 namespace GFrameworkGodotTemplate.scripts.cqrs.setting.command;

@@ -1,6 +1,5 @@
-using GFramework.Game.ui;
-using GFramework.Game.ui.handler;
-using GFramework.SourceGenerators.Abstractions.logging;
+using GFramework.Game.UI;
+using GFramework.Game.UI.Handler;
 
 namespace GFrameworkGodotTemplate.scripts.core.ui;
 

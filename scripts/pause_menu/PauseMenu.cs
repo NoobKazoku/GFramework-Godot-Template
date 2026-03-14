@@ -1,11 +1,7 @@
-using GFramework.Core.Abstractions.controller;
-using GFramework.Core.Abstractions.state;
-using GFramework.Game.Abstractions.enums;
-using GFramework.Game.Abstractions.ui;
-using GFramework.Godot.coroutine;
-using GFramework.Godot.ui;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
+using GFramework.Core.Abstractions.State;
+using GFramework.Game.Abstractions.Enums;
+using GFramework.Game.Abstractions.UI;
+using GFramework.Godot.UI;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.cqrs.game.command;

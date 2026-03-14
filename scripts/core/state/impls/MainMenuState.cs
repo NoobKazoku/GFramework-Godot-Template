@@ -1,7 +1,6 @@
-using GFramework.Core.Abstractions.state;
-using GFramework.Core.state;
-using GFramework.Game.Abstractions.scene;
-using GFramework.Game.Abstractions.ui;
+using GFramework.Core.Abstractions.State;
+using GFramework.Core.State;
+using GFramework.Game.Abstractions.UI;
 using GFrameworkGodotTemplate.scripts.main_menu;
 
 namespace GFrameworkGodotTemplate.scripts.core.state.impls;

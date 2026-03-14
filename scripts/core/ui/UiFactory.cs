@@ -1,7 +1,7 @@
-﻿using System;
-using GFramework.Core.extensions;
-using GFramework.Core.utility;
-using GFramework.SourceGenerators.Abstractions.logging;
+using System;
+using GFramework.Core.Extensions;
+using GFramework.Core.Utility;
+using GFramework.SourceGenerators.Abstractions.Logging;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.core.ui;

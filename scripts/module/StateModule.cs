@@ -1,6 +1,5 @@
-using GFramework.Core.Abstractions.architecture;
-using GFramework.Core.functional.pipe;
-using GFramework.Game.state;
+using GFramework.Core.Functional.Pipe;
+using GFramework.Game.State;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 
 namespace GFrameworkGodotTemplate.scripts.module;

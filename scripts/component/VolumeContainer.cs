@@ -1,6 +1,3 @@
-using GFramework.Core.Abstractions.controller;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.component;

@@ -1,10 +1,9 @@
-﻿using GFramework.Core.Abstractions.architecture;
-using GFramework.Game.Abstractions.data;
-using GFramework.Game.data;
-using GFramework.Game.serializer;
-using GFramework.Godot.scene;
-using GFramework.Godot.storage;
-using GFramework.Godot.ui;
+using GFramework.Game.Abstractions.Data;
+using GFramework.Game.Data;
+using GFramework.Game.Serializer;
+using GFramework.Godot.Scene;
+using GFramework.Godot.Storage;
+using GFramework.Godot.UI;
 using GFrameworkGodotTemplate.scripts.data;
 using GFrameworkGodotTemplate.scripts.utility;
 using Godot;

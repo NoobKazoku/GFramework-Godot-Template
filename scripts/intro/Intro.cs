@@ -1,11 +1,5 @@
-using GFramework.Core.Abstractions.controller;
-using GFramework.Core.Abstractions.coroutine;
-using GFramework.Core.Abstractions.environment;
-using GFramework.Core.Abstractions.state;
-using GFramework.Core.coroutine.instructions;
-using GFramework.Godot.coroutine;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
+using GFramework.Core.Abstractions.State;
+using GFramework.Core.Coroutine.Instructions;
 using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.enums.resources;

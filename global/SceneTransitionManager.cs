@@ -1,9 +1,4 @@
-using GFramework.Core.Abstractions.controller;
-using GFramework.Core.Abstractions.coroutine;
-using GFramework.Core.coroutine.instructions;
-using GFramework.Godot.extensions;
-using GFramework.SourceGenerators.Abstractions.logging;
-using GFramework.SourceGenerators.Abstractions.rule;
+using GFramework.Core.Coroutine.Instructions;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;

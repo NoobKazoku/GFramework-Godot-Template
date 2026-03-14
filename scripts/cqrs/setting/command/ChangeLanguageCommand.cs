@@ -1,4 +1,4 @@
-using GFramework.Core.cqrs.command;
+using GFramework.Core.Cqrs.Command;
 using GFrameworkGodotTemplate.scripts.cqrs.setting.command.input;
 using Unit = Mediator.Unit;
 
