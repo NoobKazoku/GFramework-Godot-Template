@@ -17,41 +17,41 @@ namespace GFrameworkGodotTemplate.scripts.pause_menu;
 public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, ISimpleUiPage
 {
     /// <summary>
-    ///     页面行为实例的私有字段
-    /// </summary>
-    private IUiPageBehavior? _page;
-
-    private IStateMachineSystem _stateMachineSystem = null!;
-
-    /// <summary>
-    ///     获取恢复游戏按钮节点
-    /// </summary>
-    private Button ResumeButton => GetNode<Button>("%ResumeButton");
-
-    /// <summary>
-    ///     获取保存游戏按钮节点
-    /// </summary>
-    private Button SaveButton => GetNode<Button>("%SaveButton");
-
-    /// <summary>
     ///     获取加载游戏按钮节点
     /// </summary>
-    private Button LoadButton => GetNode<Button>("%LoadButton");
-
-    /// <summary>
-    ///     获取选项按钮节点
-    /// </summary>
-    private Button OptionsButton => GetNode<Button>("%OptionsButton");
+    [GetNode] private Button _loadButton = null!;
 
     /// <summary>
     ///     获取主菜单按钮节点
     /// </summary>
-    private Button MainMenuButton => GetNode<Button>("%MainMenuButton");
+    [GetNode] private Button _mainMenuButton = null!;
+
+    /// <summary>
+    ///     获取选项按钮节点
+    /// </summary>
+    [GetNode] private Button _optionsButton = null!;
+
+    /// <summary>
+    ///     页面行为实例的私有字段
+    /// </summary>
+    private IUiPageBehavior? _page;
 
     /// <summary>
     ///     获取退出游戏按钮节点
     /// </summary>
-    private Button QuitButton => GetNode<Button>("%QuitButton");
+    [GetNode] private Button _quitButton = null!;
+
+    /// <summary>
+    ///     获取恢复游戏按钮节点
+    /// </summary>
+    [GetNode] private Button _resumeButton = null!;
+
+    /// <summary>
+    ///     获取保存游戏按钮节点
+    /// </summary>
+    [GetNode] private Button _saveButton = null!;
+
+    private IStateMachineSystem _stateMachineSystem = null!;
 
     /// <summary>
     ///     Ui Key的字符串形式
@@ -70,6 +70,7 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
     /// </summary>
     public override void _Ready()
     {
+        __InjectGetNodes_Generated();
         SetupEventHandlers();
         _stateMachineSystem = this.GetSystem<IStateMachineSystem>()!;
     }
@@ -92,7 +93,7 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
     private void SetupEventHandlers()
     {
         // 绑定恢复游戏按钮点击事件
-        ResumeButton.Pressed += () =>
+        _resumeButton.Pressed += () =>
         {
             this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
             {
@@ -100,7 +101,7 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
             }));
         };
         // 绑定保存游戏按钮点击事件
-        SaveButton.Pressed += () =>
+        _saveButton.Pressed += () =>
         {
             // 在此保存游戏
             this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
@@ -110,12 +111,12 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
             _log.Debug("保存游戏");
         };
         // 绑定加载游戏按钮点击事件
-        LoadButton.Pressed += () => { _log.Debug("加载游戏"); };
+        _loadButton.Pressed += () => { _log.Debug("加载游戏"); };
         // 绑定选项按钮点击事件
-        OptionsButton.Pressed += () => { this.RunCommandCoroutine(new OpenOptionsMenuCommand()); };
+        _optionsButton.Pressed += () => { this.RunCommandCoroutine(new OpenOptionsMenuCommand()); };
 
         // 绑定返回主菜单按钮点击事件
-        MainMenuButton.Pressed += () =>
+        _mainMenuButton.Pressed += () =>
         {
             this.SendCommand(new ResumeGameWithClosePauseMenuCommand(new ClosePauseMenuCommandInput
             {
@@ -125,6 +126,6 @@ public partial class PauseMenu : Control, IController, IUiPageBehaviorProvider, 
         };
 
         // 绑定退出游戏按钮点击事件
-        QuitButton.Pressed += () => this.RunCommandCoroutine(new ExitGameCommand());
+        _quitButton.Pressed += () => this.RunCommandCoroutine(new ExitGameCommand());
     }
 }

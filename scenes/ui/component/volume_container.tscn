@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://yd2jo4bddl1v"]
 
-[ext_resource type="Script" uid="uid://c10rrfab41xch" path="res://scripts/component/VolumeContainer.cs" id="1_xyh8y"]
+[ext_resource type="Script" uid="uid://c10rrfab41xch" path="res://scripts/ui/component/VolumeContainer.cs" id="1_qcye0"]
 
 [node name="VolumeContainer" type="HBoxContainer" unique_id=2081463097]
 offset_right = 488.0
 offset_bottom = 32.0
-script = ExtResource("1_xyh8y")
+script = ExtResource("1_qcye0")
 
 [node name="VolumeLabel" type="Label" parent="." unique_id=707749245]
 unique_name_in_owner = true

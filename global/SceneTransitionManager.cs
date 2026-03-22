@@ -17,28 +17,14 @@ public partial class SceneTransitionManager : Node, IController
     private static readonly string Progress = "progress";
 
     /// <summary>
+    ///     画布层节点，用于确保过渡效果显示在最上层。
+    /// </summary>
+    [GetNode] private CanvasLayer _canvasLayer = null!;
+
+    /// <summary>
     ///     当前使用的Shader材质实例。
     /// </summary>
     private ShaderMaterial _material = null!;
-
-    /// <summary>
-    ///     画布层节点，用于确保过渡效果显示在最上层。
-    /// </summary>
-    private CanvasLayer CanvasLayer => GetNode<CanvasLayer>("%CanvasLayer");
-
-    /// <summary>
-    ///     场景过渡管理器的单例实例。
-    /// </summary>
-    public static SceneTransitionManager? Instance { get; private set; }
-
-    /// <summary>
-    ///     获取场景过渡矩形节点。
-    /// </summary>
-    /// <remarks>
-    ///     该属性通过节点路径 "%SceneTransitionRect" 获取一个 ColorRect 类型的节点，
-    ///     用于表示场景过渡时的视觉效果区域。
-    /// </remarks>
-    private ColorRect SceneTransitionRect => GetNode<ColorRect>("%SceneTransitionRect");
 
     /// <summary>
     ///     获取预览视口节点。
@@ -47,7 +33,21 @@ public partial class SceneTransitionManager : Node, IController
     ///     该属性通过节点路径 "%PreviewViewport" 获取一个 SubViewport 类型的节点，
     ///     用于渲染和显示预览内容。
     /// </remarks>
-    private SubViewport PreviewViewport => GetNode<SubViewport>("%PreviewViewport");
+    [GetNode] private SubViewport _previewViewport = null!;
+
+    /// <summary>
+    ///     获取场景过渡矩形节点。
+    /// </summary>
+    /// <remarks>
+    ///     该属性通过节点路径 "%SceneTransitionRect" 获取一个 ColorRect 类型的节点，
+    ///     用于表示场景过渡时的视觉效果区域。
+    /// </remarks>
+    [GetNode] private ColorRect _sceneTransitionRect = null!;
+
+    /// <summary>
+    ///     场景过渡管理器的单例实例。
+    /// </summary>
+    public static SceneTransitionManager? Instance { get; private set; }
 
 
     /// <summary>
@@ -61,18 +61,19 @@ public partial class SceneTransitionManager : Node, IController
     /// </summary>
     public override void _Ready()
     {
+        __InjectGetNodes_Generated();
         Instance = this;
 
-        CanvasLayer.Layer = 100; // 确保在最上层
-        PreviewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
+        _canvasLayer.Layer = 100; // 确保在最上层
+        _previewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
         // 创建材质的独立副本
-        var originalMaterial = (ShaderMaterial)SceneTransitionRect.Material;
+        var originalMaterial = (ShaderMaterial)_sceneTransitionRect.Material;
         _material = (ShaderMaterial)originalMaterial.Duplicate();
-        SceneTransitionRect.Material = _material;
+        _sceneTransitionRect.Material = _material;
 
         // 确保初始状态完全隐藏
-        SceneTransitionRect.Visible = false;
-        SceneTransitionRect.Modulate = new Color(1, 1, 1); // 确保不透明度正常
+        _sceneTransitionRect.Visible = false;
+        _sceneTransitionRect.Modulate = new Color(1, 1, 1); // 确保不透明度正常
 
         // 初始化shader参数
         _material.SetShaderParameter(Progress, 0.0f);
@@ -124,7 +125,7 @@ public partial class SceneTransitionManager : Node, IController
         _material.SetShaderParameter("resolution", viewportSize);
         _material.SetShaderParameter(Progress, 0.0f);
 
-        SceneTransitionRect.Visible = true;
+        _sceneTransitionRect.Visible = true;
         yield return new WaitOneFrame();
 
         // 4. 执行场景切换（此时屏幕已被遮挡）
@@ -140,7 +141,7 @@ public partial class SceneTransitionManager : Node, IController
 
         // 6. 清理
         _log.Debug("步骤6: 清理资源");
-        SceneTransitionRect.Visible = false;
+        _sceneTransitionRect.Visible = false;
         _material.SetShaderParameter(Progress, 0.0f);
 
         fromTexture.Dispose();
@@ -167,15 +168,15 @@ public partial class SceneTransitionManager : Node, IController
             // 2. 设置预览视口大小
             var mainViewport = GetViewport();
             var viewportSize = mainViewport.GetVisibleRect().Size;
-            PreviewViewport.Size = new Vector2I((int)viewportSize.X, (int)viewportSize.Y);
+            _previewViewport.Size = new Vector2I((int)viewportSize.X, (int)viewportSize.Y);
 
-            _log.Debug($"预览视口大小: {PreviewViewport.Size}");
+            _log.Debug($"预览视口大小: {_previewViewport.Size}");
 
             // 3. 将场景添加到预览视口
-            PreviewViewport.AddChild(previewScene);
+            _previewViewport.AddChild(previewScene);
 
             // 4. 触发渲染
-            PreviewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
+            _previewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 
             // 等待渲染完成（需要等待多帧确保完全渲染）
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
@@ -183,7 +184,7 @@ public partial class SceneTransitionManager : Node, IController
             await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
 
             // 5. 获取渲染结果
-            var viewportTexture = PreviewViewport.GetTexture();
+            var viewportTexture = _previewViewport.GetTexture();
             var image = viewportTexture.GetImage();
 
             // 6. 转换为 ImageTexture
@@ -198,13 +199,13 @@ public partial class SceneTransitionManager : Node, IController
             // 7. 清理预览场景
             if (previewScene.IsValidNode())
             {
-                PreviewViewport.RemoveChild(previewScene);
+                _previewViewport.RemoveChild(previewScene);
                 previewScene.QueueFreeX();
                 _log.Debug("清理预览场景");
             }
 
             // 禁用视口渲染
-            PreviewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
+            _previewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
         }
     }
 
@@ -216,8 +217,8 @@ public partial class SceneTransitionManager : Node, IController
     private async Task<ImageTexture> CaptureScreenshot()
     {
         // 临时隐藏过渡层
-        var wasVisible = SceneTransitionRect.Visible;
-        SceneTransitionRect.Visible = false;
+        var wasVisible = _sceneTransitionRect.Visible;
+        _sceneTransitionRect.Visible = false;
         // 等待渲染完成
         await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
 
@@ -226,7 +227,7 @@ public partial class SceneTransitionManager : Node, IController
         var image = viewport.GetTexture().GetImage();
 
         // 恢复可见性
-        SceneTransitionRect.Visible = wasVisible;
+        _sceneTransitionRect.Visible = wasVisible;
 
         // 转换为 ImageTexture
         var texture = ImageTexture.CreateFromImage(image);

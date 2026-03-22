@@ -1,6 +1,3 @@
-using GFrameworkGodotTemplate.scripts.constants;
-using GFrameworkGodotTemplate.scripts.core.audio.system;
-using GFrameworkGodotTemplate.scripts.enums.audio;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -11,14 +8,14 @@ public partial class AudioManager : Node, IController
 {
     private readonly List<AudioStreamPlayer> _sfxPlayers = new();
 
-    [Export] private int _maxSfxPlayerCount = 12;
-
-    private int _sfxIndex;
-
     /// <summary>
     ///     获取背景音乐音频流播放器节点
     /// </summary>
-    private AudioStreamPlayer BgmAudioStreamPlayer => GetNode<AudioStreamPlayer>("%BgmAudioStreamPlayer");
+    [GetNode] private AudioStreamPlayer _bgmAudioStreamPlayer = null!;
+
+    [Export] private int _maxSfxPlayerCount = 12;
+
+    private int _sfxIndex;
 
     /// <summary>
     ///     背景音乐音频流
@@ -62,7 +59,8 @@ public partial class AudioManager : Node, IController
     /// </summary>
     public override void _Ready()
     {
-        BgmAudioStreamPlayer.Bus = GameConstants.Bgm;
+        __InjectGetNodes_Generated();
+        _bgmAudioStreamPlayer.Bus = GameConstants.Bgm;
         this.GetSystem<IAudioSystem>()!.BindAudioManager(this);
     }
 
@@ -109,10 +107,10 @@ public partial class AudioManager : Node, IController
     public void PlayBgm(BgmType bgmType)
     {
         // 停止当前播放的背景音乐
-        BgmAudioStreamPlayer.Stop();
+        _bgmAudioStreamPlayer.Stop();
 
         // 根据背景音乐类型设置对应的音频流
-        BgmAudioStreamPlayer.Stream = bgmType switch
+        _bgmAudioStreamPlayer.Stream = bgmType switch
         {
             BgmType.Gaming => GamingAudioStream,
             BgmType.MainMenu => BgmAudioStream,
@@ -121,8 +119,8 @@ public partial class AudioManager : Node, IController
         };
 
         // 如果音频流不为空则开始播放
-        if (BgmAudioStreamPlayer.Stream is not null)
-            BgmAudioStreamPlayer.Play();
+        if (_bgmAudioStreamPlayer.Stream is not null)
+            _bgmAudioStreamPlayer.Play();
     }
 
     /// <summary>

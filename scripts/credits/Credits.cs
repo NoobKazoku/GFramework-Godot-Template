@@ -2,7 +2,6 @@ using GFramework.Core.Coroutine.Instructions;
 using GFramework.Game.Abstractions.Enums;
 using GFramework.Game.Abstractions.UI;
 using GFramework.Godot.UI;
-using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.enums.ui;
 using Godot;
@@ -13,14 +12,14 @@ namespace GFrameworkGodotTemplate.scripts.credits;
 [Log]
 public partial class Credits : Control, IController, IUiPageBehaviorProvider, ISimpleUiPage
 {
+    [GetNode] private Button _backButton = null!;
+
     /// <summary>
     ///     页面行为实例的私有字段
     /// </summary>
     private IUiPageBehavior? _page;
 
     private IUiRouter _uiRouter = null!;
-
-    private Button BackButton => GetNode<Button>("%BackButton");
 
     /// <summary>
     ///     Ui Key的字符串形式
@@ -55,6 +54,7 @@ public partial class Credits : Control, IController, IUiPageBehaviorProvider, IS
     /// </summary>
     public override void _Ready()
     {
+        __InjectGetNodes_Generated();
         InitCoroutine().RunCoroutine();
     }
 
@@ -74,7 +74,7 @@ public partial class Credits : Control, IController, IUiPageBehaviorProvider, IS
 
     private void SetupEventHandlers()
     {
-        BackButton.Pressed += OnBackButton;
+        _backButton.Pressed += OnBackButton;
     }
 
     private void OnBackButton()

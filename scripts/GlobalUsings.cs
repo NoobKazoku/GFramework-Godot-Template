@@ -33,3 +33,7 @@ global using GFramework.SourceGenerators.Abstractions.Rule;
 global using GFramework.Game.Abstractions.Scene;
 global using GFramework.Godot.Coroutine;
 global using GFramework.Godot.Extensions;
+global using GFrameworkGodotTemplate.scripts.constants;
+global using GFrameworkGodotTemplate.scripts.core.audio.system;
+global using GFrameworkGodotTemplate.scripts.enums.audio;
+global using GFramework.Godot.SourceGenerators.Abstractions;

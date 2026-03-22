@@ -1,6 +1,6 @@
 using Godot;
 
-namespace GFrameworkGodotTemplate.scripts.component;
+namespace GFrameworkGodotTemplate.scripts.ui.component;
 
 /// <summary>
 ///     音量控制容器抽象类，提供音量滑块、标签和数值显示功能
@@ -16,28 +16,30 @@ public partial class VolumeContainer : HBoxContainer, IController
     public delegate void VolumeChangedEventHandler(float value);
 
     /// <summary>
-    ///     获取音量滑块控件
-    /// </summary>
-    private HSlider VolumeSlider => GetNode<HSlider>("%VolumeSlider");
-
-    /// <summary>
     ///     获取音量标签控件
     /// </summary>
-    private Label VolumeLabel => GetNode<Label>("%VolumeLabel");
+    [GetNode] private Label _volumeLabel = null!;
+
+    /// <summary>
+    ///     获取音量滑块控件
+    /// </summary>
+    [GetNode] private HSlider _volumeSlider = null!;
 
     /// <summary>
     ///     获取音量数值显示控件
     /// </summary>
-    private Label VolumeValue => GetNode<Label>("%VolumeValue");
+    [GetNode] private Label _volumeValue = null!;
 
     /// <summary>
     ///     Godot节点就绪时调用的方法，初始化事件订阅
     /// </summary>
     public override void _Ready()
     {
+        __InjectGetNodes_Generated();
         // 订阅滑块值改变事件
-        VolumeSlider.ValueChanged += OnSliderValueChanged;
+        _volumeSlider.ValueChanged += OnSliderValueChanged;
     }
+
 
     /// <summary>
     ///     初始化音量控制器
@@ -46,7 +48,7 @@ public partial class VolumeContainer : HBoxContainer, IController
     /// <param name="initialValue">初始音量值</param>
     public void Initialize(string title, float initialValue)
     {
-        VolumeLabel.Text = title;
+        _volumeLabel.Text = title;
         SetValue(initialValue);
     }
 
@@ -56,7 +58,7 @@ public partial class VolumeContainer : HBoxContainer, IController
     /// <param name="value">要设置的音量值</param>
     public void SetValue(float value)
     {
-        VolumeSlider.Value = value;
+        _volumeSlider.Value = value;
         UpdateValueText(value);
     }
 
@@ -77,6 +79,6 @@ public partial class VolumeContainer : HBoxContainer, IController
     /// <param name="value">当前音量值</param>
     private void UpdateValueText(float value)
     {
-        VolumeValue.Text = $"{Mathf.RoundToInt(value * 100)}%";
+        _volumeValue.Text = $"{Mathf.RoundToInt(value * 100)}%";
     }
 }

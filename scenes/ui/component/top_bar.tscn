@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://boev1pvbaarg6"]
+
+[ext_resource type="Script" uid="uid://wyhckyvto70p" path="res://scripts/ui/component/TopBar.cs" id="1_mra3b"]
+
+[node name="TopBar" type="HBoxContainer" unique_id=1864076089]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+script = ExtResource("1_mra3b")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=149069546]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="LeftContainer" type="HBoxContainer" parent="MarginContainer" unique_id=76313761]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/LeftContainer" unique_id=1295900946]
+layout_mode = 2
+text = "左边"
+
+[node name="Pacer" type="Control" parent="." unique_id=1789287147]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_mra3b")
+
+[node name="MarginContainer3" type="MarginContainer" parent="." unique_id=1142329034]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="CenterContainer" type="HBoxContainer" parent="MarginContainer3" unique_id=50153385]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer3/CenterContainer" unique_id=1935403967]
+layout_mode = 2
+text = "中间"
+
+[node name="Pacer2" type="Control" parent="." unique_id=652979931]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_mra3b")
+
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=1629859348]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="RightContainer" type="HBoxContainer" parent="MarginContainer2" unique_id=718228321]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer2/RightContainer" unique_id=1504431151]
+layout_mode = 2
+text = "右边"

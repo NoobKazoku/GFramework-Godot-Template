@@ -12,18 +12,17 @@ namespace GFrameworkGodotTemplate.scripts.tests;
 [Log]
 public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISimpleUiPage
 {
+    [GetNode] private Button _homeButton = null!;
+
     /// <summary>
     ///     页面行为实例的私有字段
     /// </summary>
     private IUiPageBehavior? _page;
 
+    [GetNode] private Button _scene1Button = null!;
+    [GetNode] private Button _scene2Button = null!;
+
     private ISceneRouter _sceneRouter = null!;
-
-    private Button Scene1Button => GetNode<Button>("%Scene1Button");
-
-    private Button Scene2Button => GetNode<Button>("%Scene2Button");
-
-    private Button HomeUiButton => GetNode<Button>("%HomeButton");
 
     /// <summary>
     ///     Ui Key的字符串形式
@@ -54,6 +53,7 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     /// </summary>
     public override void _Ready()
     {
+        __InjectGetNodes_Generated();
         Hide();
         _sceneRouter = this.GetSystem<ISceneRouter>()!;
 
@@ -69,11 +69,11 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     /// </summary>
     private void SetupEventHandlers()
     {
-        var buttons = new[] { Scene1Button, Scene2Button, HomeUiButton };
+        var buttons = new[] { _scene1Button, _scene2Button, _homeButton };
 
-        Scene1Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene1));
-        Scene2Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene2));
-        HomeUiButton.Pressed += () => SwitchScene(nameof(SceneKey.Home));
+        _scene1Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene1));
+        _scene2Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene2));
+        _homeButton.Pressed += () => SwitchScene(nameof(SceneKey.Home));
         return;
 
         IEnumerator<IYieldInstruction> ReplaceScene(string key)

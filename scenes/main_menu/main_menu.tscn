@@ -51,7 +51,7 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "新游戏"
 
-[node name="CotinueGameButton" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=1609470666]
+[node name="ContinueGameButton" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=1609470666]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
