@@ -12,7 +12,7 @@ namespace GFrameworkGodotTemplate.scripts.core.localization;
 public partial class LocalizationButton : Button
 {
     private readonly Dictionary<string, object> _variables = new(StringComparer.OrdinalIgnoreCase);
-    private ILocalizationManager? _locManager;
+    private ILocalizationManager _locManager = null!;
     private ILocalizationString? _locString;
     private bool _subscribed;
 
@@ -42,9 +42,9 @@ public partial class LocalizationButton : Button
     public override void _Ready()
     {
         // 从架构中获取本地化管理器
-        _locManager = this.GetSystem<ILocalizationManager>();
+        _locManager = this.GetSystem<ILocalizationManager>()!;
 
-        if (_locManager != null && !_subscribed)
+        if (!_subscribed)
         {
             // 订阅语言变化事件
             _locManager.SubscribeToLanguageChange(OnLanguageChanged);
@@ -117,11 +117,6 @@ public partial class LocalizationButton : Button
             return;
         }
 
-        if (_locManager == null)
-        {
-            return;
-        }
-
         // 获取本地化字符串
         _locString = _locManager.GetString(LocalizationTable, LocalizationKey);
 
@@ -141,7 +136,7 @@ public partial class LocalizationButton : Button
     /// </summary>
     private void UnsubscribeFromLanguageChange()
     {
-        if (_locManager != null && _subscribed)
+        if (_subscribed)
         {
             _locManager.UnsubscribeFromLanguageChange(OnLanguageChanged);
             _subscribed = false;
