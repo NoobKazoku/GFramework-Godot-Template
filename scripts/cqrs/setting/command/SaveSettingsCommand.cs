@@ -1,5 +1,3 @@
-using Mediator;
-
 namespace GFrameworkGodotTemplate.scripts.cqrs.setting.command;
 
 /// <summary>

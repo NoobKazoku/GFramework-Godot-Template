@@ -1,5 +1,3 @@
-using Mediator;
-
 namespace GFrameworkGodotTemplate.scripts.cqrs.menu.command;
 
 /// <summary>

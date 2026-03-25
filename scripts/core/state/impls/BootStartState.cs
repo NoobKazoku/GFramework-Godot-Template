@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Abstractions.State;
-using GFramework.Core.State;
 using GFrameworkGodotTemplate.scripts.enums.scene;
 
 namespace GFrameworkGodotTemplate.scripts.core.state.impls;

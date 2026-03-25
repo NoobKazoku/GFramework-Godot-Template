@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Game.Abstractions.Data;
 using GFrameworkGodotTemplate.scripts.data.model;
 
 namespace GFrameworkGodotTemplate.scripts.setting;

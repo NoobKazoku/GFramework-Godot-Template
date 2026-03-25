@@ -1,4 +1,3 @@
-using GFramework.Core.Cqrs.Command;
 using GFrameworkGodotTemplate.scripts.cqrs.audio.command.input;
 using Unit = Mediator.Unit;
 

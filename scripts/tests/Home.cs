@@ -1,4 +1,3 @@
-using GFramework.Godot.Scene;
 using GFrameworkGodotTemplate.scripts.core.scene;
 using GFrameworkGodotTemplate.scripts.enums.scene;
 using Godot;

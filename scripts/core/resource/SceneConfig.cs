@@ -1,5 +1,4 @@
-﻿using GFramework.Core.Abstractions.Bases;
-using GFrameworkGodotTemplate.scripts.enums.scene;
+﻿using GFrameworkGodotTemplate.scripts.enums.scene;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.core.resource;

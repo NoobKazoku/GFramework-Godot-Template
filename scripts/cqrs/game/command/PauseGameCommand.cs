@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Mediator;
-
 namespace GFrameworkGodotTemplate.scripts.cqrs.game.command;
 
 /// <summary>

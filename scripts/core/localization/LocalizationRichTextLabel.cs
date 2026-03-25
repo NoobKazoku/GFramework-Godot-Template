@@ -1,11 +1,10 @@
-using GFramework.Core.Abstractions.Localization;
 using Godot;
 
 namespace GFrameworkGodotTemplate.scripts.core.localization;
 
 /// <summary>
-/// 本地化 RichTextLabel 组件
-/// 自动根据语言变化更新富文本内容，支持 BBCode
+///     本地化 RichTextLabel 组件
+///     自动根据语言变化更新富文本内容，支持 BBCode
 /// </summary>
 [GlobalClass]
 [ContextAware]
@@ -14,25 +13,25 @@ public partial class LocalizationRichTextLabel : RichTextLabel
     private LocalizationTextController? _textController;
 
     /// <summary>
-    /// 本地化表名
+    ///     本地化表名
     /// </summary>
     [Export]
     public string LocalizationTable { get; set; } = "common";
 
     /// <summary>
-    /// 本地化键名
+    ///     本地化键名
     /// </summary>
     [Export]
     public string LocalizationKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否在 Ready 时自动更新文本
+    ///     是否在 Ready 时自动更新文本
     /// </summary>
     [Export]
     public bool AutoUpdate { get; set; } = true;
 
     /// <summary>
-    /// 是否启用 BBCode
+    ///     是否启用 BBCode
     /// </summary>
     [Export]
     public bool EnableBbCode { get; set; } = true;
@@ -50,7 +49,7 @@ public partial class LocalizationRichTextLabel : RichTextLabel
     }
 
     /// <summary>
-    /// 设置变量
+    ///     设置变量
     /// </summary>
     /// <param name="name">变量名</param>
     /// <param name="value">变量值</param>
@@ -60,7 +59,7 @@ public partial class LocalizationRichTextLabel : RichTextLabel
     }
 
     /// <summary>
-    /// 批量设置变量
+    ///     批量设置变量
     /// </summary>
     /// <param name="variables">变量字典</param>
     public void SetVariables(IReadOnlyDictionary<string, object> variables)
@@ -69,7 +68,7 @@ public partial class LocalizationRichTextLabel : RichTextLabel
     }
 
     /// <summary>
-    /// 清除所有变量
+    ///     清除所有变量
     /// </summary>
     public void ClearVariables()
     {
@@ -77,7 +76,7 @@ public partial class LocalizationRichTextLabel : RichTextLabel
     }
 
     /// <summary>
-    /// 更新文本
+    ///     更新文本
     /// </summary>
     public void UpdateText()
     {

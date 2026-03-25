@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFrameworkGodotTemplate.scripts.enums.audio;
 using Mediator;
 
 namespace GFrameworkGodotTemplate.scripts.cqrs.audio.events;

@@ -6,6 +6,7 @@
         <RootNamespace>GFrameworkGodotTemplate</RootNamespace>
         <Nullable>enable</Nullable>
         <LangVersion>preview</LangVersion>
+        <EnableGFrameworkGlobalUsings>true</EnableGFrameworkGlobalUsings>
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="scripts\core\ui\UiFactory.cs"/>
@@ -18,7 +19,7 @@
         <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Update="Meziantou.Analyzer" Version="3.0.25">
+        <PackageReference Update="Meziantou.Analyzer" Version="3.0.27">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
@@ -26,11 +27,11 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.0.207"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.207"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.207"/>
-        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.207"/>
-        <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1">
+        <PackageReference Include="GeWuYou.GFramework" Version="0.0.208"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.0.208"/>
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.0.208"/>
+        <PackageReference Include="GeWuYou.GFramework.SourceGenerators" Version="0.0.208"/>
+        <PackageReference Include="Mediator.SourceGenerator" Version="3.0.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

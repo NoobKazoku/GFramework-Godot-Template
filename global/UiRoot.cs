@@ -1,6 +1,3 @@
-using GFramework.Game.Abstractions.Enums;
-using GFramework.Game.Abstractions.UI;
-using GFrameworkGodotTemplate.scripts.constants;
 using GFrameworkGodotTemplate.scripts.cqrs.global.events;
 using Godot;
 

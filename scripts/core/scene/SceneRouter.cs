@@ -11,11 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Game.Scene;
-using GFramework.Game.Scene.Handler;
-using GFramework.Godot.Scene;
 using global::GFrameworkGodotTemplate.global;
 using Godot;
+using LoggingTransitionHandler = GFramework.Game.Scene.Handler.LoggingTransitionHandler;
 
 namespace GFrameworkGodotTemplate.scripts.core.scene;
 

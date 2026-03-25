@@ -11,9 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Cqrs.Query;
-using GFramework.Game.Abstractions.Setting;
-using GFramework.Game.Abstractions.Setting.Data;
 using GFrameworkGodotTemplate.scripts.cqrs.setting.query.view;
 
 namespace GFrameworkGodotTemplate.scripts.cqrs.setting.query;

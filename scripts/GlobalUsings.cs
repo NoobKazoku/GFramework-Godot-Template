@@ -20,20 +20,10 @@ global using System.Threading;
 global using System.Threading.Tasks;
 
 // 全局导入GFramework
-global using GFramework.Core.Extensions;
-global using GFramework.Core.Environment;
-global using GFramework.Core.Coroutine.Extensions;
-global using GFramework.Core.Abstractions.Architectures;
-global using GFramework.Core.Abstractions.Environment;
-global using GFramework.Core.Abstractions.Coroutine;
-global using GFramework.Godot.Architectures;
-global using GFramework.Core.Abstractions.Controller;
-global using GFramework.SourceGenerators.Abstractions.Logging;
-global using GFramework.SourceGenerators.Abstractions.Rule;
-global using GFramework.Game.Abstractions.Scene;
-global using GFramework.Godot.Coroutine;
-global using GFramework.Godot.Extensions;
 global using GFrameworkGodotTemplate.scripts.constants;
 global using GFrameworkGodotTemplate.scripts.core.audio.system;
 global using GFrameworkGodotTemplate.scripts.enums.audio;
 global using GFramework.Godot.SourceGenerators.Abstractions;
+global using ICommand = Mediator.ICommand;
+global using GFramework.SourceGenerators.Abstractions.Logging;
+global using GFramework.SourceGenerators.Abstractions.Rule;

@@ -1,5 +1,4 @@
-using GFramework.Game.UI;
-using GFramework.Game.UI.Handler;
+using LoggingTransitionHandler = GFramework.Game.UI.Handler.LoggingTransitionHandler;
 
 namespace GFrameworkGodotTemplate.scripts.core.ui;
 

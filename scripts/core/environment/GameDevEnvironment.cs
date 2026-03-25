@@ -1,6 +1,4 @@
-﻿using GFrameworkGodotTemplate.scripts.constants;
-
-namespace GFrameworkGodotTemplate.scripts.core.environment;
+﻿namespace GFrameworkGodotTemplate.scripts.core.environment;
 
 /// <summary>
 ///     游戏开发环境类，继承自EnvironmentBase

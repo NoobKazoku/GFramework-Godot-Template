@@ -12,8 +12,6 @@
 // limitations under the License.
 
 
-using GFramework.Game.Abstractions.Setting.Data;
-
 namespace GFrameworkGodotTemplate.scripts.cqrs.setting.query.view;
 
 /// <summary>

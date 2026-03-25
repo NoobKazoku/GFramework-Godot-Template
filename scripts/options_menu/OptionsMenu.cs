@@ -1,11 +1,3 @@
-using GFramework.Core.Abstractions.Events;
-using GFramework.Core.Coroutine.Instructions;
-using GFramework.Game.Abstractions.Enums;
-using GFramework.Game.Abstractions.Setting;
-using GFramework.Game.Abstractions.UI;
-using GFramework.Game.Setting.Events;
-using GFramework.Godot.Extensions.Signal;
-using GFramework.Godot.UI;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.cqrs.audio.command;
 using GFrameworkGodotTemplate.scripts.cqrs.audio.command.input;

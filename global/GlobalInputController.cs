@@ -1,5 +1,3 @@
-using GFramework.Core.Abstractions.State;
-using GFramework.Game.Abstractions.UI;
 using GFrameworkGodotTemplate.scripts.core.controller;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.cqrs.game.command;

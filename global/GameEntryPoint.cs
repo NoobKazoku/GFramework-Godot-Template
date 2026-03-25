@@ -1,12 +1,3 @@
-using GFramework.Core.Abstractions.Logging;
-using GFramework.Core.Abstractions.Properties;
-using GFramework.Core.Abstractions.State;
-using GFramework.Core.Architectures;
-using GFramework.Game.Abstractions.Setting;
-using GFramework.Game.Setting.Events;
-using GFramework.Godot.Logging;
-using GFramework.Godot.Scene;
-using GFramework.Godot.UI;
 using GFrameworkGodotTemplate.scripts.core;
 using GFrameworkGodotTemplate.scripts.core.environment;
 using GFrameworkGodotTemplate.scripts.core.resource;

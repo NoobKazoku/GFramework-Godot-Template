@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Cqrs.Command;
-using GFramework.Game.Abstractions.UI;
 using GFrameworkGodotTemplate.scripts.cqrs.pause_menu.command.input;
 
 namespace GFrameworkGodotTemplate.scripts.cqrs.pause_menu.command;

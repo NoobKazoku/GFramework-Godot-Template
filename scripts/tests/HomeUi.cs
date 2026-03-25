@@ -1,6 +1,3 @@
-using GFramework.Game.Abstractions.Enums;
-using GFramework.Game.Abstractions.UI;
-using GFramework.Godot.UI;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.enums.scene;
 using GFrameworkGodotTemplate.scripts.enums.ui;

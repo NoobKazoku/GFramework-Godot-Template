@@ -1,5 +1,3 @@
-using GFramework.Game.Setting;
-using GFrameworkGodotTemplate.scripts.core.audio.system;
 using GFrameworkGodotTemplate.scripts.core.scene;
 using GFrameworkGodotTemplate.scripts.core.ui;
 

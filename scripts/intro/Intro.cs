@@ -1,5 +1,3 @@
-using GFramework.Core.Abstractions.State;
-using GFramework.Core.Coroutine.Instructions;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.enums.resources;
 using GFrameworkGodotTemplate.scripts.utility;

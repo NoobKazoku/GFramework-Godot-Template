@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Godot.Scene;
 using GFrameworkGodotTemplate.scripts.core.scene;
 using GFrameworkGodotTemplate.scripts.enums.scene;
 using Godot;

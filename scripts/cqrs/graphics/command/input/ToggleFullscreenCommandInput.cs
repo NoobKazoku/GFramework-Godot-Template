@@ -1,5 +1,3 @@
-using GFramework.Core.Abstractions.Cqrs.Command;
-
 namespace GFrameworkGodotTemplate.scripts.cqrs.graphics.command.input;
 
 /// <summary>

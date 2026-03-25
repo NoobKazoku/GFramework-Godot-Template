@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GFramework.Core.Abstractions.Cqrs.Command;
-
 namespace GFrameworkGodotTemplate.scripts.cqrs.graphics.command.input;
 
 /// <summary>

@@ -1,8 +1,3 @@
-using GFramework.Core.Functional.Pipe;
-using GFramework.Game.Abstractions.Data;
-using GFramework.Game.Setting;
-using GFramework.Godot.Setting;
-using GFramework.Godot.Setting.Data;
 using GFrameworkGodotTemplate.scripts.setting;
 
 namespace GFrameworkGodotTemplate.scripts.module;

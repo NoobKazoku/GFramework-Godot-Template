@@ -1,7 +1,3 @@
-using GFramework.Core.Abstractions.State;
-using GFramework.Game.Abstractions.Enums;
-using GFramework.Game.Abstractions.UI;
-using GFramework.Godot.UI;
 using GFrameworkGodotTemplate.scripts.core.state.impls;
 using GFrameworkGodotTemplate.scripts.core.ui;
 using GFrameworkGodotTemplate.scripts.cqrs.game.command;

@@ -1,5 +1,3 @@
-using GFramework.Core.State;
-
 namespace GFrameworkGodotTemplate.scripts.core.state.impls;
 
 /// <summary>
