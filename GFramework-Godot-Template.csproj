@@ -19,7 +19,7 @@
         <EmbeddedResource Remove="script_templates\**"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Update="Meziantou.Analyzer" Version="3.0.27">
+        <PackageReference Update="Meziantou.Analyzer" Version="3.0.29">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
