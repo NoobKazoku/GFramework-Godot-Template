@@ -68,17 +68,12 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     {
         var buttons = new[] { _scene1Button, _scene2Button, _homeButton };
 
-        _scene1Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene1));
-        _scene2Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene2));
-        _homeButton.Pressed += () => SwitchScene(nameof(SceneKey.Home));
+        _scene1Button.Pressed += async () => await SwitchSceneAsync(nameof(SceneKey.Scene1)).ConfigureAwait(true);
+        _scene2Button.Pressed += async () => await SwitchSceneAsync(nameof(SceneKey.Scene2)).ConfigureAwait(true);
+        _homeButton.Pressed += async () => await SwitchSceneAsync(nameof(SceneKey.Home)).ConfigureAwait(true);
         return;
 
-        IEnumerator<IYieldInstruction> ReplaceScene(string key)
-        {
-            yield return _sceneRouter.ReplaceAsync(key).AsTask().AsCoroutineInstruction();
-        }
-
-        void SwitchScene(string sceneKey)
+        async Task SwitchSceneAsync(string sceneKey)
         {
             // 检查是否是当前场景
             if (string.Equals(_sceneRouter.CurrentKey, sceneKey, StringComparison.Ordinal))
@@ -93,7 +88,7 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
 
             try
             {
-                ReplaceScene(sceneKey).RunCoroutine();
+                await _sceneRouter.ReplaceAsync(sceneKey).AsTask().ConfigureAwait(true);
             }
             catch (Exception ex)
             {

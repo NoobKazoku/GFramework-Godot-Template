@@ -59,16 +59,15 @@ public partial class SceneTransitionAnimationHandler(
             return;
         }
 
-        // 将 next（场景切换核心逻辑）包装成协程，传给 PlayTransitionCoroutine
+        // 将 next（场景切换核心逻辑）包装成协程，交给过渡管理器等待完整生命周期。
         IEnumerator<IYieldInstruction> SwitchCoroutine()
         {
             yield return next().AsCoroutineInstruction();
         }
 
-        TransitionManager
-            .PlayTransitionCoroutine(
-                SwitchCoroutine(),
-                () => sceneMap[toSceneKey].Instantiate()
-            ).RunCoroutine();
+        await TransitionManager.PlayTransitionAsync(
+            SwitchCoroutine(),
+            () => sceneMap[toSceneKey].Instantiate(),
+            cancellationToken: cancellationToken).ConfigureAwait(true);
     }
 }
