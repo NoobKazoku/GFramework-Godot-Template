@@ -16,6 +16,7 @@
     <ItemGroup>
         <Compile Remove="scripts\core\ui\UiFactory.cs"/>
         <Compile Remove="scenes\**"/>
+        <Compile Remove="tests\**\*.cs"/>
         <Compile Include="script_templates\Node\SimpleSceneControllerTemplate.cs"/>
         <Compile Remove="script_templates\**"/>
     </ItemGroup>

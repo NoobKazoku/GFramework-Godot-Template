@@ -10,6 +10,11 @@ public static class TemplateContentPathResolver
 {
     public const string SourceRootSettingKey = "application/config/content/source_root_path";
     public const string CacheRootSettingKey = "application/config/content/cache_root_path";
+    public const string MenuTextProjectDirectorySettingKey = "application/config/content/menu_text_project_directory_path";
+    public const string CommonTextProjectDirectorySettingKey =
+        "application/config/content/common_text_project_directory_path";
+    public const string RuntimeProfileProjectDirectorySettingKey =
+        "application/config/content/runtime_profile_project_directory_path";
 
     public static bool CanMutateProjectConfig => OS.HasFeature("editor");
 
@@ -23,12 +28,45 @@ public static class TemplateContentPathResolver
         return GetConfiguredPath(CacheRootSettingKey);
     }
 
+    public static string GetConfiguredMenuTextProjectDirectoryPath()
+    {
+        return GetConfiguredPath(MenuTextProjectDirectorySettingKey);
+    }
+
+    public static string GetConfiguredCommonTextProjectDirectoryPath()
+    {
+        return GetConfiguredPath(CommonTextProjectDirectorySettingKey);
+    }
+
+    public static string GetConfiguredRuntimeProfileProjectDirectoryPath()
+    {
+        return GetConfiguredPath(RuntimeProfileProjectDirectorySettingKey);
+    }
+
     public static string GetConfiguredSchemaValidationRootPath()
     {
         var sourceRootPath = GetConfiguredSourceRootPath();
         return TemplateBundledConfigCache.CanUseDirectSourceDirectory(sourceRootPath)
             ? GetAbsolutePath(sourceRootPath)
             : GetAbsolutePath(GetConfiguredCacheRootPath());
+    }
+
+    public static string BuildMenuTextConfigFilePath(string languageId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(languageId);
+        return CombinePath(GetConfiguredMenuTextProjectDirectoryPath(), $"{languageId}.yaml");
+    }
+
+    public static string BuildCommonTextConfigFilePath(string languageId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(languageId);
+        return CombinePath(GetConfiguredCommonTextProjectDirectoryPath(), $"{languageId}.yaml");
+    }
+
+    public static string BuildRuntimeProfileConfigFilePath(string profileId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(profileId);
+        return CombinePath(GetConfiguredRuntimeProfileProjectDirectoryPath(), $"{profileId}.yaml");
     }
 
     public static string GetAbsolutePath(string path)

@@ -12,9 +12,14 @@ public static class TemplateBundledConfigCache
 {
     private static readonly string[] BundledConfigFiles =
     [
+        "config/common_text/en.yaml",
+        "config/common_text/zh-cn.yaml",
         "config/menu_text/en.yaml",
         "config/menu_text/zh-cn.yaml",
-        "schemas/menu_text.schema.json"
+        "config/runtime_profile/default.yaml",
+        "schemas/common_text.schema.json",
+        "schemas/menu_text.schema.json",
+        "schemas/runtime_profile.schema.json"
     ];
 
     public static bool CanUseDirectSourceDirectory(string sourceRootPath)

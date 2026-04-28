@@ -15,6 +15,19 @@ This is a Godot 4.6 C# template project targeting `net10.0` through `Godot.NET.S
 - `script_templates/` contains Godot C# script templates and is treated as generated-style code.
 - `.agents/skills/` stores repository-maintained Codex skills. Keep skill instructions, helper scripts, and agent metadata together inside the owning skill folder.
 
+## Template Content Pipeline Rules
+
+- The CoreGrid-derived additions in this repository stop at the template infrastructure boundary. Migrate path handling, config/schema loading, caching, and localization-refresh conventions only; do not migrate gameplay systems, gameplay scenes, or gameplay data rules under the same task unless the user explicitly asks for that broader scope.
+- Treat `project.godot` setting `application/config/content/source_root_path` as the canonical root for template config content. The template default is `res://`.
+- Treat `project.godot` setting `application/config/content/cache_root_path` as the canonical runtime cache root. The template default is `user://config_cache`.
+- Keep template-owned YAML under `config/` and JSON schemas under `schemas/`, even when `source_root_path` is pointed at another readable root for local workflows. Relative config/schema registration must still line up with those directories.
+- Use `res://` for bundled read-only template content and `user://` for writable runtime data. Do not design new template config flows that require mutating `res://` after export.
+- Assume exported builds cannot reliably enumerate or read YAML/schema files directly from `res://` as normal filesystem directories. When `source_root_path` is `res://` outside the editor, the runtime path is expected to fall back through the bundled-file synchronization path into `user://config_cache`.
+- When adding new template config or schema files, keep the pipeline aligned end to end: source files under `config/` or `schemas/`, project registration/source-generator metadata updated, and assembly embedding preserved so exported builds can reconstruct the runtime cache.
+- `GFramework-Godot-Template.csproj` intentionally embeds `config/**/*.yaml`, `config/**/*.yml`, and `schemas/**/*.json`. Do not move template-owned config/schema files outside those globs unless the build packaging and runtime cache loader are updated in the same change.
+- Localization-sensitive template content currently resolves language variants from the content catalog, but language changes do not automatically rebuild the config registry. If a new template feature depends on language-specific config data after a runtime language switch, wire an explicit content-catalog reload and then refresh the affected presentation layer.
+- The current language mapping expectation in template content is `en` fallback plus `zh-cn` for Chinese. If you expand that mapping, update both the runtime selection logic and the contributor documentation in the same change.
+
 ## Environment And Git Rules
 
 - Prefer the smallest reliable command that proves the result in the current environment instead of assuming every toolchain path behaves the same under WSL, sandboxing, or worktrees.
