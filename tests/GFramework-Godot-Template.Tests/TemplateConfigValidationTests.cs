@@ -7,8 +7,7 @@ namespace GFramework_Godot_Template.Tests;
 
 public sealed class TemplateConfigValidationTests
 {
-    private static readonly string RepoRoot = Path.GetFullPath(
-        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
+    private static readonly string RepoRoot = ResolveRepoRoot();
 
     [Theory]
     [InlineData("config/menu_text/en.yaml")]
@@ -67,6 +66,40 @@ public sealed class TemplateConfigValidationTests
         {
             tempDirectory.Delete(true);
         }
+    }
+
+    [Theory]
+    [InlineData(
+        """
+        id: default
+        defaultLanguageId: en
+        uiTransitionDurationSeconds: 0
+        notificationDurationSeconds: 2.5
+        settingsPreviewDebounceMilliseconds: 120
+        """)]
+    [InlineData(
+        """
+        id: default
+        defaultLanguageId: en
+        uiTransitionDurationSeconds: 0.18
+        notificationDurationSeconds: -1
+        settingsPreviewDebounceMilliseconds: 120
+        """)]
+    [InlineData(
+        """
+        id: default
+        defaultLanguageId: en
+        uiTransitionDurationSeconds: 0.18
+        notificationDurationSeconds: 2.5
+        settingsPreviewDebounceMilliseconds: -1
+        """)]
+    public void RuntimeProfileSchema_RejectsNonPositiveTimingValues(string yamlText)
+    {
+        var schemaPath = Path.Combine(RepoRoot, "schemas", "runtime_profile.schema.json");
+        var yamlPath = Path.Combine(RepoRoot, "config", "runtime_profile", "default.yaml");
+
+        Assert.Throws<ConfigLoadException>(() =>
+            YamlConfigTextValidator.Validate("runtime_profile", schemaPath, yamlPath, yamlText));
     }
 
     [Fact]
@@ -154,5 +187,19 @@ public sealed class TemplateConfigValidationTests
 
         await loader.LoadAsync(registry);
         return registry;
+    }
+
+    private static string ResolveRepoRoot()
+    {
+        for (var current = new DirectoryInfo(AppContext.BaseDirectory); current is not null; current = current.Parent)
+        {
+            var configDirectory = Path.Combine(current.FullName, "config");
+            var schemaDirectory = Path.Combine(current.FullName, "schemas");
+            if (Directory.Exists(configDirectory) && Directory.Exists(schemaDirectory))
+                return current.FullName;
+        }
+
+        throw new DirectoryNotFoundException(
+            $"Failed to locate repository root from '{AppContext.BaseDirectory}'. Expected 'config' and 'schemas' directories.");
     }
 }

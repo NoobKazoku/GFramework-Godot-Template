@@ -36,10 +36,14 @@ public sealed class TemplateContentCatalog : ITemplateContentCatalog
     public string GetCurrentLanguageId()
     {
         var locale = TranslationServer.GetLocale();
-        if (string.IsNullOrWhiteSpace(locale)) return GetRuntimeProfile().DefaultLanguageId;
+        var fallbackLanguageId = GetFallbackLanguageId();
+        if (string.IsNullOrWhiteSpace(locale)) return fallbackLanguageId;
 
         var normalized = locale.Replace("_", "-", StringComparison.Ordinal).ToLowerInvariant();
-        return normalized.StartsWith("zh", StringComparison.Ordinal) ? "zh-cn" : "en";
+        if (normalized.StartsWith("zh", StringComparison.Ordinal)) return "zh-cn";
+        if (normalized.StartsWith("en", StringComparison.Ordinal)) return "en";
+
+        return fallbackLanguageId;
     }
 
     public void Reload()
@@ -53,6 +57,12 @@ public sealed class TemplateContentCatalog : ITemplateContentCatalog
         _commonTextTable = registry.GetCommonTextTable();
         _menuTextTable = registry.GetMenuTextTable();
         _runtimeProfileTable = registry.GetRuntimeProfileTable();
+    }
+
+    private string GetFallbackLanguageId()
+    {
+        var fallbackLanguageId = GetRuntimeProfile().DefaultLanguageId;
+        return string.IsNullOrWhiteSpace(fallbackLanguageId) ? "en" : fallbackLanguageId;
     }
 
     private TConfig ResolveByLanguage<TConfig>(IConfigTable<string, TConfig> table)

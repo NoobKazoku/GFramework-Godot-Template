@@ -53,20 +53,20 @@ public static class TemplateContentPathResolver
 
     public static string BuildMenuTextConfigFilePath(string languageId)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(languageId);
-        return CombinePath(GetConfiguredMenuTextProjectDirectoryPath(), $"{languageId}.yaml");
+        var safeLanguageId = ValidateConfigIdentifier(languageId, nameof(languageId));
+        return CombinePath(GetConfiguredMenuTextProjectDirectoryPath(), $"{safeLanguageId}.yaml");
     }
 
     public static string BuildCommonTextConfigFilePath(string languageId)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(languageId);
-        return CombinePath(GetConfiguredCommonTextProjectDirectoryPath(), $"{languageId}.yaml");
+        var safeLanguageId = ValidateConfigIdentifier(languageId, nameof(languageId));
+        return CombinePath(GetConfiguredCommonTextProjectDirectoryPath(), $"{safeLanguageId}.yaml");
     }
 
     public static string BuildRuntimeProfileConfigFilePath(string profileId)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(profileId);
-        return CombinePath(GetConfiguredRuntimeProfileProjectDirectoryPath(), $"{profileId}.yaml");
+        var safeProfileId = ValidateConfigIdentifier(profileId, nameof(profileId));
+        return CombinePath(GetConfiguredRuntimeProfileProjectDirectoryPath(), $"{safeProfileId}.yaml");
     }
 
     public static string GetAbsolutePath(string path)
@@ -104,6 +104,22 @@ public static class TemplateContentPathResolver
         return string.IsNullOrEmpty(normalizedRelativePath)
             ? normalizedRoot
             : $"{normalizedRoot}/{normalizedRelativePath}";
+    }
+
+    private static string ValidateConfigIdentifier(string value, string parameterName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(value, parameterName);
+        var normalizedValue = value.Trim();
+        if (Path.IsPathRooted(normalizedValue) ||
+            normalizedValue.Contains("..", StringComparison.Ordinal) ||
+            normalizedValue.IndexOfAny(['/', '\\', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar]) >= 0 ||
+            normalizedValue.Contains(Path.PathSeparator) ||
+            normalizedValue.Contains(':'))
+        {
+            throw new ArgumentException("Identifier contains invalid path characters.", parameterName);
+        }
+
+        return normalizedValue;
     }
 
     private static string NormalizePath(string path)

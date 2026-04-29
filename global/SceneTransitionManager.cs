@@ -1,3 +1,7 @@
+using System.Reflection;
+using GFramework.Core.Abstractions.Coroutine;
+using GFramework.Core.Coroutine;
+using GFramework.Godot.Coroutine;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -103,29 +107,85 @@ public partial class SceneTransitionManager : Node, IController
             return Task.CompletedTask;
 
         var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var scheduler = GetProcessCoroutineScheduler();
         var handle = this.RunCoroutine(
-            PlayTransitionAndCompleteCoroutine(onSwitch, scenePreloader, duration, completion),
+            PlayTransitionCoroutine(onSwitch, scenePreloader, duration),
             cancellationToken: cancellationToken);
 
         if (!handle.IsValid)
-            completion.TrySetResult();
+        {
+            if (cancellationToken.IsCancellationRequested)
+                completion.TrySetCanceled(cancellationToken);
+            else
+                completion.TrySetResult();
 
+            return completion.Task;
+        }
+
+        BridgeCoroutineCompletionAsync(scheduler, handle, completion, cancellationToken);
         return completion.Task;
     }
 
-    private IEnumerator<IYieldInstruction> PlayTransitionAndCompleteCoroutine(
-        IEnumerator<IYieldInstruction> onSwitch,
-        Func<Node> scenePreloader,
-        float duration,
-        TaskCompletionSource completion)
+    private static CoroutineScheduler GetProcessCoroutineScheduler()
     {
+        var scheduler = typeof(Timing)
+            .GetProperty("ProcessScheduler", BindingFlags.Instance | BindingFlags.NonPublic)?
+            .GetValue(Timing.Instance) as CoroutineScheduler;
+
+        return scheduler ?? throw new InvalidOperationException("Failed to access the process coroutine scheduler.");
+    }
+
+    private static async void BridgeCoroutineCompletionAsync(
+        CoroutineScheduler scheduler,
+        CoroutineHandle handle,
+        TaskCompletionSource completion,
+        CancellationToken cancellationToken)
+    {
+        Exception? faultException = null;
+        EventHandler<CoroutineFinishedEventArgs>? onFinished = null;
+        onFinished = (_, eventArgs) =>
+        {
+            if (eventArgs.Handle != handle)
+                return;
+
+            faultException = eventArgs.Exception;
+        };
+
+        scheduler.OnCoroutineFinished += onFinished;
         try
         {
-            yield return new WaitForCoroutine(PlayTransitionCoroutine(onSwitch, scenePreloader, duration));
+            var status = await scheduler.WaitForCompletionAsync(handle).ConfigureAwait(false);
+            switch (status)
+            {
+                case CoroutineCompletionStatus.Completed:
+                    completion.TrySetResult();
+                    break;
+                case CoroutineCompletionStatus.Cancelled:
+                    if (cancellationToken.CanBeCanceled)
+                        completion.TrySetCanceled(cancellationToken);
+                    else
+                        completion.TrySetCanceled();
+
+                    break;
+                case CoroutineCompletionStatus.Faulted:
+                    completion.TrySetException(
+                        faultException ?? new InvalidOperationException(
+                            $"Coroutine {handle} faulted without an exception payload."));
+                    break;
+                default:
+                    completion.TrySetException(
+                        new InvalidOperationException(
+                            $"Coroutine {handle} completed with unexpected status '{status}'."));
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            completion.TrySetException(ex);
         }
         finally
         {
-            completion.TrySetResult();
+            scheduler.OnCoroutineFinished -= onFinished;
         }
     }
 

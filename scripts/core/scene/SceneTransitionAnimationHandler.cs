@@ -59,6 +59,12 @@ public partial class SceneTransitionAnimationHandler(
             return;
         }
 
+        if (!sceneMap.TryGetValue(toSceneKey, out var targetScene))
+        {
+            _log.Error($"Unknown scene key: {toSceneKey}");
+            return;
+        }
+
         // 将 next（场景切换核心逻辑）包装成协程，交给过渡管理器等待完整生命周期。
         IEnumerator<IYieldInstruction> SwitchCoroutine()
         {
@@ -67,7 +73,7 @@ public partial class SceneTransitionAnimationHandler(
 
         await TransitionManager.PlayTransitionAsync(
             SwitchCoroutine(),
-            () => sceneMap[toSceneKey].Instantiate(),
+            () => targetScene.Instantiate(),
             cancellationToken: cancellationToken).ConfigureAwait(true);
     }
 }

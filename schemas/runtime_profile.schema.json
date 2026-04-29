@@ -20,13 +20,16 @@
       "enum": ["zh-cn", "en"]
     },
     "uiTransitionDurationSeconds": {
-      "type": "number"
+      "type": "number",
+      "exclusiveMinimum": 0
     },
     "notificationDurationSeconds": {
-      "type": "number"
+      "type": "number",
+      "exclusiveMinimum": 0
     },
     "settingsPreviewDebounceMilliseconds": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0
     }
   },
   "additionalProperties": false
