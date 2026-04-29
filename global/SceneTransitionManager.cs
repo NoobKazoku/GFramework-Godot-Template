@@ -109,7 +109,7 @@ public partial class SceneTransitionManager : Node, IController
         var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var scheduler = GetProcessCoroutineScheduler();
         var handle = this.RunCoroutine(
-            PlayTransitionCoroutine(onSwitch, scenePreloader, duration),
+            PlayTransitionCoroutine(onSwitch, scenePreloader, duration, cancellationToken),
             cancellationToken: cancellationToken);
 
         if (!handle.IsValid)
@@ -199,7 +199,8 @@ public partial class SceneTransitionManager : Node, IController
     public IEnumerator<IYieldInstruction> PlayTransitionCoroutine(
         IEnumerator<IYieldInstruction> onSwitch,
         Func<Node> scenePreloader,
-        float duration = 0.6f)
+        float duration = 0.6f,
+        CancellationToken cancellationToken = default)
     {
         if (IsTransitioning) yield break;
 
@@ -207,22 +208,25 @@ public partial class SceneTransitionManager : Node, IController
         try
         {
             _log.Debug("=== 开始场景过渡（预渲染模式） ===");
+            cancellationToken.ThrowIfCancellationRequested();
 
             // 1. 截图当前画面
             _log.Debug("步骤1: 捕获当前画面");
-            var captureFromInstruction = CaptureScreenshot().AsCoroutineInstruction();
+            var captureFromInstruction = CaptureScreenshot(cancellationToken).AsCoroutineInstruction();
             yield return captureFromInstruction;
             _activeFromTexture = captureFromInstruction.Result;
 
             _log.Debug($"旧画面: {_activeFromTexture.GetWidth()}x{_activeFromTexture.GetHeight()}");
+            cancellationToken.ThrowIfCancellationRequested();
 
             // 2. 在预览视口中预渲染新场景
             _log.Debug("步骤2: 预渲染新场景");
-            var previewSceneInstruction = PreviewSceneInViewport(scenePreloader).AsCoroutineInstruction();
+            var previewSceneInstruction = PreviewSceneInViewport(scenePreloader, cancellationToken).AsCoroutineInstruction();
             yield return previewSceneInstruction;
             _activeToTexture = previewSceneInstruction.Result;
 
             _log.Debug($"新画面: {_activeToTexture.GetWidth()}x{_activeToTexture.GetHeight()}");
+            cancellationToken.ThrowIfCancellationRequested();
 
             // 3. 设置shader参数并显示遮挡层
             _log.Debug("步骤3: 设置shader并显示遮挡层");
@@ -260,13 +264,18 @@ public partial class SceneTransitionManager : Node, IController
     ///     在预览视口中渲染场景并截图。
     /// </summary>
     /// <param name="scenePreloader">场景预加载委托。</param>
+    /// <param name="cancellationToken">用于提前终止预渲染流程的取消令牌。</param>
     /// <returns>包含截图结果的图像纹理任务。</returns>
-    private async Task<ImageTexture> PreviewSceneInViewport(Func<Node> scenePreloader)
+    private async Task<ImageTexture> PreviewSceneInViewport(
+        Func<Node> scenePreloader,
+        CancellationToken cancellationToken)
     {
         Node? previewScene = null;
 
         try
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // 1. 加载场景实例
             previewScene = scenePreloader();
 
@@ -285,8 +294,11 @@ public partial class SceneTransitionManager : Node, IController
 
             // 等待渲染完成（需要等待多帧确保完全渲染）
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            cancellationToken.ThrowIfCancellationRequested();
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            cancellationToken.ThrowIfCancellationRequested();
             await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+            cancellationToken.ThrowIfCancellationRequested();
 
             // 5. 获取渲染结果
             var viewportTexture = _previewViewport.GetTexture();
@@ -294,6 +306,11 @@ public partial class SceneTransitionManager : Node, IController
 
             // 6. 转换为 ImageTexture
             var texture = ImageTexture.CreateFromImage(image);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                texture.Dispose();
+                cancellationToken.ThrowIfCancellationRequested();
+            }
 
             _log.Debug("预览场景渲染完成");
 
@@ -318,26 +335,40 @@ public partial class SceneTransitionManager : Node, IController
     ///     异步方法，用于捕获当前屏幕截图并返回图像纹理。
     ///     在截图过程中会临时隐藏过渡层以避免干扰。
     /// </summary>
+    /// <param name="cancellationToken">用于提前终止截图流程的取消令牌。</param>
     /// <returns>包含截图结果的图像纹理任务。</returns>
-    private async Task<ImageTexture> CaptureScreenshot()
+    private async Task<ImageTexture> CaptureScreenshot(CancellationToken cancellationToken)
     {
         // 临时隐藏过渡层
         var wasVisible = _sceneTransitionRect.Visible;
         _sceneTransitionRect.Visible = false;
-        // 等待渲染完成
-        await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
 
-        // 获取视口纹理
-        var viewport = GetViewport();
-        var image = viewport.GetTexture().GetImage();
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-        // 恢复可见性
-        _sceneTransitionRect.Visible = wasVisible;
+            // 等待渲染完成
+            await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+            cancellationToken.ThrowIfCancellationRequested();
 
-        // 转换为 ImageTexture
-        var texture = ImageTexture.CreateFromImage(image);
+            // 获取视口纹理
+            var viewport = GetViewport();
+            var image = viewport.GetTexture().GetImage();
 
-        return texture;
+            // 转换为 ImageTexture
+            var texture = ImageTexture.CreateFromImage(image);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                texture.Dispose();
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            return texture;
+        }
+        finally
+        {
+            _sceneTransitionRect.Visible = wasVisible;
+        }
     }
 
     /// <summary>
