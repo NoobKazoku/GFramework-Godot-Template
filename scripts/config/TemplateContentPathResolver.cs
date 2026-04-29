@@ -10,6 +10,11 @@ public static class TemplateContentPathResolver
 {
     public const string SourceRootSettingKey = "application/config/content/source_root_path";
     public const string CacheRootSettingKey = "application/config/content/cache_root_path";
+    public const string MenuTextProjectDirectorySettingKey = "application/config/content/menu_text_project_directory_path";
+    public const string CommonTextProjectDirectorySettingKey =
+        "application/config/content/common_text_project_directory_path";
+    public const string RuntimeProfileProjectDirectorySettingKey =
+        "application/config/content/runtime_profile_project_directory_path";
 
     public static bool CanMutateProjectConfig => OS.HasFeature("editor");
 
@@ -23,12 +28,45 @@ public static class TemplateContentPathResolver
         return GetConfiguredPath(CacheRootSettingKey);
     }
 
+    public static string GetConfiguredMenuTextProjectDirectoryPath()
+    {
+        return GetConfiguredPath(MenuTextProjectDirectorySettingKey);
+    }
+
+    public static string GetConfiguredCommonTextProjectDirectoryPath()
+    {
+        return GetConfiguredPath(CommonTextProjectDirectorySettingKey);
+    }
+
+    public static string GetConfiguredRuntimeProfileProjectDirectoryPath()
+    {
+        return GetConfiguredPath(RuntimeProfileProjectDirectorySettingKey);
+    }
+
     public static string GetConfiguredSchemaValidationRootPath()
     {
         var sourceRootPath = GetConfiguredSourceRootPath();
         return TemplateBundledConfigCache.CanUseDirectSourceDirectory(sourceRootPath)
             ? GetAbsolutePath(sourceRootPath)
             : GetAbsolutePath(GetConfiguredCacheRootPath());
+    }
+
+    public static string BuildMenuTextConfigFilePath(string languageId)
+    {
+        var safeLanguageId = ValidateConfigIdentifier(languageId, nameof(languageId));
+        return CombinePath(GetConfiguredMenuTextProjectDirectoryPath(), $"{safeLanguageId}.yaml");
+    }
+
+    public static string BuildCommonTextConfigFilePath(string languageId)
+    {
+        var safeLanguageId = ValidateConfigIdentifier(languageId, nameof(languageId));
+        return CombinePath(GetConfiguredCommonTextProjectDirectoryPath(), $"{safeLanguageId}.yaml");
+    }
+
+    public static string BuildRuntimeProfileConfigFilePath(string profileId)
+    {
+        var safeProfileId = ValidateConfigIdentifier(profileId, nameof(profileId));
+        return CombinePath(GetConfiguredRuntimeProfileProjectDirectoryPath(), $"{safeProfileId}.yaml");
     }
 
     public static string GetAbsolutePath(string path)
@@ -66,6 +104,22 @@ public static class TemplateContentPathResolver
         return string.IsNullOrEmpty(normalizedRelativePath)
             ? normalizedRoot
             : $"{normalizedRoot}/{normalizedRelativePath}";
+    }
+
+    private static string ValidateConfigIdentifier(string value, string parameterName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(value, parameterName);
+        var normalizedValue = value.Trim();
+        if (Path.IsPathRooted(normalizedValue) ||
+            normalizedValue.Contains("..", StringComparison.Ordinal) ||
+            normalizedValue.IndexOfAny(['/', '\\', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar]) >= 0 ||
+            normalizedValue.Contains(Path.PathSeparator) ||
+            normalizedValue.Contains(':'))
+        {
+            throw new ArgumentException("Identifier contains invalid path characters.", parameterName);
+        }
+
+        return normalizedValue;
     }
 
     private static string NormalizePath(string path)

@@ -22,6 +22,8 @@ mono_crash.*.json
 .vscode/
 
 # .Net
+**/bin/
+**/obj/
 GFramework-Godot-Template.sln.DotSettings.user
 addons/*
 !addons/.editorconfig

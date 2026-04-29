@@ -1,0 +1,30 @@
+{
+  "title": "Common Text Config",
+  "description": "Defines reusable application text for one language.",
+  "x-gframework-config-path": "config/common_text",
+  "type": "object",
+  "required": [
+    "id",
+    "confirm",
+    "cancel",
+    "close",
+    "reload",
+    "back",
+    "applySucceeded",
+    "applyFailed"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "enum": ["zh-cn", "en"]
+    },
+    "confirm": { "type": "string" },
+    "cancel": { "type": "string" },
+    "close": { "type": "string" },
+    "reload": { "type": "string" },
+    "back": { "type": "string" },
+    "applySucceeded": { "type": "string" },
+    "applyFailed": { "type": "string" }
+  },
+  "additionalProperties": false
+}

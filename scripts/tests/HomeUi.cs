@@ -19,6 +19,8 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     [GetNode] private Button _scene1Button = null!;
     [GetNode] private Button _scene2Button = null!;
 
+    private bool _isSwitchingScene;
+
     private ISceneRouter _sceneRouter = null!;
 
     /// <summary>
@@ -68,18 +70,15 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
     {
         var buttons = new[] { _scene1Button, _scene2Button, _homeButton };
 
-        _scene1Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene1));
-        _scene2Button.Pressed += () => SwitchScene(nameof(SceneKey.Scene2));
-        _homeButton.Pressed += () => SwitchScene(nameof(SceneKey.Home));
+        _scene1Button.Pressed += async () => await SwitchSceneAsync(nameof(SceneKey.Scene1)).ConfigureAwait(true);
+        _scene2Button.Pressed += async () => await SwitchSceneAsync(nameof(SceneKey.Scene2)).ConfigureAwait(true);
+        _homeButton.Pressed += async () => await SwitchSceneAsync(nameof(SceneKey.Home)).ConfigureAwait(true);
         return;
 
-        IEnumerator<IYieldInstruction> ReplaceScene(string key)
+        async Task SwitchSceneAsync(string sceneKey)
         {
-            yield return _sceneRouter.ReplaceAsync(key).AsTask().AsCoroutineInstruction();
-        }
+            if (_isSwitchingScene) return;
 
-        void SwitchScene(string sceneKey)
-        {
             // 检查是否是当前场景
             if (string.Equals(_sceneRouter.CurrentKey, sceneKey, StringComparison.Ordinal))
             {
@@ -87,13 +86,14 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
                 return;
             }
 
+            _isSwitchingScene = true;
+
             // 禁用所有按钮，防止重复点击
-            foreach (var btn in buttons)
-                btn.Disabled = true;
+            SetSceneButtonsDisabled(buttons, true);
 
             try
             {
-                ReplaceScene(sceneKey).RunCoroutine();
+                await _sceneRouter.ReplaceAsync(sceneKey).AsTask().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -101,10 +101,28 @@ public partial class HomeUi : Control, IController, IUiPageBehaviorProvider, ISi
             }
             finally
             {
+                _isSwitchingScene = false;
+
                 // 重新启用所有按钮
-                foreach (var btn in buttons)
-                    btn.Disabled = false;
+                SetSceneButtonsDisabled(buttons, false);
             }
+        }
+    }
+
+    /// <summary>
+    ///     安全切换场景按钮状态。场景切换可能销毁当前 HomeUi，异步收尾时不能再访问失效的 Godot 对象。
+    /// </summary>
+    /// <param name="buttons">需要更新的按钮集合。</param>
+    /// <param name="disabled">是否禁用按钮。</param>
+    private void SetSceneButtonsDisabled(IEnumerable<Button> buttons, bool disabled)
+    {
+        if (!GodotObject.IsInstanceValid(this) || IsQueuedForDeletion() || !IsInsideTree()) return;
+
+        foreach (var button in buttons)
+        {
+            if (!GodotObject.IsInstanceValid(button) || button.IsQueuedForDeletion()) continue;
+
+            button.Disabled = disabled;
         }
     }
 }

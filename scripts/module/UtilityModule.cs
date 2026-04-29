@@ -1,6 +1,9 @@
+using GFramework.Core.Pause;
+using GFramework.Godot.Pause;
+using GFrameworkGodotTemplate.global;
+using GFrameworkGodotTemplate.scripts.config;
 using GFrameworkGodotTemplate.scripts.data;
 using GFrameworkGodotTemplate.scripts.data.model;
-using GFrameworkGodotTemplate.scripts.config;
 using GFrameworkGodotTemplate.scripts.utility;
 using Godot;
 
@@ -17,6 +20,11 @@ public class UtilityModule : IArchitectureModule
     /// <param name="architecture">要安装模块的目标游戏架构实例</param>
     public void Install(IArchitecture architecture)
     {
+        var pauseStackManager = new PauseStackManager();
+        if (GameEntryPoint.Tree is { } tree)
+            pauseStackManager.RegisterHandler(new GodotPauseHandler(tree));
+        architecture.RegisterUtility(pauseStackManager);
+
         architecture.RegisterUtility(new GodotUiRegistry());
         architecture.RegisterUtility(new GodotSceneRegistry());
         architecture.RegisterUtility(new GodotTextureRegistry());

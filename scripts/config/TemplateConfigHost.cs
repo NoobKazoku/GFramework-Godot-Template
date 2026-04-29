@@ -7,6 +7,8 @@ public sealed class TemplateConfigHost : IDisposable
 {
     private static readonly GeneratedConfigRegistrationOptions RegistrationOptions = new()
     {
+        CommonTextComparer = StringComparer.OrdinalIgnoreCase,
+        RuntimeProfileComparer = StringComparer.OrdinalIgnoreCase,
         MenuTextComparer = StringComparer.OrdinalIgnoreCase
     };
 

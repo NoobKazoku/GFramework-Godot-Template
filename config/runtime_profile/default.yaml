@@ -1,0 +1,5 @@
+id: default
+defaultLanguageId: en
+uiTransitionDurationSeconds: 0.18
+notificationDurationSeconds: 2.5
+settingsPreviewDebounceMilliseconds: 120

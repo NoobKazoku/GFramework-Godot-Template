@@ -1,0 +1,8 @@
+id: en
+confirm: "Confirm"
+cancel: "Cancel"
+close: "Close"
+reload: "Reload"
+back: "Back"
+applySucceeded: "Changes applied."
+applyFailed: "Failed to apply changes."

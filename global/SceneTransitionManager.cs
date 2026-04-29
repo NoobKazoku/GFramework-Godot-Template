@@ -1,3 +1,7 @@
+using System.Reflection;
+using GFramework.Core.Abstractions.Coroutine;
+using GFramework.Core.Coroutine;
+using GFramework.Godot.Coroutine;
 using Godot;
 
 namespace GFrameworkGodotTemplate.global;
@@ -13,7 +17,10 @@ public partial class SceneTransitionManager : Node, IController
     /// <summary>
     ///     Shader参数名称，用于控制过渡进度。
     /// </summary>
-    private static readonly string Progress = "progress";
+    private const string FROM_TEXTURE_PARAMETER = "from_tex";
+    private const string PROGRESS_PARAMETER = "progress";
+    private const string RESOLUTION_PARAMETER = "resolution";
+    private const string TO_TEXTURE_PARAMETER = "to_tex";
 
     /// <summary>
     ///     画布层节点，用于确保过渡效果显示在最上层。
@@ -24,6 +31,8 @@ public partial class SceneTransitionManager : Node, IController
     ///     当前使用的Shader材质实例。
     /// </summary>
     private ShaderMaterial _material = null!;
+    private ImageTexture? _activeFromTexture;
+    private ImageTexture? _activeToTexture;
 
     /// <summary>
     ///     获取预览视口节点。
@@ -62,6 +71,7 @@ public partial class SceneTransitionManager : Node, IController
     {
         __InjectGetNodes_Generated();
         Instance = this;
+        ProcessMode = ProcessModeEnum.Pausable;
 
         _canvasLayer.Layer = 100; // 确保在最上层
         _previewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
@@ -75,11 +85,109 @@ public partial class SceneTransitionManager : Node, IController
         _sceneTransitionRect.Modulate = new Color(1, 1, 1); // 确保不透明度正常
 
         // 初始化shader参数
-        _material.SetShaderParameter(Progress, 0.0f);
+        _material.SetShaderParameter(PROGRESS_PARAMETER, 0.0f);
 
         _log.Debug($"SceneTransitionManager初始化: Shader={_material.Shader?.ResourcePath}");
     }
 
+    public override void _ExitTree()
+    {
+        CleanupTransitionState();
+        if (Instance == this)
+            Instance = null;
+    }
+
+    public Task PlayTransitionAsync(
+        IEnumerator<IYieldInstruction> onSwitch,
+        Func<Node> scenePreloader,
+        float duration = 0.6f,
+        CancellationToken cancellationToken = default)
+    {
+        if (!IsInsideTree() || IsTransitioning)
+            return Task.CompletedTask;
+
+        var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var scheduler = GetProcessCoroutineScheduler();
+        var handle = this.RunCoroutine(
+            PlayTransitionCoroutine(onSwitch, scenePreloader, duration, cancellationToken),
+            cancellationToken: cancellationToken);
+
+        if (!handle.IsValid)
+        {
+            if (cancellationToken.IsCancellationRequested)
+                completion.TrySetCanceled(cancellationToken);
+            else
+                completion.TrySetResult();
+
+            return completion.Task;
+        }
+
+        BridgeCoroutineCompletionAsync(scheduler, handle, completion, cancellationToken);
+        return completion.Task;
+    }
+
+    private static CoroutineScheduler GetProcessCoroutineScheduler()
+    {
+        var scheduler = typeof(Timing)
+            .GetProperty("ProcessScheduler", BindingFlags.Instance | BindingFlags.NonPublic)?
+            .GetValue(Timing.Instance) as CoroutineScheduler;
+
+        return scheduler ?? throw new InvalidOperationException("Failed to access the process coroutine scheduler.");
+    }
+
+    private static async void BridgeCoroutineCompletionAsync(
+        CoroutineScheduler scheduler,
+        CoroutineHandle handle,
+        TaskCompletionSource completion,
+        CancellationToken cancellationToken)
+    {
+        Exception? faultException = null;
+        EventHandler<CoroutineFinishedEventArgs>? onFinished = null;
+        onFinished = (_, eventArgs) =>
+        {
+            if (eventArgs.Handle != handle)
+                return;
+
+            faultException = eventArgs.Exception;
+        };
+
+        scheduler.OnCoroutineFinished += onFinished;
+        try
+        {
+            var status = await scheduler.WaitForCompletionAsync(handle).ConfigureAwait(false);
+            switch (status)
+            {
+                case CoroutineCompletionStatus.Completed:
+                    completion.TrySetResult();
+                    break;
+                case CoroutineCompletionStatus.Cancelled:
+                    if (cancellationToken.CanBeCanceled)
+                        completion.TrySetCanceled(cancellationToken);
+                    else
+                        completion.TrySetCanceled();
+
+                    break;
+                case CoroutineCompletionStatus.Faulted:
+                    completion.TrySetException(
+                        faultException ?? new InvalidOperationException(
+                            $"Coroutine {handle} faulted without an exception payload."));
+                    break;
+                default:
+                    completion.TrySetException(
+                        new InvalidOperationException(
+                            $"Coroutine {handle} completed with unexpected status '{status}'."));
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            completion.TrySetException(ex);
+        }
+        finally
+        {
+            scheduler.OnCoroutineFinished -= onFinished;
+        }
+    }
 
     /// <summary>
     ///     执行场景过渡的协程方法（使用预渲染）。
@@ -91,76 +199,83 @@ public partial class SceneTransitionManager : Node, IController
     public IEnumerator<IYieldInstruction> PlayTransitionCoroutine(
         IEnumerator<IYieldInstruction> onSwitch,
         Func<Node> scenePreloader,
-        float duration = 0.6f)
+        float duration = 0.6f,
+        CancellationToken cancellationToken = default)
     {
         if (IsTransitioning) yield break;
 
         IsTransitioning = true;
-        _log.Debug("=== 开始场景过渡（预渲染模式） ===");
+        try
+        {
+            _log.Debug("=== 开始场景过渡（预渲染模式） ===");
+            cancellationToken.ThrowIfCancellationRequested();
 
-        // 1. 截图当前画面
-        _log.Debug("步骤1: 捕获当前画面");
-        var captureFromInstruction = CaptureScreenshot().AsCoroutineInstruction();
-        yield return captureFromInstruction;
-        var fromTexture = captureFromInstruction.Result;
+            // 1. 截图当前画面
+            _log.Debug("步骤1: 捕获当前画面");
+            var captureFromInstruction = CaptureScreenshot(cancellationToken).AsCoroutineInstruction();
+            yield return captureFromInstruction;
+            _activeFromTexture = captureFromInstruction.Result;
 
-        _log.Debug($"旧画面: {fromTexture.GetWidth()}x{fromTexture.GetHeight()}");
+            _log.Debug($"旧画面: {_activeFromTexture.GetWidth()}x{_activeFromTexture.GetHeight()}");
+            cancellationToken.ThrowIfCancellationRequested();
 
-        // 2. 在预览视口中预渲染新场景
-        _log.Debug("步骤2: 预渲染新场景");
-        var previewSceneInstruction = PreviewSceneInViewport(scenePreloader).AsCoroutineInstruction();
-        yield return previewSceneInstruction;
-        var toTexture = previewSceneInstruction.Result;
+            // 2. 在预览视口中预渲染新场景
+            _log.Debug("步骤2: 预渲染新场景");
+            var previewSceneInstruction = PreviewSceneInViewport(scenePreloader, cancellationToken).AsCoroutineInstruction();
+            yield return previewSceneInstruction;
+            _activeToTexture = previewSceneInstruction.Result;
 
-        _log.Debug($"新画面: {toTexture.GetWidth()}x{toTexture.GetHeight()}");
+            _log.Debug($"新画面: {_activeToTexture.GetWidth()}x{_activeToTexture.GetHeight()}");
+            cancellationToken.ThrowIfCancellationRequested();
 
-        // 3. 设置shader参数并显示遮挡层
-        _log.Debug("步骤3: 设置shader并显示遮挡层");
-        var viewport = GetViewport();
-        var viewportSize = viewport.GetVisibleRect().Size;
+            // 3. 设置shader参数并显示遮挡层
+            _log.Debug("步骤3: 设置shader并显示遮挡层");
+            var viewport = GetViewport();
+            var viewportSize = viewport.GetVisibleRect().Size;
 
-        _material.SetShaderParameter("from_tex", fromTexture);
-        _material.SetShaderParameter("to_tex", toTexture);
-        _material.SetShaderParameter("resolution", viewportSize);
-        _material.SetShaderParameter(Progress, 0.0f);
+            _material.SetShaderParameter(FROM_TEXTURE_PARAMETER, _activeFromTexture);
+            _material.SetShaderParameter(TO_TEXTURE_PARAMETER, _activeToTexture);
+            _material.SetShaderParameter(RESOLUTION_PARAMETER, viewportSize);
+            _material.SetShaderParameter(PROGRESS_PARAMETER, 0.0f);
 
-        _sceneTransitionRect.Visible = true;
-        yield return new WaitOneFrame();
+            _sceneTransitionRect.Visible = true;
+            yield return new WaitOneFrame();
 
-        // 4. 执行场景切换（此时屏幕已被遮挡）
-        _log.Debug("步骤4: 执行场景切换");
-        yield return new WaitForCoroutine(onSwitch);
+            // 4. 执行场景切换（此时屏幕已被遮挡）
+            _log.Debug("步骤4: 执行场景切换");
+            yield return new WaitForCoroutine(onSwitch);
 
-        // 等待新场景稳定
-        yield return new WaitOneFrame();
+            // 等待新场景稳定
+            yield return new WaitOneFrame();
 
-        // 5. 执行过渡动画
-        _log.Debug($"步骤5: 执行过渡动画 (时长: {duration}s)");
-        yield return new WaitForCoroutine(TweenProgressCoroutine(0f, 1f, duration));
+            // 5. 执行过渡动画
+            _log.Debug($"步骤5: 执行过渡动画 (时长: {duration}s)");
+            yield return new WaitForCoroutine(TweenProgressCoroutine(0f, 1f, duration));
 
-        // 6. 清理
-        _log.Debug("步骤6: 清理资源");
-        _sceneTransitionRect.Visible = false;
-        _material.SetShaderParameter(Progress, 0.0f);
-
-        fromTexture.Dispose();
-        toTexture.Dispose();
-
-        IsTransitioning = false;
-        _log.Debug("=== 场景过渡完成 ===");
+            _log.Debug("=== 场景过渡完成 ===");
+        }
+        finally
+        {
+            CleanupTransitionState();
+        }
     }
 
     /// <summary>
     ///     在预览视口中渲染场景并截图。
     /// </summary>
     /// <param name="scenePreloader">场景预加载委托。</param>
+    /// <param name="cancellationToken">用于提前终止预渲染流程的取消令牌。</param>
     /// <returns>包含截图结果的图像纹理任务。</returns>
-    private async Task<ImageTexture> PreviewSceneInViewport(Func<Node> scenePreloader)
+    private async Task<ImageTexture> PreviewSceneInViewport(
+        Func<Node> scenePreloader,
+        CancellationToken cancellationToken)
     {
         Node? previewScene = null;
 
         try
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // 1. 加载场景实例
             previewScene = scenePreloader();
 
@@ -179,8 +294,11 @@ public partial class SceneTransitionManager : Node, IController
 
             // 等待渲染完成（需要等待多帧确保完全渲染）
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            cancellationToken.ThrowIfCancellationRequested();
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            cancellationToken.ThrowIfCancellationRequested();
             await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+            cancellationToken.ThrowIfCancellationRequested();
 
             // 5. 获取渲染结果
             var viewportTexture = _previewViewport.GetTexture();
@@ -188,6 +306,11 @@ public partial class SceneTransitionManager : Node, IController
 
             // 6. 转换为 ImageTexture
             var texture = ImageTexture.CreateFromImage(image);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                texture.Dispose();
+                cancellationToken.ThrowIfCancellationRequested();
+            }
 
             _log.Debug("预览场景渲染完成");
 
@@ -212,26 +335,40 @@ public partial class SceneTransitionManager : Node, IController
     ///     异步方法，用于捕获当前屏幕截图并返回图像纹理。
     ///     在截图过程中会临时隐藏过渡层以避免干扰。
     /// </summary>
+    /// <param name="cancellationToken">用于提前终止截图流程的取消令牌。</param>
     /// <returns>包含截图结果的图像纹理任务。</returns>
-    private async Task<ImageTexture> CaptureScreenshot()
+    private async Task<ImageTexture> CaptureScreenshot(CancellationToken cancellationToken)
     {
         // 临时隐藏过渡层
         var wasVisible = _sceneTransitionRect.Visible;
         _sceneTransitionRect.Visible = false;
-        // 等待渲染完成
-        await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
 
-        // 获取视口纹理
-        var viewport = GetViewport();
-        var image = viewport.GetTexture().GetImage();
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-        // 恢复可见性
-        _sceneTransitionRect.Visible = wasVisible;
+            // 等待渲染完成
+            await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+            cancellationToken.ThrowIfCancellationRequested();
 
-        // 转换为 ImageTexture
-        var texture = ImageTexture.CreateFromImage(image);
+            // 获取视口纹理
+            var viewport = GetViewport();
+            var image = viewport.GetTexture().GetImage();
 
-        return texture;
+            // 转换为 ImageTexture
+            var texture = ImageTexture.CreateFromImage(image);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                texture.Dispose();
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            return texture;
+        }
+        finally
+        {
+            _sceneTransitionRect.Visible = wasVisible;
+        }
     }
 
     /// <summary>
@@ -244,7 +381,7 @@ public partial class SceneTransitionManager : Node, IController
     /// <returns>协程指令枚举器。</returns>
     private IEnumerator<IYieldInstruction> TweenProgressCoroutine(float from, float to, float duration)
     {
-        var tween = CreateTween();
+        var tween = CreateTween().SetPauseMode(Tween.TweenPauseMode.Stop);
         tween.SetEase(Tween.EaseType.InOut);
         tween.SetTrans(Tween.TransitionType.Cubic);
 
@@ -252,7 +389,7 @@ public partial class SceneTransitionManager : Node, IController
         var tweenFinished = false;
 
         tween.TweenMethod(
-            Callable.From<float>(v => { _material.SetShaderParameter(Progress, v); }),
+            Callable.From<float>(v => { _material.SetShaderParameter(PROGRESS_PARAMETER, v); }),
             from,
             to,
             duration
@@ -264,5 +401,29 @@ public partial class SceneTransitionManager : Node, IController
         while (!tweenFinished) yield return new WaitOneFrame();
 
         _log.Debug("Tween动画完成");
+    }
+
+    private void CleanupTransitionState()
+    {
+        if (_sceneTransitionRect is not null && _sceneTransitionRect.IsValidNode())
+            _sceneTransitionRect.Visible = false;
+
+        if (_material is not null && GodotObject.IsInstanceValid(_material))
+        {
+            _material.SetShaderParameter(FROM_TEXTURE_PARAMETER, default(Variant));
+            _material.SetShaderParameter(TO_TEXTURE_PARAMETER, default(Variant));
+            _material.SetShaderParameter(PROGRESS_PARAMETER, 0.0f);
+        }
+
+        if (_previewViewport is not null && _previewViewport.IsValidNode())
+            _previewViewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Disabled;
+
+        _activeFromTexture?.Dispose();
+        _activeFromTexture = null;
+
+        _activeToTexture?.Dispose();
+        _activeToTexture = null;
+
+        IsTransitioning = false;
     }
 }

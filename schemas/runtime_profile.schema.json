@@ -1,0 +1,36 @@
+{
+  "title": "Runtime Profile Config",
+  "description": "Defines non-gameplay runtime defaults for the template.",
+  "x-gframework-config-path": "config/runtime_profile",
+  "type": "object",
+  "required": [
+    "id",
+    "defaultLanguageId",
+    "uiTransitionDurationSeconds",
+    "notificationDurationSeconds",
+    "settingsPreviewDebounceMilliseconds"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "enum": ["default"]
+    },
+    "defaultLanguageId": {
+      "type": "string",
+      "enum": ["zh-cn", "en"]
+    },
+    "uiTransitionDurationSeconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "notificationDurationSeconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "settingsPreviewDebounceMilliseconds": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}
