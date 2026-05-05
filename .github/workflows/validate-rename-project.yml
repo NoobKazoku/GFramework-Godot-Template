@@ -1,0 +1,160 @@
+name: Validate Rename Project Scripts
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SMOKE_PROJECT_NAME: RenameSmokeGame
+
+jobs:
+  bash:
+    name: Bash Rename Script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Create smoke-test copy
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/rename-smoke"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/rename-smoke"
+
+      - name: Run bash rename script
+        working-directory: ${{ runner.temp }}/rename-smoke
+        run: bash rename_project.sh "$SMOKE_PROJECT_NAME" --remove-rename-tools
+
+      - name: Assert renamed project shape
+        working-directory: ${{ runner.temp }}/rename-smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "$SMOKE_PROJECT_NAME.sln"
+          test -f "$SMOKE_PROJECT_NAME.csproj"
+          test -d "tests/$SMOKE_PROJECT_NAME.Tests"
+          test -f "tests/$SMOKE_PROJECT_NAME.Tests/$SMOKE_PROJECT_NAME.Tests.csproj"
+          test ! -e "GFramework-Godot-Template.sln"
+          test ! -e "GFramework-Godot-Template.csproj"
+          test ! -e "tests/GFramework-Godot-Template.Tests"
+          test ! -e "rename_project.sh"
+          test ! -e "rename_project.ps1"
+          test ! -e "rename_project.config"
+          test ! -e ".github/workflows/validate-rename-project.yml"
+          if grep -R -n -E 'GFramework-Godot-Template|GFrameworkGodotTemplate|GFramework_Godot_Template\.Tests' . \
+            --exclude-dir=.godot \
+            --exclude-dir=.git \
+            --exclude-dir=.idea \
+            --exclude-dir=.vscode \
+            --exclude-dir=.mono \
+            --exclude-dir=bin \
+            --exclude-dir=obj; then
+            echo "Old template names remain after rename"
+            exit 1
+          fi
+
+      - name: Restore renamed solution
+        working-directory: ${{ runner.temp }}/rename-smoke
+        run: dotnet restore "$SMOKE_PROJECT_NAME.sln"
+
+      - name: Build renamed solution
+        working-directory: ${{ runner.temp }}/rename-smoke
+        run: dotnet build "$SMOKE_PROJECT_NAME.sln" --no-restore
+
+      - name: Test renamed solution
+        working-directory: ${{ runner.temp }}/rename-smoke
+        run: dotnet test "$SMOKE_PROJECT_NAME.sln" --no-build
+
+  powershell:
+    name: PowerShell Rename Script
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Create smoke-test copy
+        shell: pwsh
+        run: |
+          $target = Join-Path $env:RUNNER_TEMP "rename-smoke"
+          if (Test-Path -LiteralPath $target) {
+              Remove-Item -LiteralPath $target -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $target | Out-Null
+          $archivePath = Join-Path $env:RUNNER_TEMP "rename-smoke.zip"
+          git archive --format=zip --output $archivePath HEAD
+          Expand-Archive -LiteralPath $archivePath -DestinationPath $target
+
+      - name: Run PowerShell rename script
+        working-directory: ${{ runner.temp }}/rename-smoke
+        shell: pwsh
+        run: ./rename_project.ps1 "$env:SMOKE_PROJECT_NAME" -RemoveRenameTools
+
+      - name: Assert renamed project shape
+        working-directory: ${{ runner.temp }}/rename-smoke
+        shell: pwsh
+        run: |
+          $requiredPaths = @(
+              "$env:SMOKE_PROJECT_NAME.sln",
+              "$env:SMOKE_PROJECT_NAME.csproj",
+              "tests/$env:SMOKE_PROJECT_NAME.Tests",
+              "tests/$env:SMOKE_PROJECT_NAME.Tests/$env:SMOKE_PROJECT_NAME.Tests.csproj"
+          )
+          foreach ($requiredPath in $requiredPaths) {
+              if (-not (Test-Path -LiteralPath $requiredPath)) {
+                  throw "Missing renamed path: $requiredPath"
+              }
+          }
+
+          $forbiddenPaths = @(
+              "GFramework-Godot-Template.sln",
+              "GFramework-Godot-Template.csproj",
+              "tests/GFramework-Godot-Template.Tests",
+              "rename_project.sh",
+              "rename_project.ps1",
+              "rename_project.config",
+              ".github/workflows/validate-rename-project.yml"
+          )
+          foreach ($forbiddenPath in $forbiddenPaths) {
+              if (Test-Path -LiteralPath $forbiddenPath) {
+                  throw "Old or cleanup path still exists: $forbiddenPath"
+              }
+          }
+
+          $oldNameMatches = Get-ChildItem -Path . -File -Recurse |
+              Where-Object { $_.FullName -notmatch '[\\/](\.godot|\.git|\.idea|\.vscode|\.mono|bin|obj)[\\/]' } |
+              Select-String -Pattern 'GFramework-Godot-Template', 'GFrameworkGodotTemplate', 'GFramework_Godot_Template\.Tests'
+
+          if ($oldNameMatches) {
+              $oldNameMatches | ForEach-Object { Write-Host $_ }
+              throw "Old template names remain after rename"
+          }
+
+      - name: Restore renamed solution
+        working-directory: ${{ runner.temp }}/rename-smoke
+        run: dotnet restore "$env:SMOKE_PROJECT_NAME.sln"
+
+      - name: Build renamed solution
+        working-directory: ${{ runner.temp }}/rename-smoke
+        run: dotnet build "$env:SMOKE_PROJECT_NAME.sln" --no-restore
+
+      - name: Test renamed solution
+        working-directory: ${{ runner.temp }}/rename-smoke
+        run: dotnet test "$env:SMOKE_PROJECT_NAME.sln" --no-build

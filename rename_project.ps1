@@ -9,23 +9,87 @@
     新项目名称
 .PARAMETER WhatIf
     预览模式，不实际执行更改
+.PARAMETER RemoveRenameTools
+    重命名后删除重命名脚本和共享配置
 .EXAMPLE
     .\rename_project.ps1 "MyAwesomeGame"
 .EXAMPLE
     .\rename_project.ps1 "MyAwesomeGame" -WhatIf
+.EXAMPLE
+    .\rename_project.ps1 "MyAwesomeGame" -RemoveRenameTools
 #>
 
 param(
     [Parameter(Mandatory=$true, Position=0)]
     [string]$NewProjectName,
 
-    [switch]$WhatIf
+    [switch]$WhatIf,
+
+    [switch]$RemoveRenameTools
 )
 
 $ErrorActionPreference = "Stop"
 
-$OldProjectName = "GFramework-Godot-Template"
-$OldNamespace = "GFrameworkGodotTemplate"
+$scriptRoot = $PSScriptRoot
+if ([string]::IsNullOrWhiteSpace($scriptRoot)) {
+    $scriptRoot = (Get-Location).Path
+}
+
+$configPath = Join-Path $scriptRoot "rename_project.config"
+
+Push-Location -LiteralPath $scriptRoot
+try {
+
+function Read-RenameProjectConfig {
+    param([string]$path)
+
+    if (-not (Test-Path -LiteralPath $path)) {
+        Write-Host "错误: 找不到配置文件: $path" -ForegroundColor Red
+        exit 1
+    }
+
+    $config = @{}
+    $configSection = ""
+    foreach ($rawLine in Get-Content -LiteralPath $path -Encoding UTF8) {
+        $line = $rawLine.Trim()
+        if (-not [string]::IsNullOrWhiteSpace($line) -and -not $line.StartsWith("#")) {
+            if ($line.StartsWith("[") -and $line.EndsWith("]")) {
+                $configSection = $line.Substring(1, $line.Length - 2).Trim()
+            } else {
+                $separatorIndex = $line.IndexOf('=')
+                if ($separatorIndex -ge 1) {
+                    $key = $line.Substring(0, $separatorIndex).Trim()
+                    $value = $line.Substring($separatorIndex + 1).Trim()
+                    $config["$configSection.$key"] = $value
+                }
+            }
+        }
+    }
+
+    $requiredKeys = @(
+        'template.old_project_name',
+        'template.old_namespace',
+        'template.old_test_namespace',
+        'scan.exclude_dirs',
+        'scan.content_patterns',
+        'cleanup.self_clean_files'
+    )
+
+    foreach ($requiredKey in $requiredKeys) {
+        if (-not $config.ContainsKey($requiredKey) -or [string]::IsNullOrWhiteSpace($config[$requiredKey])) {
+            Write-Host "错误: 配置文件缺少必要项: $requiredKey" -ForegroundColor Red
+            exit 1
+        }
+    }
+
+    return $config
+}
+
+$config = Read-RenameProjectConfig $configPath
+
+$OldProjectName = $config['template.old_project_name']
+$OldNamespace = $config['template.old_namespace']
+$OldTestNamespace = $config['template.old_test_namespace']
 
 function ConvertTo-PascalCase {
     param([string]$name)
@@ -59,8 +123,43 @@ function Test-ProjectName {
     return $true
 }
 
-function Get-ExcludeDirs {
-    @('.godot', '.git', '.idea', '.vscode', 'bin', 'obj', '.mono')
+function Test-ExcludedPath {
+    param(
+        [string]$filePath,
+        [string]$rootPath,
+        [string[]]$excludeDirs
+    )
+
+    $relativePath = [System.IO.Path]::GetRelativePath($rootPath, $filePath)
+    $pathParts = $relativePath -split '[\\/]+'
+
+    foreach ($pathPart in $pathParts) {
+        if ($excludeDirs -contains $pathPart) {
+            return $true
+        }
+    }
+
+    return $false
+}
+
+function Remove-RenameTools {
+    param([string[]]$cleanupFiles)
+
+    Write-Host "`n3. 清理重命名工具..." -ForegroundColor Cyan
+
+    foreach ($cleanupFile in $cleanupFiles) {
+        if ([string]::IsNullOrWhiteSpace($cleanupFile)) {
+            continue
+        }
+
+        $cleanupPath = Join-Path $scriptRoot $cleanupFile
+        if ($WhatIf) {
+            Write-Host "  [删除] $cleanupFile" -ForegroundColor Cyan
+        } elseif (Test-Path -LiteralPath $cleanupPath) {
+            Remove-Item -LiteralPath $cleanupPath -Force
+            Write-Host "  [删除] $cleanupFile" -ForegroundColor Green
+        }
+    }
 }
 
 function Update-FileContent {
@@ -80,21 +179,26 @@ function Update-FileContent {
     }
 }
 
-function Rename-ProjectFile {
+function Rename-ProjectPath {
     param(
-        [string]$filePath,
+        [string]$sourcePath,
         [string]$oldName,
         [string]$newName
     )
     
-    if (-not (Test-Path $filePath)) { return }
+    if (-not (Test-Path -LiteralPath $sourcePath)) { return }
     
-    $newPath = $filePath.Replace($oldName, $newName)
+    $newPath = $sourcePath.Replace($oldName, $newName)
     
     if ($WhatIf) {
-        Write-Host "  [重命名] $filePath -> $newPath" -ForegroundColor Cyan
+        Write-Host "  [重命名] $sourcePath -> $newPath" -ForegroundColor Cyan
     } else {
-        Rename-Item $filePath $newPath
+        if (Test-Path -LiteralPath $newPath) {
+            Write-Host "错误: 目标路径已存在: $newPath" -ForegroundColor Red
+            exit 1
+        }
+
+        Rename-Item -LiteralPath $sourcePath -NewName (Split-Path -Leaf $newPath)
         Write-Host "  [重命名] $newPath" -ForegroundColor Green
     }
 }
@@ -108,15 +212,16 @@ if (-not (Test-ProjectName $NewProjectName)) {
 }
 
 $NewNamespace = ConvertTo-PascalCase $NewProjectName
+$NewTestNamespace = "$NewNamespace.Tests"
 Write-Host "新命名空间: $NewNamespace" -ForegroundColor Green
 
 $replacements = @{
     $OldProjectName = $NewProjectName
     $OldNamespace = $NewNamespace
+    $OldTestNamespace = $NewTestNamespace
 }
 
-$excludeDirs = Get-ExcludeDirs
-$excludePattern = '(' + ($excludeDirs -join '|') + ')'
+$excludeDirs = $config['scan.exclude_dirs'] -split ','
 
 Write-Host "`n开始处理..." -ForegroundColor Cyan
 if ($WhatIf) {
@@ -125,14 +230,14 @@ if ($WhatIf) {
 
 Write-Host "`n1. 更新文件内容..." -ForegroundColor Cyan
 
-$filePatterns = @('*.cs', '*.csproj', '*.sln', 'project.godot', 'README.md', '.gitignore','*.yml')
+$filePatterns = $config['scan.content_patterns'] -split ','
 $processedFiles = 0
 
 $currentDir = Get-Location
 
 foreach ($pattern in $filePatterns) {
     Get-ChildItem -Path . -Filter $pattern -File -Recurse -ErrorAction SilentlyContinue |
-    Where-Object { $_.DirectoryName.Replace($currentDir.Path, "") -notmatch $excludePattern } |
+    Where-Object { -not (Test-ExcludedPath $_.FullName $currentDir.Path $excludeDirs) } |
     ForEach-Object {
         $filePath = $_.FullName
         
@@ -164,12 +269,23 @@ foreach ($pattern in $filePatterns) {
 
 Write-Host "`n2. 重命名项目文件..." -ForegroundColor Cyan
 
-Rename-ProjectFile "$OldProjectName.csproj" $OldProjectName $NewProjectName
-Rename-ProjectFile "$OldProjectName.sln" $OldProjectName $NewProjectName
+Rename-ProjectPath "$OldProjectName.csproj" $OldProjectName $NewProjectName
+Rename-ProjectPath "$OldProjectName.sln" $OldProjectName $NewProjectName
+
+$oldTestProjectName = "$OldProjectName.Tests"
+$newTestProjectName = "$NewProjectName.Tests"
+$oldTestProjectDir = "tests/$oldTestProjectName"
+
+Rename-ProjectPath "$oldTestProjectDir/$oldTestProjectName.csproj" "$oldTestProjectName.csproj" "$newTestProjectName.csproj"
+Rename-ProjectPath $oldTestProjectDir $oldTestProjectName $newTestProjectName
 
 $dotSettingsUserFile = "$OldProjectName.sln.DotSettings.user"
 if (Test-Path $dotSettingsUserFile) {
-    Rename-ProjectFile $dotSettingsUserFile $OldProjectName $NewProjectName
+    Rename-ProjectPath $dotSettingsUserFile $OldProjectName $NewProjectName
+}
+
+if ($RemoveRenameTools) {
+    Remove-RenameTools ($config['cleanup.self_clean_files'] -split ',')
 }
 
 Write-Host "`n===== 完成 =====" -ForegroundColor Cyan
@@ -180,4 +296,7 @@ if (-not $WhatIf) {
     Write-Host "1. 在 Rider 中重新打开解决方案" -ForegroundColor White
     Write-Host "2. 运行清理命令: dotnet clean" -ForegroundColor White
     Write-Host "3. 重新构建项目: dotnet build" -ForegroundColor White
+}
+} finally {
+    Pop-Location
 }
