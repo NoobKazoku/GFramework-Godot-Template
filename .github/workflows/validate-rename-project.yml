@@ -30,7 +30,8 @@ jobs:
       - name: Create smoke-test copy
         run: |
           set -euo pipefail
-          rsync -a --delete --exclude '.git' ./ "$RUNNER_TEMP/rename-smoke/"
+          mkdir -p "$RUNNER_TEMP/rename-smoke"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/rename-smoke"
 
       - name: Run bash rename script
         working-directory: ${{ runner.temp }}/rename-smoke
@@ -91,16 +92,14 @@ jobs:
       - name: Create smoke-test copy
         shell: pwsh
         run: |
-          $source = (Get-Location).Path
           $target = Join-Path $env:RUNNER_TEMP "rename-smoke"
           if (Test-Path -LiteralPath $target) {
               Remove-Item -LiteralPath $target -Recurse -Force
           }
           New-Item -ItemType Directory -Path $target | Out-Null
-          robocopy $source $target /E /XD .git
-          if ($LASTEXITCODE -gt 7) {
-              exit $LASTEXITCODE
-          }
+          $archivePath = Join-Path $env:RUNNER_TEMP "rename-smoke.zip"
+          git archive --format=zip --output $archivePath HEAD
+          Expand-Archive -LiteralPath $archivePath -DestinationPath $target
 
       - name: Run PowerShell rename script
         working-directory: ${{ runner.temp }}/rename-smoke

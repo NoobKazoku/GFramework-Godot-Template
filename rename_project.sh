@@ -18,22 +18,32 @@ load_config() {
     fi
 
     local key
+    local section=""
     local value
     while IFS='=' read -r key value || [ -n "$key" ]; do
         key="${key//$'\r'/}"
         value="${value//$'\r'/}"
+        key="${key#"${key%%[![:space:]]*}"}"
+        key="${key%"${key##*[![:space:]]}"}"
+        value="${value#"${value%%[![:space:]]*}"}"
+        value="${value%"${value##*[![:space:]]}"}"
 
         if [ -z "$key" ] || [[ "$key" =~ ^# ]]; then
             continue
         fi
 
-        case "$key" in
-            OLD_PROJECT_NAME) OLD_PROJECT_NAME="$value" ;;
-            OLD_NAMESPACE) OLD_NAMESPACE="$value" ;;
-            OLD_TEST_NAMESPACE) OLD_TEST_NAMESPACE="$value" ;;
-            EXCLUDE_DIRS) EXCLUDE_DIRS="$value" ;;
-            CONTENT_PATTERNS) CONTENT_PATTERNS="$value" ;;
-            SELF_CLEAN_FILES) SELF_CLEAN_FILES="$value" ;;
+        if [[ "$key" =~ ^\[(.*)\]$ ]]; then
+            section="${BASH_REMATCH[1]}"
+            continue
+        fi
+
+        case "$section.$key" in
+            template.old_project_name) OLD_PROJECT_NAME="$value" ;;
+            template.old_namespace) OLD_NAMESPACE="$value" ;;
+            template.old_test_namespace) OLD_TEST_NAMESPACE="$value" ;;
+            scan.exclude_dirs) EXCLUDE_DIRS="$value" ;;
+            scan.content_patterns) CONTENT_PATTERNS="$value" ;;
+            cleanup.self_clean_files) SELF_CLEAN_FILES="$value" ;;
         esac
     done < "$CONFIG_FILE"
 

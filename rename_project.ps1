@@ -46,26 +46,30 @@ function Read-RenameProjectConfig {
     }
 
     $config = @{}
-    Get-Content -LiteralPath $path -Encoding UTF8 |
-    ForEach-Object {
-        $line = $_.Trim()
+    $configSection = ""
+    foreach ($rawLine in Get-Content -LiteralPath $path -Encoding UTF8) {
+        $line = $rawLine.Trim()
         if (-not [string]::IsNullOrWhiteSpace($line) -and -not $line.StartsWith("#")) {
-            $separatorIndex = $line.IndexOf('=')
-            if ($separatorIndex -ge 1) {
-                $key = $line.Substring(0, $separatorIndex)
-                $value = $line.Substring($separatorIndex + 1)
-                $config[$key] = $value
+            if ($line.StartsWith("[") -and $line.EndsWith("]")) {
+                $configSection = $line.Substring(1, $line.Length - 2).Trim()
+            } else {
+                $separatorIndex = $line.IndexOf('=')
+                if ($separatorIndex -ge 1) {
+                    $key = $line.Substring(0, $separatorIndex).Trim()
+                    $value = $line.Substring($separatorIndex + 1).Trim()
+                    $config["$configSection.$key"] = $value
+                }
             }
         }
     }
 
     $requiredKeys = @(
-        'OLD_PROJECT_NAME',
-        'OLD_NAMESPACE',
-        'OLD_TEST_NAMESPACE',
-        'EXCLUDE_DIRS',
-        'CONTENT_PATTERNS',
-        'SELF_CLEAN_FILES'
+        'template.old_project_name',
+        'template.old_namespace',
+        'template.old_test_namespace',
+        'scan.exclude_dirs',
+        'scan.content_patterns',
+        'cleanup.self_clean_files'
     )
 
     foreach ($requiredKey in $requiredKeys) {
@@ -80,9 +84,9 @@ function Read-RenameProjectConfig {
 
 $config = Read-RenameProjectConfig $configPath
 
-$OldProjectName = $config['OLD_PROJECT_NAME']
-$OldNamespace = $config['OLD_NAMESPACE']
-$OldTestNamespace = $config['OLD_TEST_NAMESPACE']
+$OldProjectName = $config['template.old_project_name']
+$OldNamespace = $config['template.old_namespace']
+$OldTestNamespace = $config['template.old_test_namespace']
 
 function ConvertTo-PascalCase {
     param([string]$name)
@@ -214,7 +218,7 @@ $replacements = @{
     $OldTestNamespace = $NewTestNamespace
 }
 
-$excludeDirs = $config['EXCLUDE_DIRS'] -split ','
+$excludeDirs = $config['scan.exclude_dirs'] -split ','
 
 Write-Host "`n开始处理..." -ForegroundColor Cyan
 if ($WhatIf) {
@@ -223,7 +227,7 @@ if ($WhatIf) {
 
 Write-Host "`n1. 更新文件内容..." -ForegroundColor Cyan
 
-$filePatterns = $config['CONTENT_PATTERNS'] -split ','
+$filePatterns = $config['scan.content_patterns'] -split ','
 $processedFiles = 0
 
 $currentDir = Get-Location
@@ -278,7 +282,7 @@ if (Test-Path $dotSettingsUserFile) {
 }
 
 if ($RemoveRenameTools) {
-    Remove-RenameTools ($config['SELF_CLEAN_FILES'] -split ',')
+    Remove-RenameTools ($config['cleanup.self_clean_files'] -split ',')
 }
 
 Write-Host "`n===== 完成 =====" -ForegroundColor Cyan
