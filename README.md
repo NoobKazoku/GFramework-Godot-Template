@@ -53,7 +53,7 @@
 - 不要在这套迁移里引入 CoreGrid 的玩法场景、玩法状态机、战斗规则、地图逻辑或其他 gameplay 内容。
 
 ## 框架文档
-https://qf.readthedocs.io/zh-cn/latest/QFramework_v1.0_Guide/01_introduction/01_introduction.html
+https://gewuyou.github.io/GFramework
 
 ## 发布流程
 
