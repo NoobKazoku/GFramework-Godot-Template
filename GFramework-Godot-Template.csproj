@@ -34,18 +34,18 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup Condition="'$(UseLocalGFrameworkWorkspace)' != 'true'">
-        <PackageReference Include="Meziantou.Analyzer" Version="3.0.54">
+        <PackageReference Include="Meziantou.Analyzer" Version="3.0.63">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="GeWuYou.GFramework" Version="0.1.0"/>
-        <PackageReference Include="GeWuYou.GFramework.Core.SourceGenerators" Version="0.1.0"/>
-        <PackageReference Include="GeWuYou.GFramework.Cqrs" Version="0.1.0"/>
-        <PackageReference Include="GeWuYou.GFramework.Cqrs.Abstractions" Version="0.1.0"/>
-        <PackageReference Include="GeWuYou.GFramework.Cqrs.SourceGenerators" Version="0.1.0"/>
-        <PackageReference Include="GeWuYou.GFramework.Game.SourceGenerators" Version="0.1.0"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.1.0"/>
-        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.1.0"/>
+        <PackageReference Include="GeWuYou.GFramework" Version="0.3.1" />
+        <PackageReference Include="GeWuYou.GFramework.Core.SourceGenerators" Version="0.3.1" />
+        <PackageReference Include="GeWuYou.GFramework.Cqrs" Version="0.3.1" />
+        <PackageReference Include="GeWuYou.GFramework.Cqrs.Abstractions" Version="0.3.1" />
+        <PackageReference Include="GeWuYou.GFramework.Cqrs.SourceGenerators" Version="0.3.1" />
+        <PackageReference Include="GeWuYou.GFramework.Game.SourceGenerators" Version="0.3.1" />
+        <PackageReference Include="GeWuYou.GFramework.Godot" Version="0.3.1" />
+        <PackageReference Include="GeWuYou.GFramework.Godot.SourceGenerators" Version="0.3.1" />
     </ItemGroup>
     <ItemGroup Condition="'$(UseLocalGFrameworkWorkspace)' == 'true'">
         <ProjectReference Include="..\GFramework\GFramework.Core\GFramework.Core.csproj"/>
